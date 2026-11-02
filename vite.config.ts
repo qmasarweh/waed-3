@@ -2,8 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  // Project Pages URL: https://qmasarweh.github.io/waed-industrial-site/
-  base: "/waed-industrial-site/",
+  // Domain root, so a Bluehost upload into public_html loads assets correctly.
+  base: "/",
   plugins: [react()],
   server: {
     port: 5173,

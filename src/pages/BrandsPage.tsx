@@ -17,13 +17,16 @@ export function BrandsPage() {
       <main className="page-parallax is-ready brands-page">
         <section className="brands-hero" aria-label="Our Brands">
           <div className="brands-hero__media" aria-hidden="true">
-            <img
-              src={asset("/img/hero-facility.jpg")}
-              alt=""
-              width={1920}
-              height={1080}
-              fetchPriority="high"
-            />
+            <picture>
+              <source media="(max-width: 759px)" srcSet={asset("/img/hero-facility-mobile.jpg")} />
+              <img
+                src={asset("/img/hero-facility.jpg")}
+                alt=""
+                width={1024}
+                height={576}
+                fetchPriority="high"
+              />
+            </picture>
             <div className="brands-hero__veil" />
           </div>
           <div className="shell brands-hero__content">

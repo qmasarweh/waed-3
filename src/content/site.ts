@@ -150,11 +150,17 @@ export const factory = {
   },
 } as const;
 
+export type ProductVariant = {
+  label: string;
+  image: string;
+};
+
 export type BrandProduct = {
   name: string;
   category: string;
   body: string;
   image?: string;
+  variants?: readonly ProductVariant[];
 };
 
 export type BrandGalleryShot = {
@@ -201,29 +207,24 @@ export const brands = {
       titleClass: "enaya-title",
       gallery: [
         {
-          src: "/img/enaya/dishwashing.jpg",
-          alt: "Enaya dishwashing liquid bottle",
+          src: "/img/enaya/dishwashing-lemon.png",
+          alt: "Enaya dishwashing liquid jerry can",
           caption: "Dishwashing Liquid",
         },
         {
-          src: "/img/enaya/hand-wash.jpg",
-          alt: "Enaya hand wash bottle",
-          caption: "Hand Wash",
+          src: "/img/enaya/hand-soap-rose.png",
+          alt: "Enaya hand soap jerry can",
+          caption: "Hand Soap",
         },
         {
-          src: "/img/enaya/laundry.jpg",
-          alt: "Enaya laundry liquid jug",
-          caption: "Laundry Liquid",
+          src: "/img/enaya/multipurpose-white.png",
+          alt: "Enaya multipurpose cleaner jerry can",
+          caption: "Multipurpose Cleaner",
         },
         {
-          src: "/img/enaya/fabric-softener.jpg",
-          alt: "Enaya fabric softener bottle",
-          caption: "Fabric Softener",
-        },
-        {
-          src: "/img/enaya/hand-sanitizer.jpg",
-          alt: "Enaya hand sanitizer gel 500ml",
-          caption: "Hand Sanitizer · 500ml",
+          src: "/img/enaya/disinfectant-rose.png",
+          alt: "Enaya disinfectant jerry can",
+          caption: "Disinfectant",
         },
       ],
       products: [
@@ -231,84 +232,73 @@ export const brands = {
           name: "Dishwashing Liquid",
           category: "Kitchen",
           body: "Concentrated dishwashing liquid for household kitchens and professional food-service environments.",
-          image: "/img/enaya/dishwashing.jpg",
+          image: "/img/enaya/dishwashing-lemon.png",
         },
         {
-          name: "Hand Wash",
+          name: "Hand Soap",
           category: "Hygiene",
-          body: "Liquid hand wash for everyday personal hygiene in home and workplace settings.",
-          image: "/img/enaya/hand-wash.jpg",
-        },
-        {
-          name: "Laundry Liquid",
-          category: "Laundry",
-          body: "Laundry detergent liquid for domestic and institutional laundry loads.",
-          image: "/img/enaya/laundry.jpg",
-        },
-        {
-          name: "Fabric Softener",
-          category: "Laundry",
-          body: "Fabric softener for improved fabric feel after laundering.",
-          image: "/img/enaya/fabric-softener.jpg",
+          body: "Liquid hand soap for everyday use in home and workplace settings. Other variants are available.",
+          image: "/img/enaya/hand-soap-rose.png",
+          variants: [
+            { label: "Rose", image: "/img/enaya/hand-soap-rose.png" },
+            { label: "Oud", image: "/img/enaya/hand-soap-oud.png" },
+            { label: "White Floral", image: "/img/enaya/hand-soap-white-floral.png" },
+            { label: "Lavender", image: "/img/enaya/hand-soap-lavender.png" },
+          ],
         },
         {
           name: "Multipurpose Cleaner",
           category: "Surface",
           body: "General-purpose cleaner for routine cleaning of hard surfaces.",
-          image: "/img/enaya/multipurpose.jpg",
-        },
-        {
-          name: "Glass Cleaner",
-          category: "Surface",
-          body: "Glass cleaner for streak-free cleaning of windows and glass surfaces.",
-          image: "/img/enaya/glass.jpg",
+          image: "/img/enaya/multipurpose-white.png",
         },
         {
           name: "Disinfectant",
           category: "Hygiene",
-          body: "Disinfectant for hygiene-focused cleaning protocols in commercial settings.",
-          image: "/img/enaya/disinfectant.jpg",
-        },
-        {
-          name: "Hand Sanitizer",
-          category: "Hygiene",
-          body: "Hand sanitizer for entrances, workplaces and public-facing counters.",
-          image: "/img/enaya/hand-sanitizer.jpg",
+          body: "Disinfectant for hygiene-focused cleaning in commercial settings. Other variants are available.",
+          image: "/img/enaya/disinfectant-rose.png",
+          variants: [
+            { label: "Rose", image: "/img/enaya/disinfectant-rose.png" },
+            { label: "French Perfume", image: "/img/enaya/disinfectant-french-perfume.png" },
+            { label: "Lavender", image: "/img/enaya/disinfectant-lavender.png" },
+            { label: "Pine", image: "/img/enaya/disinfectant-pine.png" },
+            { label: "Al Haram", image: "/img/enaya/disinfectant-al-haram.png" },
+          ],
         },
       ],
     },
     {
-      id: "clean",
-      name: "CLEAN",
+      id: "lean-x",
+      name: "LEAN X",
       tagline: "Everyday surfaces. Clear results.",
       story:
-        "Clean is built for fast, reliable surface care across homes, offices, and shared spaces. Practical formulas. Fresh finish. Easy to stock and easy to use.",
+        "Lean X is built for fast, reliable surface care across homes, offices, and shared spaces. Practical formulas. Fresh finish. Easy to stock and easy to use.",
       focus: ["Household", "Offices", "Retail", "Facilities"],
-      logo: "/img/clean/logo.jpg",
+      logo: "/img/lean-x/logo.svg",
       gallery: [
         {
-          src: "/img/clean/product.jpg",
-          alt: "Clean multipurpose cleaner bottle",
+          src: "/img/lean-x/multipurpose.jpg",
+          alt: "Lean X multipurpose cleaner bottle",
           caption: "Multipurpose Cleaner",
         },
         {
-          src: "/img/clean/bathroom.jpg",
-          alt: "Clean bathroom cleaner spray bottle",
+          src: "/img/lean-x/bathroom.jpg",
+          alt: "Lean X bathroom cleaner bottle",
           caption: "Bathroom Cleaner",
         },
         {
-          src: "/img/clean/floor.jpg",
-          alt: "Clean floor cleaner bottle",
+          src: "/img/lean-x/floor.jpg",
+          alt: "Lean X floor cleaner bottle",
           caption: "Floor Cleaner",
         },
         {
-          src: "/img/clean/kitchen.jpg",
-          alt: "Clean kitchen degreaser spray bottle",
+          src: "/img/lean-x/kitchen.jpg",
+          alt: "Lean X kitchen degreaser bottle",
           caption: "Kitchen Degreaser",
         },
         {
-          src: "/img/clean/glass.jpg",
-          alt: "Clean glass and window spray bottle",
+          src: "/img/lean-x/glass.jpg",
+          alt: "Lean X glass and window cleaner bottle",
           caption: "Glass & Window",
         },
       ],
@@ -317,31 +307,31 @@ export const brands = {
           name: "Multipurpose Cleaner",
           category: "Surface",
           body: "Everyday multipurpose cleaner for counters, fixtures, and high-touch hard surfaces.",
-          image: "/img/clean/product.jpg",
+          image: "/img/lean-x/multipurpose.jpg",
         },
         {
           name: "Floor Cleaner",
           category: "Floor",
           body: "Floor cleaner for tiled and hard floors in homes and light commercial spaces.",
-          image: "/img/clean/floor.jpg",
+          image: "/img/lean-x/floor.jpg",
         },
         {
           name: "Bathroom Cleaner",
           category: "Bathroom",
           body: "Bathroom cleaner for sinks, tiles, and washroom surfaces that need a fresh finish.",
-          image: "/img/clean/bathroom.jpg",
+          image: "/img/lean-x/bathroom.jpg",
         },
         {
           name: "Kitchen Degreaser",
           category: "Kitchen",
           body: "Kitchen degreaser for cooktops, splashbacks, and grease-prone work areas.",
-          image: "/img/clean/kitchen.jpg",
+          image: "/img/lean-x/kitchen.jpg",
         },
         {
           name: "Glass & Window",
           category: "Surface",
           body: "Glass and window cleaner for streak-free shine on glass, mirrors, and panels.",
-          image: "/img/clean/glass.jpg",
+          image: "/img/lean-x/glass.jpg",
         },
       ],
     },

@@ -30,20 +30,25 @@ export function Hero() {
     const scrub = fine ? 0.25 : true;
     const ctx = gsap.context(() => {
       if (veil.current) {
-        gsap.fromTo(
-          veil.current,
-          { opacity: 0.55 },
-          {
-            opacity: 0.85,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start: "top top",
-              end: "bottom top",
-              scrub,
+        const phoneVeil = window.matchMedia("(max-width: 759px)").matches;
+        if (phoneVeil) {
+          gsap.set(veil.current, { opacity: 1 });
+        } else {
+          gsap.fromTo(
+            veil.current,
+            { opacity: 0.55 },
+            {
+              opacity: 0.85,
+              ease: "none",
+              scrollTrigger: {
+                trigger: el,
+                start: "top top",
+                end: "bottom top",
+                scrub,
+              },
             },
-          },
-        );
+          );
+        }
       }
 
       // On a phone the type stays large, centered, and fully visible.
@@ -100,14 +105,17 @@ export function Hero() {
       <div className="hero__sticky">
         <div className="hero__stage" aria-hidden="true">
           <div className="hero__media">
-            <img
-              ref={img}
-              src={asset("/img/hero-facility.jpg")}
-              alt=""
-              width={1920}
-              height={1080}
-              fetchPriority="high"
-            />
+            <picture>
+              <source media="(max-width: 759px)" srcSet={asset("/img/hero-facility-mobile.jpg")} />
+              <img
+                ref={img}
+                src={asset("/img/hero-facility.jpg")}
+                alt=""
+                width={1024}
+                height={576}
+                fetchPriority="high"
+              />
+            </picture>
             <div className="hero__veil" ref={veil} />
           </div>
           <div className="hero__watermark" ref={mark}>
