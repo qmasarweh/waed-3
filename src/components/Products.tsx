@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { brands } from "../content/site";
 import { asset } from "../lib/asset";
+import { BrandTitle } from "./BrandTitle";
 import { MarkRule } from "./MarkRule";
 import { ScrollType } from "./motion/ScrollType";
 
@@ -31,7 +32,9 @@ export function Products() {
                   height={160}
                   loading="lazy"
                 />
-                <strong className={brand.titleClass}>{brand.name}</strong>
+                <strong>
+                  <BrandTitle name={brand.name} className={brand.titleClass} />
+                </strong>
                 <p>{brand.tagline}</p>
                 <span className="brand-card__meta">
                   {brand.products.length} products

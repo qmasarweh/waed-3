@@ -710,9 +710,11 @@ textarea {
   will-change: transform;
 }
 
-.statement__mark svg {
+.statement__mark svg,
+.statement__mark img {
   width: 100%;
   height: auto;
+  display: block;
 }
 
 .statement--navy .statement__mark {
@@ -1032,6 +1034,31 @@ textarea {
   letter-spacing: 0.08em !important;
 }
 
+.leenx-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.02em;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #5f9e84;
+}
+
+.leenx-title__soft {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 0.72em;
+  letter-spacing: 0.01em;
+  color: #7cb89a;
+}
+
+.leenx-title__x {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.28em;
+  line-height: 0.85;
+  color: #7eb8e8;
+}
+
 .split {
   display: grid;
   gap: 2rem;
@@ -1090,10 +1117,14 @@ textarea {
   height: auto;
   flex-shrink: 0;
   opacity: 0.75;
+  display: block;
+  /* White SVG, tinted navy on light sections so it stays visible. */
+  filter: brightness(0) saturate(100%) invert(16%) sepia(18%) saturate(1400%) hue-rotate(182deg) brightness(92%) contrast(92%);
 }
 
-.mark-rule--light .mark-rule__icon path {
-  fill: #f7f5f0;
+.mark-rule--light .mark-rule__icon {
+  filter: none;
+  opacity: 0.9;
 }
 
 /* ----------------------------- pills / tiles */

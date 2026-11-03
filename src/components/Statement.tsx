@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BrandMark } from "./BrandMark";
+import { asset } from "../lib/asset";
 import { usePrefersReducedMotion } from "../lib/usePrefersReducedMotion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -80,7 +80,12 @@ export function Statement({
       aria-label={eyebrow ?? line}
     >
       <div className="statement__mark" aria-hidden="true">
-        <BrandMark tone={tone === "navy" ? "white" : "navy"} />
+        <img
+          src={asset("/img/waed-logo-vertical-white.svg")}
+          alt=""
+          width={320}
+          height={295}
+        />
       </div>
 
       <div className="shell statement__inner">

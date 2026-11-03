@@ -134,14 +134,6 @@ export function Hero() {
           />
           <ScrollType text={home.headline} as="h1" className="alive-headline" mode="hero" />
           <p className="hero__lead">{home.support}</p>
-          <div className="hero__actions">
-            <a className="btn btn-light" href="#contact">
-              {home.ctaPrimary}
-            </a>
-            <a className="hero__text-link" href="#factory">
-              {home.ctaSecondary}
-            </a>
-          </div>
         </div>
 
         <div className="hero__scroll" aria-hidden="true" ref={scrollCue}>

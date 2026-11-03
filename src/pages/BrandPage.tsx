@@ -2,12 +2,16 @@ import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getBrand } from "../content/site";
 import { asset } from "../lib/asset";
+import { BrandTitle } from "../components/BrandTitle";
 import { MarkRule } from "../components/MarkRule";
 import { ProductVariants } from "../components/ProductVariants";
 import { RevealObserver } from "../components/RevealObserver";
 
 export function BrandPage() {
   const { brandId = "" } = useParams();
+  if (brandId === "lean-x") {
+    return <Navigate to="/brands/leen-x" replace />;
+  }
   const brand = getBrand(brandId);
 
   useEffect(() => {
@@ -39,7 +43,9 @@ export function BrandPage() {
               />
               <div className="brand-page__intro">
                 <p className="eyebrow">Brand by WAED Industrial</p>
-                <h1 className={brand.titleClass}>{brand.name}</h1>
+                <h1>
+                  <BrandTitle name={brand.name} className={brand.titleClass} />
+                </h1>
                 <p className="brand-page__tagline">{brand.tagline}</p>
                 <MarkRule />
                 <p className="brand-page__story">{brand.story}</p>

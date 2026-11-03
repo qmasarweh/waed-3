@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { brands } from "../content/site";
 import { asset } from "../lib/asset";
+import { BrandTitle } from "../components/BrandTitle";
 import { MarkRule } from "../components/MarkRule";
 import { RevealObserver } from "../components/RevealObserver";
 import { ScrollType } from "../components/motion/ScrollType";
@@ -64,7 +65,9 @@ export function BrandsPage() {
                       height={180}
                       loading="lazy"
                     />
-                    <strong className={brand.titleClass}>{brand.name}</strong>
+                    <strong>
+                      <BrandTitle name={brand.name} className={brand.titleClass} />
+                    </strong>
                     <p>{brand.tagline}</p>
                     <span className="brand-card__meta">
                       Explore {brand.products.length} products
