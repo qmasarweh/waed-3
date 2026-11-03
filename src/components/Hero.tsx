@@ -4,7 +4,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { home, site } from "../content/site";
 import { asset } from "../lib/asset";
 import { ScrollType } from "./motion/ScrollType";
-import { BrandMark } from "./BrandMark";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -111,15 +110,20 @@ export function Hero() {
                 ref={img}
                 src={asset("/img/hero-facility.jpg")}
                 alt=""
-                width={1024}
-                height={576}
+                width={2560}
+                height={1439}
                 fetchPriority="high"
               />
             </picture>
             <div className="hero__veil" ref={veil} />
           </div>
           <div className="hero__watermark" ref={mark}>
-            <BrandMark tone="white" />
+            <img
+              src={asset("/img/waed-logo-vertical-white.svg")}
+              alt=""
+              width={320}
+              height={295}
+            />
           </div>
         </div>
 

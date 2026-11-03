@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { brands } from "../content/site";
 import { asset } from "../lib/asset";
 import { BrandTitle } from "./BrandTitle";
-import { MarkRule } from "./MarkRule";
 import { ScrollType } from "./motion/ScrollType";
 
 export function Products() {
@@ -12,7 +11,19 @@ export function Products() {
         <div className="section-head section-head--center">
           <p className="eyebrow">Our Brands & Products</p>
           <ScrollType text={brands.title} mode="rise" />
-          <MarkRule />
+          <div className="brands-mark" aria-hidden="true">
+            <span className="brands-mark__lines">
+              <i />
+              <i />
+            </span>
+            <img
+              className="brands-mark__logo"
+              src={asset("/img/waed-logo-horizontal-navy.svg")}
+              alt=""
+              width={220}
+              height={56}
+            />
+          </div>
           <p className="lead reveal reveal--up">{brands.lead}</p>
           <p className="lead muted reveal reveal--up">
             WAED Industrial is the company behind our household brands. Select a brand to explore
