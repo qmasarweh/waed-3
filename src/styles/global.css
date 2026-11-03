@@ -1052,8 +1052,9 @@ textarea {
 }
 
 .leenx-title__x {
-  font-family: var(--font-display);
-  font-weight: 800;
+  /* Match leenX logo.svg X: Arial Black / ultra-bold sans */
+  font-family: "Arial Black", Arial, Helvetica, sans-serif;
+  font-weight: 900;
   font-size: 1.28em;
   line-height: 0.85;
   color: #7eb8e8;
