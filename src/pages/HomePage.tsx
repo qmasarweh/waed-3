@@ -70,8 +70,8 @@ export function HomePage() {
         />
         <PrivateLabel />
         <MediaBand
-          src={asset("/img/logo-wall.jpg")}
-          alt="WAED Industrial brand wall"
+          src={asset("/img/hero-facility.jpg")}
+          alt="WAED Industrial facility exterior"
           speed="medium"
           fit="contain"
           ratio="3840 / 2160"
