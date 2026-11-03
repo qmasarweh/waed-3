@@ -74,7 +74,7 @@ export function HomePage() {
           alt="WAED Industrial brand wall"
           speed="medium"
           fit="contain"
-          ratio="2048 / 866"
+          ratio="3840 / 2160"
         />
         <Quality />
         <Markets />

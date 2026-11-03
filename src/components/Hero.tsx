@@ -110,8 +110,8 @@ export function Hero() {
                 ref={img}
                 src={asset("/img/hero-facility.jpg")}
                 alt=""
-                width={3344}
-                height={1882}
+                width={3840}
+                height={2160}
                 fetchPriority="high"
               />
             </picture>
