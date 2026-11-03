@@ -65,7 +65,7 @@ export function HomePage() {
         <Products />
         <Statement
           tone="navy"
-          eyebrow="Private label"
+          eyebrow="Custom home brands"
           line="Your Vision. Our Formulation and Manufacturing Expertise."
         />
         <PrivateLabel />

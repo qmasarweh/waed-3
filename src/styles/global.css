@@ -3416,6 +3416,24 @@ a.contact-chip:hover {
   font-weight: 650;
 }
 
+.form-error {
+  padding: 1rem;
+  background: rgba(140, 40, 40, 0.08);
+  border: 1px solid rgba(140, 40, 40, 0.28);
+  color: #8c2828;
+  font-weight: 650;
+}
+
+.form-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ----------------------------- footer */
 .site-footer {
   padding: 3.25rem 0 2.25rem;

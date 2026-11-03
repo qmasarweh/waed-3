@@ -15,8 +15,8 @@ export function Products() {
           <MarkRule />
           <p className="lead reveal reveal--up">{brands.lead}</p>
           <p className="lead muted reveal reveal--up">
-            WAED Industrial is the parent manufacturing company. Select a brand to explore its
-            product range.
+            WAED Industrial is the company behind our household brands. Select a brand to explore
+            products made for everyday home cleaning.
           </p>
         </div>
 

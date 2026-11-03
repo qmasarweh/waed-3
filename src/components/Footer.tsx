@@ -17,7 +17,7 @@ export function Footer() {
           />
           <p>
             Bahrain-based manufacturer of soap, detergents, cleaning and polishing preparations —
-            for retail, institutional, professional and private-label partners.
+            for homes, families, and everyday cleaning across the region.
           </p>
         </div>
         <div className="footer-cols">

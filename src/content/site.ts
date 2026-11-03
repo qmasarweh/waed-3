@@ -29,7 +29,7 @@ export const nav: NavItem[] = [
   { href: "/#about-us", label: "About Us" },
   { href: "/#factory", label: "Factory" },
   { href: "/brands", label: "Our Brands" },
-  { href: "/#private-label", label: "Private Label" },
+  { href: "/#private-label", label: "Custom Brands" },
   { href: "/#our-services", label: "Our Services" },
   { href: "/#quality", label: "Quality" },
   { href: "/#contact", label: "Contact" },
@@ -37,14 +37,14 @@ export const nav: NavItem[] = [
 
 export const home = {
   headline: "Innovating the Future of Cleaning Manufacturing.",
-  support: "Manufactured in Bahrain. Ready to Supply Regionally.",
+  support: "Manufactured in Bahrain. Made for homes across the region.",
   ctaPrimary: "Request a Quote",
   ctaSecondary: "Explore Factory",
   highlights: [
     "Bahrain-based manufacturing",
-    "Innovative cleaning and hygiene solutions",
-    "Private-label and contract manufacturing",
-    "Flexible production and packaging",
+    "Innovative cleaning and hygiene for the home",
+    "Trusted household brands",
+    "Flexible packs for everyday use",
     "Quality-focused product development",
   ],
 } as const;
@@ -53,47 +53,47 @@ export const about = {
   eyebrow: "About WAED Industrial",
   title: "Innovative Cleaning & Hygiene Solutions",
   shortIntro: [
-    "Based in Al Hidd, Kingdom of Bahrain, WAED Industrial develops and manufactures cleaning and hygiene products for household, commercial, and industrial markets.",
-    "Through our own brands and private-label manufacturing services, we bring products to market with a focus on performance, consistency, and reliability.",
+    "Based in Al Hidd, Kingdom of Bahrain, WAED Industrial develops and manufactures cleaning and hygiene products for homes and families.",
+    "Through our own consumer brands, we bring everyday cleaning products to market with a focus on performance, consistency, and reliability.",
   ],
   profileEyebrow: "About Us",
   profileTitle: "Innovation in Manufacturing. Excellence in Every Product.",
   fullProfile: [
-    "At WAED Industrial, our ambition is to set a higher standard for cleaning manufacturing.",
+    "At WAED Industrial, our ambition is to set a higher standard for cleaning products made for the home.",
     "We believe exceptional products are the result of disciplined execution, purposeful innovation, and uncompromising attention to detail.",
-    "This philosophy shapes the way we operate, the trust we build, and the lasting value we create for our customers and business partners.",
-    "We are building an industrial company designed not only to meet expectations, but to raise them.",
+    "This philosophy shapes the way we operate, the trust we build, and the lasting value we create for families who use our brands every day.",
+    "We are building products designed not only to meet expectations, but to raise them.",
   ],
 } as const;
 
 export const pillars = [
   {
     id: "market-demand",
-    eyebrow: "Engineered for Market Demand",
-    title: "Built for Real Needs. Designed to Compete.",
+    eyebrow: "Made for Real Homes",
+    title: "Built for Everyday Needs. Designed to Delight.",
     body: [
-      "At WAED Industrial, we believe successful products begin with a deep understanding of the markets they serve.",
-      "We translate customer expectations and evolving market demands into cleaning solutions tailored for performance, functionality, fragrance preferences, and packaging requirements.",
-      "Our market-driven approach enables us to develop products with a clear commercial purpose, helping our brands and business partners deliver solutions that are relevant, competitive, and aligned with their target markets.",
+      "At WAED Industrial, we believe successful products begin with a deep understanding of how people clean at home.",
+      "We turn everyday expectations into cleaning solutions tailored for performance, fragrance preferences, and packaging that fits family life.",
+      "Our home-first approach helps our brands deliver products that feel relevant, dependable, and ready for daily use.",
     ],
   },
   {
     id: "end-to-end",
-    eyebrow: "End-to-End Solutions",
-    title: "One Partner. A Complete Manufacturing Solution.",
+    eyebrow: "From Idea to Home Shelf",
+    title: "One Team. A Complete Product Journey.",
     body: [
-      "At WAED Industrial, we simplify the journey from product concept to market-ready solutions by bringing essential manufacturing services together under one roof.",
-      "Our integrated approach ensures seamless coordination between product development, production, and final delivery, helping our partners streamline operations, maintain consistency, and bring their products to market with confidence.",
+      "At WAED Industrial, we simplify the journey from product concept to home-ready cleaning solutions by bringing development and production together under one roof.",
+      "Our integrated approach keeps quality consistent from formulation to final pack, so every bottle that reaches a household meets the same high standard.",
     ],
   },
   {
     id: "partnerships",
-    eyebrow: "Built for Partnerships",
-    title: "Beyond Manufacturing. Growing Together.",
+    eyebrow: "Built Around People",
+    title: "Beyond Manufacturing. Caring for Every Home.",
     body: [
-      "At WAED Industrial, we see every partnership as an opportunity to create lasting value and shared success.",
-      "We work closely with our customers and business partners to understand their goals, respond to their evolving needs, and support their long-term growth.",
-      "Our approach is built on transparency, mutual trust, and a commitment to delivering on our promises — because we believe the strongest partnerships are those that grow together.",
+      "At WAED Industrial, we see every product as an opportunity to make daily cleaning simpler and more reliable.",
+      "We listen closely to what households need, respond to evolving preferences, and keep improving the products families count on.",
+      "Our approach is built on transparency, care, and a commitment to delivering on our promises — because the strongest brands grow with the people who use them.",
     ],
   },
 ] as const;
@@ -105,7 +105,7 @@ export const factory = {
     "WAED Industrial combines modern manufacturing equipment, versatile production systems, and technical expertise to deliver a wide range of cleaning and hygiene solutions.",
   body: [
     "Our manufacturing facility in Bahrain is equipped with industrial mixing systems, water treatment technology, automatic and semi-automatic filling equipment, labeling and packaging solutions, and laboratory facilities for quality control.",
-    "Our integrated capabilities support product development, flexible production volumes, multiple packaging formats, and private-label manufacturing to meet the diverse needs of our business partners.",
+    "Our integrated capabilities support product development, flexible production volumes, and multiple packaging formats for household cleaning brands people trust at home.",
   ],
   location: "Warehouse no. 9, Building 2094, Road 1529, Al Hidd, Kingdom of Bahrain",
   journey: {
@@ -184,13 +184,13 @@ export type BrandEntry = {
 export const brands = {
   title: "Our Brands",
   lead:
-    "WAED Industrial develops and manufactures brands with controlled formulation, consistent quality, and a clear commercial presence.",
+    "WAED Industrial develops and manufactures household brands with controlled formulation, consistent quality, and a clear presence in everyday life.",
   page: {
     eyebrow: "Brand House",
     title: "Our Brands",
-    heroLine: "Crafted in Bahrain. Built for the region.",
+    heroLine: "Crafted in Bahrain. Made for home.",
     intro:
-      "WAED Industrial is the parent manufacturing company behind our brand house. Explore each brand to discover its identity and product range.",
+      "WAED Industrial is the company behind our household brand house. Explore each brand to discover its identity and product range for everyday cleaning.",
   },
   /**
    * Brand house catalog. Add entries here as new brands launch (designed for 3–5+).
@@ -199,10 +199,10 @@ export const brands = {
     {
       id: "enaya",
       name: "ENAYA",
-      tagline: "Household and professional cleaning from Bahrain.",
+      tagline: "Everyday household cleaning from Bahrain.",
       story:
-        "Enaya brings dependable household and professional cleaning products from our manufacturing facility in Bahrain. Clear formulations. Flexible packs. Supply you can plan around.",
-      focus: ["Household", "Hospitality", "Institutional", "Professional cleaning"],
+        "Enaya brings dependable home cleaning products from our manufacturing facility in Bahrain. Clear formulations. Family-friendly packs. Fresh results you can trust.",
+      focus: ["Kitchen", "Bathroom", "Living spaces", "Everyday hygiene"],
       logo: "/img/enaya/logo.jpg",
       titleClass: "enaya-title",
       gallery: [
@@ -231,13 +231,13 @@ export const brands = {
         {
           name: "Dishwashing Liquid",
           category: "Kitchen",
-          body: "Concentrated dishwashing liquid for household kitchens and professional food-service environments.",
+          body: "Concentrated dishwashing liquid for everyday family kitchens.",
           image: "/img/enaya/dishwashing-lemon.png",
         },
         {
           name: "Hand Soap",
           category: "Hygiene",
-          body: "Liquid hand soap for everyday use in home and workplace settings. Other variants are available.",
+          body: "Liquid hand soap for everyday use at home. Other variants are available.",
           image: "/img/enaya/hand-soap-rose.png",
           variants: [
             { label: "Rose", image: "/img/enaya/hand-soap-rose.png" },
@@ -255,7 +255,7 @@ export const brands = {
         {
           name: "Disinfectant",
           category: "Hygiene",
-          body: "Disinfectant for hygiene-focused cleaning in commercial settings. Other variants are available.",
+          body: "Disinfectant for hygiene-focused cleaning around the home. Other variants are available.",
           image: "/img/enaya/disinfectant-rose.png",
           variants: [
             { label: "Rose", image: "/img/enaya/disinfectant-rose.png" },
@@ -270,68 +270,68 @@ export const brands = {
     {
       id: "leen-x",
       name: "leenX",
-      tagline: "Institutional gallons. Consistent commercial results.",
+      tagline: "Home gallons. Fresh results for everyday living.",
       story:
-        "leenX is WAED Industrial’s B2B surface-care line for facilities, hospitality, and food-service partners. Bulk gallon formats, controlled formulas, and packaging built for professional stocking and repeat supply.",
-      focus: ["Facilities", "Hospitality", "Food Service", "Institutional"],
+        "leenX is WAED Industrial’s household surface-care line for families who want larger, lasting packs at home. Convenient gallon formats, gentle controlled formulas, and packaging made for everyday home cleaning.",
+      focus: ["Living rooms", "Kitchens", "Bathrooms", "Whole-home care"],
       logo: "/img/leen-x/logo.svg",
       titleClass: "leenx-title",
       gallery: [
         {
           src: "/img/leen-x/multipurpose.jpg",
-          alt: "leenX multipurpose cleaner 30L gallon",
+          alt: "leenX multipurpose cleaner home gallon",
           caption: "Multipurpose Cleaner · 30L",
         },
         {
           src: "/img/leen-x/bathroom.jpg",
-          alt: "leenX bathroom cleaner 30L gallon",
+          alt: "leenX bathroom cleaner home gallon",
           caption: "Bathroom Cleaner · 30L",
         },
         {
           src: "/img/leen-x/floor.jpg",
-          alt: "leenX floor cleaner 30L gallon",
+          alt: "leenX floor cleaner home gallon",
           caption: "Floor Cleaner · 30L",
         },
         {
           src: "/img/leen-x/kitchen.jpg",
-          alt: "leenX kitchen degreaser 30L gallon",
+          alt: "leenX kitchen degreaser home gallon",
           caption: "Kitchen Degreaser · 30L",
         },
         {
           src: "/img/leen-x/glass.jpg",
-          alt: "leenX glass and window cleaner 30L gallon",
+          alt: "leenX glass and window cleaner home gallon",
           caption: "Glass & Window · 30L",
         },
       ],
       products: [
         {
           name: "Multipurpose Cleaner",
-          category: "Surface · 30L",
-          body: "Bulk multipurpose cleaner for high-touch hard surfaces across commercial buildings and shared facilities.",
+          category: "Home · 30L",
+          body: "Family-size multipurpose cleaner for counters, fixtures, and everyday hard surfaces around the house.",
           image: "/img/leen-x/multipurpose.jpg",
         },
         {
           name: "Floor Cleaner",
-          category: "Floor · 30L",
-          body: "Institutional floor cleaner for tiled and hard floors in lobbies, corridors, and light industrial spaces.",
+          category: "Home · 30L",
+          body: "Home floor cleaner for tiled and hard floors in living areas, hallways, and family spaces.",
           image: "/img/leen-x/floor.jpg",
         },
         {
           name: "Bathroom Cleaner",
-          category: "Washroom · 30L",
-          body: "Washroom cleaner for sinks, tiles, and restroom surfaces in hospitality and facilities programs.",
+          category: "Home · 30L",
+          body: "Bathroom cleaner for sinks, tiles, and washroom surfaces that need a fresh home finish.",
           image: "/img/leen-x/bathroom.jpg",
         },
         {
           name: "Kitchen Degreaser",
-          category: "Kitchen · 30L",
-          body: "Commercial kitchen degreaser for cooklines, splashbacks, and grease-prone food-service work areas.",
+          category: "Home · 30L",
+          body: "Kitchen degreaser for cooktops, splashbacks, and grease-prone home cooking areas.",
           image: "/img/leen-x/kitchen.jpg",
         },
         {
           name: "Glass & Window",
-          category: "Surface · 30L",
-          body: "Streak-free glass cleaner for commercial windows, mirrors, and glazed panels in volume use.",
+          category: "Home · 30L",
+          body: "Streak-free glass cleaner for home windows, mirrors, and glass surfaces.",
           image: "/img/leen-x/glass.jpg",
         },
       ],
@@ -345,23 +345,23 @@ export function getBrand(id: string) {
 }
 
 export const privateLabel = {
-  eyebrow: "Private Label & Contract Manufacturing",
+  eyebrow: "Custom Home Brands",
   title: "Your Vision. Our Formulation and Manufacturing Expertise.",
   lead:
-    "At WAED Industrial, we provide comprehensive private-label and contract manufacturing solutions, with a strong focus on product formulation, innovation, and customization.",
+    "At WAED Industrial, we help create custom household cleaning brands with a strong focus on product formulation, innovation, and packaging people love at home.",
   body: [
-    "From developing new cleaning formulations to enhancing existing products, we work with our partners to create solutions tailored to their performance requirements, market preferences, and brand identity.",
-    "Our integrated services cover the journey from formulation development and laboratory sampling to manufacturing, filling, labeling, and packaging.",
+    "From developing new cleaning formulations to enhancing existing products, we create home-care solutions tailored to performance, fragrance preferences, and brand identity.",
+    "Our services cover the journey from formulation development and laboratory sampling to manufacturing, filling, labeling, and packaging for consumer products.",
   ],
   servicesTitle: "Our Services",
   services: [
     "Custom Formulation Development & Innovation",
     "Product Research, Sampling & Evaluation",
     "Existing Formulation Enhancement",
-    "Private Label & Contract Manufacturing",
+    "Custom Household Brand Manufacturing",
     "Filling, Labeling & Packaging",
   ],
-  cta: "Request a Manufacturing Consultation",
+  cta: "Ask About a Custom Home Brand",
 } as const;
 
 export const quality = {
@@ -399,29 +399,29 @@ export const quality = {
 } as const;
 
 export const markets = {
-  eyebrow: "Markets & Export",
-  title: "Manufactured in Bahrain. Connecting to Regional and Global Markets.",
+  eyebrow: "Where Our Products Go",
+  title: "Manufactured in Bahrain. Loved in Homes Across the Region.",
   lead:
-    "Strategically based in the Kingdom of Bahrain, WAED Industrial is positioned to serve the growing demand for innovative cleaning and hygiene solutions across the GCC and international markets.",
-  body: "We aim to build strong, long-term partnerships with distributors, retailers, and private-label businesses, supported by flexible manufacturing capabilities and a commitment to quality and reliable supply.",
-  targets: ["GCC", "Regional markets", "International partners"],
+    "Strategically based in the Kingdom of Bahrain, WAED Industrial is positioned to bring innovative home cleaning and hygiene products to families across the GCC and beyond.",
+  body: "We aim to reach more households with dependable everyday cleaning brands, supported by flexible manufacturing and a commitment to quality people can feel at home.",
+  targets: ["GCC homes", "Regional households", "International families"],
 } as const;
 
 export const contact = {
   eyebrow: "Contact Us",
-  title: "Let’s Build Something Great Together.",
+  title: "Let’s Talk About Cleaner Homes.",
   lead:
-    "Whether you’re looking for innovative cleaning solutions, private-label manufacturing, custom formulation development, or distribution partnerships, our team is ready to explore opportunities with you.",
-  support: "Get in touch with WAED Industrial to discuss your business requirements.",
+    "Whether you’re looking for household cleaning products, fragrance options, pack sizes, or a custom home brand, our team is ready to help.",
+  support: "Get in touch with WAED Industrial to discuss your home cleaning needs.",
   enquiryTypes: [
-    "General Enquiry",
-    "Product Enquiry",
-    "Private Label & Contract Manufacturing",
-    "Custom Formulation Development",
-    "Request a Quotation",
-    "Distribution & Business Partnerships",
+    "General Question",
+    "Product Question",
+    "Custom Home Brand",
+    "Fragrance or Pack Size",
+    "Request Product Details",
+    "Other",
   ],
-  submitLabel: "Submit Enquiry",
+  submitLabel: "Send Message",
   successMessage:
-    "Thank you. Your enquiry is ready to send — your email client should open with the details for our team at WAED Industrial.",
+    "Thank you. Your message is ready to send — your email client should open with the details for our team at WAED Industrial.",
 } as const;

@@ -3,10 +3,14 @@ import { contact, site } from "../content/site";
 import { MarkRule } from "./MarkRule";
 import { ScrollType } from "./motion/ScrollType";
 
+const enquiryEndpoint = (import.meta.env.VITE_ENQUIRY_ENDPOINT as string | undefined)?.trim() || "";
+
 export function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -17,6 +21,32 @@ export function Contact() {
     const email = String(data.get("email") || "");
     const phone = String(data.get("phone") || "");
     const message = String(data.get("message") || "");
+
+    setError("");
+
+    if (enquiryEndpoint) {
+      setSending(true);
+      try {
+        const response = await fetch(enquiryEndpoint, {
+          method: "POST",
+          body: data,
+          headers: { Accept: "application/json" },
+        });
+        const payload = (await response.json().catch(() => null)) as
+          | { ok?: boolean; error?: string; message?: string }
+          | null;
+        if (!response.ok || !payload?.ok) {
+          throw new Error(payload?.error || "We could not send your enquiry right now.");
+        }
+        setSent(true);
+        form.reset();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "We could not send your enquiry right now.");
+      } finally {
+        setSending(false);
+      }
+      return;
+    }
 
     const body = [
       `Full Name: ${name}`,
@@ -62,7 +92,22 @@ export function Contact() {
           </div>
         </div>
 
-        <form className="form reveal reveal--up" onSubmit={onSubmit}>
+        <form
+          className="form reveal reveal--up"
+          method="post"
+          action={enquiryEndpoint || undefined}
+          onSubmit={onSubmit}
+          noValidate={false}
+        >
+          {/* Honeypot for the Bluehost PHP handler */}
+          <input
+            className="form-honeypot"
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
           <div className="form-row">
             <label>
               Full Name
@@ -104,15 +149,22 @@ export function Contact() {
             <textarea
               name="message"
               required
-              placeholder="Tell us about your requirements, product interest, or partnership goals…"
+              placeholder="Tell us what you’re looking for — product, fragrance, pack size, or a custom home brand…"
             />
           </label>
-          <button className="btn btn-primary" type="submit">
-            {contact.submitLabel}
+          <button className="btn btn-primary" type="submit" disabled={sending}>
+            {sending ? "Sending…" : contact.submitLabel}
           </button>
+          {error ? (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          ) : null}
           {sent && (
             <p className="form-success" role="status">
-              {contact.successMessage}
+              {enquiryEndpoint
+                ? "Thank you. Your enquiry has been sent to WAED Industrial."
+                : contact.successMessage}
             </p>
           )}
         </form>

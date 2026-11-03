@@ -4,17 +4,18 @@ export function CtaBand() {
       <div className="shell cta-band__inner reveal reveal--up">
         <div>
           <p className="eyebrow">Next step</p>
-          <h2>Ready to manufacture with WAED?</h2>
+          <h2>Ready for cleaner homes with WAED?</h2>
           <p className="lead">
-            Send your product, pack size and volume — or ask for a private-label sample — and our team will respond with a quote.
+            Tell us which household products you need — or ask about a custom home brand — and our
+            team will respond with details.
           </p>
         </div>
         <div className="cta-band__actions">
           <a className="btn btn-primary" href="#contact">
-            Request a Quote
+            Get in Touch
           </a>
           <a className="btn btn-ghost" href="#private-label">
-            Private Label
+            Custom Home Brands
           </a>
         </div>
       </div>

@@ -83,17 +83,17 @@ export function BrandsPage() {
         <section className="section brands-cta">
           <div className="shell brands-cta__inner reveal reveal--up">
             <MarkRule />
-            <h2>Partner with a Bahrain manufacturer.</h2>
+            <h2>Discover household cleaning made in Bahrain.</h2>
             <p className="lead">
-              Private label, contract manufacturing, or brand supply — talk to the team that makes
-              the product.
+              Looking for home cleaning brands or a custom household product — talk to the team that
+              makes them.
             </p>
             <div className="brands-cta__actions">
               <Link className="btn btn-primary" to={{ pathname: "/", hash: "contact" }}>
-                Request a Quote
+                Get in Touch
               </Link>
               <Link className="btn btn-ghost" to={{ pathname: "/", hash: "private-label" }}>
-                Private Label
+                Custom Home Brands
               </Link>
             </div>
           </div>
