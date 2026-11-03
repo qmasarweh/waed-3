@@ -23,8 +23,8 @@ export function BrandsPage() {
               <img
                 src={asset("/img/hero-facility.jpg")}
                 alt=""
-                width={1024}
-                height={576}
+                width={2048}
+                height={1152}
                 fetchPriority="high"
               />
             </picture>
@@ -35,9 +35,17 @@ export function BrandsPage() {
               <p className="brands-hero__eyebrow">{page.eyebrow}</p>
               <h1 className="brands-hero__title">{page.title}</h1>
               <div className="brands-hero__rule" aria-hidden="true">
-                <span />
-                <i />
-                <span />
+                <span className="brands-hero__rule-lines">
+                  <i />
+                  <i />
+                </span>
+                <img
+                  className="brands-hero__rule-logo"
+                  src={asset("/img/waed-logo-horizontal-white.svg")}
+                  alt=""
+                  width={220}
+                  height={56}
+                />
               </div>
               <p className="brands-hero__line">{page.heroLine}</p>
             </div>
