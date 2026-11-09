@@ -189,30 +189,7 @@ export function Hero() {
         );
       });
 
-      tl.fromTo(
-        panel,
-        { scale: 1.08, y: phone ? 8 : 14 },
-        {
-          scale: 1,
-          y: 0,
-          duration: 1.15,
-          ease: "power2.out",
-        },
-        0.12,
-      );
-
-      tl.to(
-        panel,
-        {
-          y: phone ? -3 : -6,
-          duration: 2.2,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: 1,
-        },
-        ">-0.2",
-      );
-
+      // Keep the black plate still — only the words move.
       return tl;
     };
 
@@ -244,7 +221,6 @@ export function Hero() {
               index * 0.035,
             );
           });
-          exit.to(panel, { scale: 0.97, duration: 0.35, ease: "power2.in" }, 0);
         }, 6200);
       }
 
