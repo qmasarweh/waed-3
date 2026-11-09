@@ -644,21 +644,12 @@ textarea {
   position: absolute;
   inset: 0;
   z-index: 2;
-  /* Soft light pool over the copy zone so navy stays readable on every slide */
-  background:
-    radial-gradient(
-      ellipse 70% 48% at 50% 72%,
-      rgba(247, 245, 240, 0.78) 0%,
-      rgba(247, 245, 240, 0.42) 42%,
-      rgba(247, 245, 240, 0) 72%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(247, 245, 240, 0.12) 0%,
-      rgba(247, 245, 240, 0.06) 40%,
-      rgba(247, 245, 240, 0.38) 70%,
-      rgba(247, 245, 240, 0.62) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(247, 245, 240, 0.06) 0%,
+    rgba(247, 245, 240, 0.04) 55%,
+    rgba(247, 245, 240, 0.18) 100%
+  );
 }
 
 .hero__watermark {
@@ -710,7 +701,7 @@ textarea {
   width: min(40rem, 100%);
   display: grid;
   gap: 0.85rem;
-  padding: 1.1rem 1.25rem;
+  padding: 0.55rem 0.65rem;
   justify-items: center;
   text-align: center;
   color: var(--hero-ink);
@@ -721,19 +712,15 @@ textarea {
   will-change: transform;
 }
 
-/* Soft light wash behind copy only — not a card, not a letter glow */
+/* Tiny soft lift only behind the words — low opacity, tight to the text */
 .hero__panel::before {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -18% -10%;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(247, 245, 240, 0.72) 0%,
-    rgba(247, 245, 240, 0.38) 45%,
-    rgba(247, 245, 240, 0) 72%
-  );
+  inset: 4% 8%;
+  border-radius: 1.25rem;
+  background: rgba(247, 245, 240, 0.28);
+  filter: blur(14px);
   pointer-events: none;
 }
 
@@ -3917,19 +3904,18 @@ a.contact-chip:hover {
 
   .hero__veil {
     opacity: 1 !important;
-    background:
-      radial-gradient(
-        ellipse 90% 55% at 50% 88%,
-        rgba(247, 245, 240, 0.88) 0%,
-        rgba(247, 245, 240, 0.5) 48%,
-        rgba(247, 245, 240, 0) 76%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(247, 245, 240, 0.08) 0%,
-        rgba(247, 245, 240, 0.12) 48%,
-        rgba(247, 245, 240, 0.55) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      rgba(247, 245, 240, 0.04) 0%,
+      rgba(247, 245, 240, 0.08) 60%,
+      rgba(247, 245, 240, 0.22) 100%
+    );
+  }
+
+  .hero__panel::before {
+    inset: 6% 10%;
+    background: rgba(247, 245, 240, 0.32);
+    filter: blur(12px);
   }
 
   .hero__content {
