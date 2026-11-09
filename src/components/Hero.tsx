@@ -11,7 +11,12 @@ const HERO_SLIDES = Array.from({ length: 12 }, (_, index) => {
   return `/img/hero-slider/hero-slide-${n}.jpg`;
 });
 
-const HEADLINE_WORDS = home.headline.replace(/\.$/, "").split(/\s+/);
+const HEADLINE_LINES = [
+  ["Innovating", "the", "Future"],
+  ["of", "Cleaning"],
+  ["Manufacturing."],
+] as const;
+
 const LEAD_LINES = home.support
   .split(/(?<=\.)\s+/)
   .map((line) => line.trim())
@@ -139,63 +144,64 @@ export function Hero() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
     const phone = window.matchMedia("(max-width: 759px)").matches;
+    const headlineLines = copy.querySelectorAll<HTMLElement>(".hero__hline");
     const words = copy.querySelectorAll<HTMLElement>(".hero__word");
-    const lines = copy.querySelectorAll<HTMLElement>(".hero__lead-line");
+    const leadLines = copy.querySelectorAll<HTMLElement>(".hero__lead-line");
     const place = copy.querySelector<HTMLElement>(".hero__place");
     const brand = copy.querySelector<HTMLElement>(".hero__brand");
     const rule = copy.querySelector<HTMLElement>(".hero__place-rule");
+    const accent = copy.querySelector<HTMLElement>(".hero__accent");
+    const rail = copy.querySelector<HTMLElement>(".hero__lead-rail");
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set([place, brand, rule, words, lines], { clearProps: "all", opacity: 1, y: 0, filter: "none" });
+        gsap.set([place, brand, rule, words, leadLines, headlineLines, accent, rail], {
+          clearProps: "all",
+          opacity: 1,
+          y: 0,
+          x: 0,
+          filter: "none",
+          clipPath: "none",
+          scaleX: 1,
+        });
         return;
       }
 
-      gsap.set(place, { opacity: 0, y: 18 });
+      gsap.set(place, { opacity: 0, y: 16, letterSpacing: "0.42em" });
       gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
-      gsap.set(brand, { opacity: 0, y: 24 });
-      gsap.set(words, { opacity: 0, y: 42, rotateX: 18, filter: "blur(8px)" });
-      gsap.set(lines, { opacity: 0, y: 22 });
+      gsap.set(brand, { opacity: 0, y: 28, filter: "blur(10px)" });
+      gsap.set(headlineLines, { clipPath: "inset(0 0 100% 0)" });
+      gsap.set(words, { y: "110%", opacity: 0 });
+      gsap.set(accent, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(leadLines, { opacity: 0, x: -24 });
+      gsap.set(rail, { scaleY: 0, transformOrigin: "top center" });
 
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
       intro
-        .to(place, { opacity: 1, y: 0, duration: 0.7 }, 0.15)
-        .to(rule, { scaleX: 1, duration: 0.85 }, 0.28)
-        .to(brand, { opacity: 1, y: 0, duration: 0.85 }, 0.32)
-        .to(
-          words,
-          {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            filter: "blur(0px)",
-            duration: 0.9,
-            stagger: 0.07,
-          },
-          0.45,
-        )
-        .to(
-          lines,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            stagger: 0.14,
-          },
-          0.95,
-        );
+        .to(place, { opacity: 1, y: 0, letterSpacing: "0.2em", duration: 0.85 }, 0.1)
+        .to(rule, { scaleX: 1, duration: 0.9 }, 0.18)
+        .to(brand, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.95 }, 0.28)
+        .to(headlineLines, { clipPath: "inset(0 0 0% 0)", duration: 0.95, stagger: 0.16 }, 0.42)
+        .to(words, { y: "0%", opacity: 1, duration: 0.95, stagger: 0.055 }, 0.48)
+        .to(accent, { scaleX: 1, duration: 0.85 }, 1.15)
+        .to(rail, { scaleY: 1, duration: 0.8 }, 1.2)
+        .to(leadLines, { opacity: 1, x: 0, duration: 0.75, stagger: 0.16 }, 1.22);
 
-      if (!phone && words.length) {
-        gsap.to(words, {
-          y: "-=4",
-          duration: 3.6,
+      if (!phone) {
+        gsap.to(headlineLines, {
+          x: 6,
+          duration: 4.8,
           ease: "sine.inOut",
-          stagger: {
-            each: 0.12,
-            repeat: -1,
-            yoyo: true,
-          },
-          delay: 1.8,
+          stagger: { each: 0.35, repeat: -1, yoyo: true },
+          delay: 2.1,
+        });
+        gsap.to(accent, {
+          opacity: 0.55,
+          duration: 2.4,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: 2.2,
         });
       }
 
@@ -311,20 +317,30 @@ export function Hero() {
             height={90}
           />
           <h1 className="alive-headline" ref={headline}>
-            {HEADLINE_WORDS.map((word, index) => (
-              <span className="hero__word" key={`${word}-${index}`}>
-                {word}
-                {index === HEADLINE_WORDS.length - 1 ? "." : ""}
+            {HEADLINE_LINES.map((line, lineIndex) => (
+              <span
+                className={`hero__hline${lineIndex === HEADLINE_LINES.length - 1 ? " hero__hline--accent" : ""}`}
+                key={line.join("-")}
+              >
+                {line.map((word) => (
+                  <span className="hero__word" key={`${lineIndex}-${word}`}>
+                    {word}
+                  </span>
+                ))}
               </span>
             ))}
+            <span className="hero__accent" aria-hidden="true" />
           </h1>
-          <p className="hero__lead">
-            {LEAD_LINES.map((line) => (
-              <span className="hero__lead-line" key={line}>
-                {line}
-              </span>
-            ))}
-          </p>
+          <div className="hero__lead-wrap">
+            <span className="hero__lead-rail" aria-hidden="true" />
+            <p className="hero__lead">
+              {LEAD_LINES.map((line) => (
+                <span className="hero__lead-line" key={line}>
+                  {line}
+                </span>
+              ))}
+            </p>
+          </div>
         </div>
 
         <div className="hero__scroll" aria-hidden="true" ref={scrollCue}>

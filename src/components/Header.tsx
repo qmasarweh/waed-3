@@ -69,7 +69,7 @@ export function Header() {
           <Link className="brand-lockup" to="/" aria-label={`${site.displayName} home`} onClick={close}>
             <img
               className="brand-lockup__logo"
-              src={light ? asset("/img/waed-logo-horizontal-white.svg") : asset("/img/waed-logo-horizontal-navy.svg")}
+              src={asset("/img/waed-logo-horizontal-navy.svg")}
               alt={site.legalName}
               width={156}
               height={40}
@@ -85,7 +85,7 @@ export function Header() {
           </nav>
 
           <div className="header-actions">
-            <Link className={`nav-cta${light ? " nav-cta--light" : ""}`} to="/#contact">
+            <Link className="nav-cta" to="/#contact">
               Request a Quote
             </Link>
             <button
