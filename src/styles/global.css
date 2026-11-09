@@ -696,8 +696,8 @@ textarea {
 }
 
 .hero__panel {
-  /* Invision / Huge-style agency black */
-  --hero-ink: #0a0a0a;
+  /* Same navy as About / section titles (WAED Industrial) */
+  --hero-ink: var(--navy);
   --hero-halo:
     0 1px 0 rgba(255, 255, 255, 0.85),
     0 0 1px rgba(255, 255, 255, 0.9);
