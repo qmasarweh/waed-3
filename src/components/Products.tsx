@@ -16,13 +16,6 @@ export function Products() {
               <i />
               <i />
             </span>
-            <img
-              className="brands-mark__logo"
-              src={asset("/img/waed-logo-horizontal-navy.svg")}
-              alt=""
-              width={220}
-              height={56}
-            />
           </div>
           <p className="lead reveal reveal--up">{brands.lead}</p>
           <p className="lead muted reveal reveal--up">

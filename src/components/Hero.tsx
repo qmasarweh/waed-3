@@ -3,7 +3,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { home, site } from "../content/site";
 import { asset } from "../lib/asset";
-import { ScrollType } from "./motion/ScrollType";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,8 +11,14 @@ const HERO_SLIDES = Array.from({ length: 12 }, (_, index) => {
   return `/img/hero-slider/hero-slide-${n}.jpg`;
 });
 
+const HEADLINE_WORDS = home.headline.replace(/\.$/, "").split(/\s+/);
+const LEAD_LINES = home.support
+  .split(/(?<=\.)\s+/)
+  .map((line) => line.trim())
+  .filter(Boolean);
+
 /**
- * Sticky hero with a cinematic cleaning-product photo slider.
+ * Sticky hero with cinematic photo slider and living typography.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -23,6 +28,7 @@ export function Hero() {
   const veil = useRef<HTMLDivElement>(null);
   const mark = useRef<HTMLDivElement>(null);
   const scrollCue = useRef<HTMLDivElement>(null);
+  const headline = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const stage = slider.current;
@@ -122,22 +128,79 @@ export function Hero() {
       window.clearInterval(id);
       kenBurns?.kill();
       gsap.killTweensOf(slides);
-      if (veil.current) gsap.killTweensOf(veil.current);
     };
   }, []);
 
   useEffect(() => {
     const el = root.current;
-    if (!el || !media.current) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const fine = window.matchMedia("(pointer: fine)").matches;
-    const scrub = fine ? 0.25 : true;
     const copy = content.current;
+    if (!el || !media.current || !copy) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const phone = window.matchMedia("(max-width: 759px)").matches;
+    const words = copy.querySelectorAll<HTMLElement>(".hero__word");
+    const lines = copy.querySelectorAll<HTMLElement>(".hero__lead-line");
+    const place = copy.querySelector<HTMLElement>(".hero__place");
+    const brand = copy.querySelector<HTMLElement>(".hero__brand");
+    const rule = copy.querySelector<HTMLElement>(".hero__place-rule");
+
     const ctx = gsap.context(() => {
+      if (reduce) {
+        gsap.set([place, brand, rule, words, lines], { clearProps: "all", opacity: 1, y: 0, filter: "none" });
+        return;
+      }
+
+      gsap.set(place, { opacity: 0, y: 18 });
+      gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(brand, { opacity: 0, y: 24 });
+      gsap.set(words, { opacity: 0, y: 42, rotateX: 18, filter: "blur(8px)" });
+      gsap.set(lines, { opacity: 0, y: 22 });
+
+      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      intro
+        .to(place, { opacity: 1, y: 0, duration: 0.7 }, 0.15)
+        .to(rule, { scaleX: 1, duration: 0.85 }, 0.28)
+        .to(brand, { opacity: 1, y: 0, duration: 0.85 }, 0.32)
+        .to(
+          words,
+          {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            filter: "blur(0px)",
+            duration: 0.9,
+            stagger: 0.07,
+          },
+          0.45,
+        )
+        .to(
+          lines,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.75,
+            stagger: 0.14,
+          },
+          0.95,
+        );
+
+      if (!phone && words.length) {
+        gsap.to(words, {
+          y: "-=4",
+          duration: 3.6,
+          ease: "sine.inOut",
+          stagger: {
+            each: 0.12,
+            repeat: -1,
+            yoyo: true,
+          },
+          delay: 1.8,
+        });
+      }
+
       if (veil.current) {
-        const phoneVeil = window.matchMedia("(max-width: 759px)").matches;
-        if (phoneVeil) {
+        if (phone) {
           gsap.set(veil.current, { opacity: 1 });
         } else {
           gsap.fromTo(
@@ -150,20 +213,19 @@ export function Hero() {
                 trigger: el,
                 start: "top top",
                 end: "bottom top",
-                scrub,
+                scrub: fine ? 0.25 : true,
               },
             },
           );
         }
       }
 
-      const phone = window.matchMedia("(max-width: 759px)").matches;
-      if (copy && phone) {
+      if (phone) {
         gsap.set(copy, { yPercent: 0, opacity: 1, clearProps: "transform,opacity" });
-      } else if (copy) {
+      } else {
         gsap.to(copy, {
-          yPercent: fine ? -55 : -30,
-          opacity: 0.35,
+          yPercent: fine ? -40 : -24,
+          opacity: 0.4,
           ease: "none",
           scrollTrigger: {
             trigger: el,
@@ -237,7 +299,10 @@ export function Hero() {
         </div>
 
         <div className="shell hero__content" ref={content}>
-          <p className="hero__place">Bahrain · Al Hidd</p>
+          <div className="hero__place-row">
+            <span className="hero__place-rule" aria-hidden="true" />
+            <p className="hero__place">Bahrain · Al Hidd</p>
+          </div>
           <img
             className="hero__brand"
             src={asset("/img/waed-logo-horizontal-white.svg")}
@@ -245,8 +310,21 @@ export function Hero() {
             width={420}
             height={90}
           />
-          <ScrollType text={home.headline} as="h1" className="alive-headline" mode="hero" />
-          <p className="hero__lead">{home.support}</p>
+          <h1 className="alive-headline" ref={headline}>
+            {HEADLINE_WORDS.map((word, index) => (
+              <span className="hero__word" key={`${word}-${index}`}>
+                {word}
+                {index === HEADLINE_WORDS.length - 1 ? "." : ""}
+              </span>
+            ))}
+          </h1>
+          <p className="hero__lead">
+            {LEAD_LINES.map((line) => (
+              <span className="hero__lead-line" key={line}>
+                {line}
+              </span>
+            ))}
+          </p>
         </div>
 
         <div className="hero__scroll" aria-hidden="true" ref={scrollCue}>
