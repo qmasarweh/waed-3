@@ -228,10 +228,18 @@ textarea {
   transition: opacity 0.3s ease;
 }
 
-.brand-lockup__mark {
+.brand-lockup__mark,
+.brand-lockup__logo {
   display: block;
   height: 40px;
   width: auto;
+}
+
+.brand-lockup__logo {
+  height: 36px;
+  max-width: min(220px, 48vw);
+  object-fit: contain;
+  object-position: left center;
 }
 
 .header-actions {
@@ -3604,6 +3612,11 @@ a.contact-chip:hover {
     width: auto;
   }
 
+  .brand-lockup__logo {
+    height: 30px;
+    max-width: min(168px, 46vw);
+  }
+
   .site-header {
     padding-top: env(safe-area-inset-top, 0px);
   }
@@ -4213,6 +4226,11 @@ a.contact-chip:hover {
     width: auto;
   }
 
+  .brand-lockup__logo {
+    height: 34px;
+    max-width: 200px;
+  }
+
   .header-actions {
     display: flex;
     align-items: center;
@@ -4225,6 +4243,11 @@ a.contact-chip:hover {
     display: block;
     height: 42px;
     width: auto;
+  }
+
+  .brand-lockup__logo {
+    height: 40px;
+    max-width: 240px;
   }
 
   .header-actions {

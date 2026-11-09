@@ -68,11 +68,11 @@ export function Header() {
         <div className="site-header__inner">
           <Link className="brand-lockup" to="/" aria-label={`${site.displayName} home`} onClick={close}>
             <img
-              className="brand-lockup__mark"
-              src={light ? asset("/img/waed-logo-vertical-white.svg") : asset("/img/waed-logo-vertical.svg")}
+              className="brand-lockup__logo"
+              src={light ? asset("/img/waed-logo-horizontal-white.svg") : asset("/img/waed-logo-horizontal-navy.svg")}
               alt={site.legalName}
-              width={36}
-              height={42}
+              width={156}
+              height={40}
             />
           </Link>
 
