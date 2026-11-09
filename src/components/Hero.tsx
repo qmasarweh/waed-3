@@ -106,46 +106,54 @@ export function Hero() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
     const phone = window.matchMedia("(max-width: 759px)").matches;
-    const lines = copy.querySelectorAll<HTMLElement>(".hero__reveal-line");
+    const lines = Array.from(copy.querySelectorAll<HTMLElement>(".hero__reveal-line"));
+
+    const showLines = () => {
+      gsap.set(lines, { yPercent: 0, clearProps: "transform" });
+    };
 
     const reveal = () => {
+      if (!lines.length) return null;
       gsap.killTweensOf(lines);
-      gsap.set(lines, { yPercent: 105 });
-      return gsap.to(lines, {
-        yPercent: 0,
-        duration: 1.05,
-        stagger: 0.12,
-        ease: "power4.out",
-        overwrite: true,
-      });
+      return gsap.fromTo(
+        lines,
+        { yPercent: 110 },
+        {
+          yPercent: 0,
+          duration: 1,
+          stagger: 0.11,
+          ease: "power4.out",
+          overwrite: true,
+        },
+      );
     };
 
     let loopId = 0;
+    const safety = window.setTimeout(showLines, 1800);
+
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(lines, { yPercent: 0, clearProps: "transform" });
+        showLines();
         return;
       }
 
-      // Ensure first paint is hidden, then reveal.
-      gsap.set(lines, { yPercent: 105 });
-      gsap.delayedCall(0.15, () => {
-        reveal();
-      });
+      // Immediate visible reveal — never leave copy stuck off-screen.
+      reveal();
 
       loopId = window.setInterval(() => {
         gsap
-          .timeline()
-          .to(lines, {
-            yPercent: -105,
-            duration: 0.55,
-            stagger: 0.06,
-            ease: "power3.in",
+          .timeline({
+            onComplete: () => {
+              reveal();
+            },
           })
-          .add(() => {
-            reveal();
+          .to(lines, {
+            yPercent: -110,
+            duration: 0.45,
+            stagger: 0.05,
+            ease: "power3.in",
           });
-      }, 6200);
+      }, 6500);
 
       if (veil.current) {
         gsap.set(veil.current, { opacity: phone ? 1 : 0.55 });
@@ -192,7 +200,9 @@ export function Hero() {
     }, el);
 
     return () => {
+      window.clearTimeout(safety);
       window.clearInterval(loopId);
+      showLines();
       ctx.revert();
     };
   }, []);
