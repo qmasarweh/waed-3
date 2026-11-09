@@ -644,13 +644,20 @@ textarea {
   position: absolute;
   inset: 0;
   z-index: 2;
+  /* Soft light pool over the copy zone so navy stays readable on every slide */
   background:
+    radial-gradient(
+      ellipse 70% 48% at 50% 72%,
+      rgba(247, 245, 240, 0.78) 0%,
+      rgba(247, 245, 240, 0.42) 42%,
+      rgba(247, 245, 240, 0) 72%
+    ),
     linear-gradient(
       180deg,
-      rgba(247, 245, 240, 0.18) 0%,
-      rgba(247, 245, 240, 0.08) 36%,
-      rgba(247, 245, 240, 0.42) 68%,
-      rgba(247, 245, 240, 0.72) 100%
+      rgba(247, 245, 240, 0.12) 0%,
+      rgba(247, 245, 240, 0.06) 40%,
+      rgba(247, 245, 240, 0.38) 70%,
+      rgba(247, 245, 240, 0.62) 100%
     );
 }
 
@@ -698,10 +705,12 @@ textarea {
 .hero__panel {
   /* Same navy as About / section titles (WAED Industrial) */
   --hero-ink: var(--navy);
+  position: relative;
+  isolation: isolate;
   width: min(40rem, 100%);
   display: grid;
   gap: 0.85rem;
-  padding: 0.35rem 0;
+  padding: 1.1rem 1.25rem;
   justify-items: center;
   text-align: center;
   color: var(--hero-ink);
@@ -710,6 +719,22 @@ textarea {
   box-shadow: none;
   transform-origin: center center;
   will-change: transform;
+}
+
+/* Soft light wash behind copy only — not a card, not a letter glow */
+.hero__panel::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -18% -10%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(247, 245, 240, 0.72) 0%,
+    rgba(247, 245, 240, 0.38) 45%,
+    rgba(247, 245, 240, 0) 72%
+  );
+  pointer-events: none;
 }
 
 .hero__line {
@@ -3892,13 +3917,19 @@ a.contact-chip:hover {
 
   .hero__veil {
     opacity: 1 !important;
-    background: linear-gradient(
-      180deg,
-      rgba(14, 24, 40, 0) 0%,
-      rgba(14, 24, 40, 0) 40%,
-      rgba(14, 24, 40, 0.42) 62%,
-      rgba(14, 24, 40, 0.82) 100%
-    );
+    background:
+      radial-gradient(
+        ellipse 90% 55% at 50% 88%,
+        rgba(247, 245, 240, 0.88) 0%,
+        rgba(247, 245, 240, 0.5) 48%,
+        rgba(247, 245, 240, 0) 76%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(247, 245, 240, 0.08) 0%,
+        rgba(247, 245, 240, 0.12) 48%,
+        rgba(247, 245, 240, 0.55) 100%
+      );
   }
 
   .hero__content {
