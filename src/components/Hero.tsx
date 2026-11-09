@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { home, site } from "../content/site";
+import { home } from "../content/site";
 import { asset } from "../lib/asset";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -293,22 +293,14 @@ export function Hero() {
             <div className="hero__mask">
               <p className="hero__place hero__slide-up">Bahrain · Al Hidd</p>
             </div>
-            <div className="hero__mask">
-              <img
-                className="hero__brand hero__slide-up"
-                src={asset("/img/waed-logo-horizontal-navy.svg")}
-                alt={site.legalName}
-                width={420}
-                height={90}
-              />
-            </div>
             <h1 className="alive-headline">
               {HEADLINE_LINES.map((line) => (
                 <span className="hero__mask" key={line.join("-")}>
                   <span className="hero__hline hero__slide-up">
-                    {line.map((word) => (
-                      <span className="hero__word" key={word}>
+                    {line.map((word, wordIndex) => (
+                      <span className="hero__word" key={`${line.join("-")}-${word}`}>
                         {word}
+                        {wordIndex < line.length - 1 ? "\u00A0" : ""}
                       </span>
                     ))}
                   </span>

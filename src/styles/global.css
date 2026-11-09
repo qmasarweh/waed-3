@@ -713,17 +713,19 @@ textarea {
   display: block;
   overflow: hidden;
   width: 100%;
+  padding-bottom: 0.18em;
 }
 
 .hero__slide-up {
   display: block;
   will-change: transform;
+  padding-bottom: 0.12em;
 }
 
 .hero__place {
   margin: 0 auto;
   width: fit-content;
-  padding: 0;
+  padding: 0 0 0.12em;
   font-size: clamp(0.78rem, 0.7rem + 0.35vw, 0.92rem);
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -733,22 +735,16 @@ textarea {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
-.hero__brand {
-  width: min(280px, 72%);
-  margin-inline: auto;
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5));
-}
-
 .alive-headline {
   position: relative;
   margin: 0;
   display: grid;
-  gap: 0.1em;
+  gap: 0.18em;
   width: 100%;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(2.4rem, 1.2rem + 5vw, 4.6rem);
-  line-height: 1.02;
+  line-height: 1.12;
   letter-spacing: -0.04em;
   text-align: center;
   justify-items: center;
@@ -759,16 +755,13 @@ textarea {
 .hero__hline {
   display: block;
   width: 100%;
-  padding-bottom: 0.05em;
+  line-height: 1.12;
+  padding-bottom: 0.14em;
 }
 
 .hero__word {
   display: inline-block;
-  margin-right: 0.28em;
-}
-
-.hero__word:last-child {
-  margin-right: 0;
+  white-space: nowrap;
 }
 
 .scroll-type {
@@ -940,10 +933,10 @@ textarea {
 .hero__lead {
   margin: 0;
   display: grid;
-  gap: 0.2rem;
+  gap: 0.28rem;
   width: 100%;
   font-size: clamp(1.05rem, 0.9rem + 0.55vw, 1.28rem);
-  line-height: 1.45;
+  line-height: 1.5;
   text-align: center;
   color: #0a0a0a;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
@@ -952,6 +945,8 @@ textarea {
 .hero__lead-line {
   display: block;
   width: 100%;
+  padding-bottom: 0.12em;
+  line-height: 1.5;
 }
 
 .hero__actions {
@@ -3957,15 +3952,9 @@ a.contact-chip:hover {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
   }
 
-  .hero__brand {
-    display: block;
-    width: min(200px, 62%);
-    margin-inline: auto;
-  }
-
   .alive-headline {
     font-size: clamp(1.85rem, 8.2vw, 2.55rem);
-    line-height: 1.04;
+    line-height: 1.14;
     letter-spacing: -0.035em;
     text-align: center;
     max-width: none;
@@ -3979,11 +3968,11 @@ a.contact-chip:hover {
 
   .hero__lead {
     display: grid;
-    gap: 0.18rem;
+    gap: 0.24rem;
     margin: 0;
     max-width: none;
     font-size: clamp(0.92rem, 3.1vw, 1.05rem);
-    line-height: 1.4;
+    line-height: 1.5;
     text-align: center;
     color: #0a0a0a;
     position: relative;
