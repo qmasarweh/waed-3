@@ -3931,7 +3931,7 @@ a.contact-chip:hover {
     padding: 1rem 1.1rem;
     text-align: center;
     justify-items: center;
-    background: rgba(8, 10, 14, 0.9);
+    background: rgba(8, 10, 14, 0.52);
     border: 0;
     border-radius: 0.85rem;
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
