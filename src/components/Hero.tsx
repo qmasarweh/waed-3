@@ -12,10 +12,10 @@ const HERO_SLIDES = Array.from({ length: 12 }, (_, index) => {
 });
 
 const HEADLINE_LINES = [
-  ["Innovating", "the", "Future"],
-  ["of", "Cleaning"],
-  ["Manufacturing."],
-] as const;
+  "Innovating the Future",
+  "of Cleaning",
+  "Manufacturing.",
+];
 
 const LEAD_LINES = home.support
   .split(/(?<=\.)\s+/)
@@ -23,7 +23,7 @@ const LEAD_LINES = home.support
   .filter(Boolean);
 
 /**
- * Sticky hero with cinematic photo slider + Jitter-style Sliding Text Reveal.
+ * Sticky hero: photo slider + reliable Sliding Text Reveal on every copy line.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -42,15 +42,14 @@ export function Hero() {
     if (!slides.length) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    gsap.set(slides, { opacity: 0, scale: 1.1, xPercent: 0, filter: "blur(0px)", clipPath: "inset(0 0 0 0)", zIndex: 1 });
+    gsap.set(slides, { opacity: 0, scale: 1.08, zIndex: 1 });
     gsap.set(slides[0], { opacity: 1, scale: 1, zIndex: 3 });
-
     if (reduce) return;
 
     let active = 0;
     let kenBurns: gsap.core.Tween | null = gsap.to(slides[0], {
-      scale: 1.14,
-      duration: 6.2,
+      scale: 1.12,
+      duration: 6,
       ease: "none",
     });
     let locked = false;
@@ -58,7 +57,6 @@ export function Hero() {
     const goNext = () => {
       if (locked) return;
       locked = true;
-
       const prev = active;
       const next = (active + 1) % slides.length;
       const outgoing = slides[prev];
@@ -66,65 +64,30 @@ export function Hero() {
       const fromRight = next % 2 === 0;
 
       kenBurns?.kill();
-
       gsap.set(incoming, {
         opacity: 1,
         zIndex: 4,
-        scale: 1.22,
-        xPercent: fromRight ? 10 : -10,
-        filter: "blur(8px)",
+        scale: 1.18,
+        xPercent: fromRight ? 8 : -8,
+        filter: "blur(6px)",
         clipPath: fromRight ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)",
       });
       gsap.set(outgoing, { zIndex: 3 });
 
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.inOut" },
-        onComplete: () => {
-          gsap.set(outgoing, {
-            opacity: 0,
-            zIndex: 1,
-            scale: 1.1,
-            xPercent: 0,
-            filter: "blur(0px)",
-            clipPath: "inset(0 0 0 0)",
-          });
-          gsap.set(incoming, { zIndex: 3, filter: "blur(0px)", clipPath: "inset(0 0 0 0)" });
-          active = next;
-          locked = false;
-          kenBurns = gsap.to(incoming, {
-            scale: 1.14,
-            duration: 6.2,
-            ease: "none",
-          });
-        },
-      });
-
-      tl.to(
-        outgoing,
-        {
-          scale: 1.24,
-          xPercent: fromRight ? -6 : 6,
-          opacity: 0.25,
-          filter: "blur(12px)",
-          duration: 1.45,
-        },
-        0,
-      );
-
-      tl.to(
-        incoming,
-        {
-          clipPath: "inset(0 0% 0 0%)",
-          scale: 1.02,
-          xPercent: 0,
-          filter: "blur(0px)",
-          duration: 1.55,
-          ease: "power3.out",
-        },
-        0.08,
-      );
-
-      tl.to(outgoing, { opacity: 0, duration: 0.35 }, 1.15);
+      gsap
+        .timeline({
+          defaults: { ease: "power3.inOut" },
+          onComplete: () => {
+            gsap.set(outgoing, { opacity: 0, zIndex: 1, scale: 1.08, xPercent: 0, filter: "blur(0px)", clipPath: "inset(0)" });
+            gsap.set(incoming, { zIndex: 3, filter: "blur(0px)", clipPath: "inset(0)" });
+            active = next;
+            locked = false;
+            kenBurns = gsap.to(incoming, { scale: 1.12, duration: 6, ease: "none" });
+          },
+        })
+        .to(outgoing, { scale: 1.2, xPercent: fromRight ? -5 : 5, opacity: 0.2, filter: "blur(10px)", duration: 1.35 }, 0)
+        .to(incoming, { clipPath: "inset(0 0% 0 0%)", scale: 1.02, xPercent: 0, filter: "blur(0px)", duration: 1.45, ease: "power3.out" }, 0.05)
+        .to(outgoing, { opacity: 0, duration: 0.3 }, 1.05);
     };
 
     const id = window.setInterval(goNext, 5600);
@@ -143,90 +106,67 @@ export function Hero() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
     const phone = window.matchMedia("(max-width: 759px)").matches;
+    const lines = copy.querySelectorAll<HTMLElement>(".hero__reveal-line");
 
-    const masks = copy.querySelectorAll<HTMLElement>(".hero__mask");
-    const slidesUp = copy.querySelectorAll<HTMLElement>(".hero__slide-up");
-    const panel = copy.querySelector<HTMLElement>(".hero__panel");
-
-    const playReveal = () => {
-      gsap.killTweensOf([panel, ...masks, ...slidesUp]);
-      gsap.set(panel, { opacity: 1, y: 0, scale: 1 });
-      gsap.set(slidesUp, { yPercent: 110 });
-
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(slidesUp, {
+    const reveal = () => {
+      gsap.killTweensOf(lines);
+      gsap.set(lines, { yPercent: 105 });
+      return gsap.to(lines, {
         yPercent: 0,
-        duration: 0.95,
-        stagger: 0.08,
+        duration: 1.05,
+        stagger: 0.12,
+        ease: "power4.out",
+        overwrite: true,
       });
-      return tl;
     };
 
-    let loop = 0;
-
+    let loopId = 0;
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set([panel, ...slidesUp], { clearProps: "all", opacity: 1, yPercent: 0, y: 0 });
+        gsap.set(lines, { yPercent: 0, clearProps: "transform" });
         return;
       }
 
-      playReveal();
+      // Ensure first paint is hidden, then reveal.
+      gsap.set(lines, { yPercent: 105 });
+      gsap.delayedCall(0.15, () => {
+        reveal();
+      });
 
-      // Loop the sliding reveal so it keeps the Jitter template feel.
-      loop = window.setInterval(() => {
-        const out = gsap.timeline();
-        out.to(slidesUp, {
-          yPercent: -110,
-          duration: 0.55,
-          stagger: 0.05,
-          ease: "power2.in",
-        });
-        out.add(() => {
-          playReveal();
-        });
-      }, 7000);
+      loopId = window.setInterval(() => {
+        gsap
+          .timeline()
+          .to(lines, {
+            yPercent: -105,
+            duration: 0.55,
+            stagger: 0.06,
+            ease: "power3.in",
+          })
+          .add(() => {
+            reveal();
+          });
+      }, 6200);
 
       if (veil.current) {
-        if (phone) {
-          gsap.set(veil.current, { opacity: 1 });
-        } else {
-          gsap.fromTo(
-            veil.current,
-            { opacity: 0.45 },
-            {
-              opacity: 0.75,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: "top top",
-                end: "bottom top",
-                scrub: fine ? 0.25 : true,
-              },
+        gsap.set(veil.current, { opacity: phone ? 1 : 0.55 });
+        if (!phone) {
+          gsap.to(veil.current, {
+            opacity: 0.8,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top top",
+              end: "bottom top",
+              scrub: fine ? 0.25 : true,
             },
-          );
+          });
         }
       }
 
-      if (phone) {
-        gsap.set(copy, { yPercent: 0, opacity: 1, clearProps: "transform,opacity" });
-      } else {
-        gsap.to(copy, {
-          yPercent: fine ? -22 : -12,
-          opacity: 0.7,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top top",
-            end: "bottom top",
-            scrub: fine ? 0.2 : true,
-          },
-        });
-      }
-
-      if (mark.current && fine) {
+      if (!phone && fine && mark.current) {
         gsap.to(mark.current, {
-          yPercent: 28,
-          opacity: 0.2,
+          yPercent: 24,
+          opacity: 0.18,
           ease: "none",
           scrollTrigger: {
             trigger: el,
@@ -252,7 +192,7 @@ export function Hero() {
     }, el);
 
     return () => {
-      window.clearInterval(loop);
+      window.clearInterval(loopId);
       ctx.revert();
     };
   }, []);
@@ -279,38 +219,28 @@ export function Hero() {
             <div className="hero__veil" ref={veil} />
           </div>
           <div className="hero__watermark" ref={mark}>
-            <img
-              src={asset("/img/waed-logo-vertical-white.svg")}
-              alt=""
-              width={320}
-              height={295}
-            />
+            <img src={asset("/img/waed-logo-vertical-white.svg")} alt="" width={320} height={295} />
           </div>
         </div>
 
         <div className="shell hero__content" ref={content}>
           <div className="hero__panel">
-            <div className="hero__mask">
-              <p className="hero__place hero__slide-up">Bahrain · Al Hidd</p>
+            <div className="hero__line-mask">
+              <p className="hero__place hero__reveal-line">Bahrain · Al Hidd</p>
             </div>
+
             <h1 className="alive-headline">
               {HEADLINE_LINES.map((line) => (
-                <span className="hero__mask" key={line.join("-")}>
-                  <span className="hero__hline hero__slide-up">
-                    {line.map((word, wordIndex) => (
-                      <span className="hero__word" key={`${line.join("-")}-${word}`}>
-                        {word}
-                        {wordIndex < line.length - 1 ? "\u00A0" : ""}
-                      </span>
-                    ))}
-                  </span>
+                <span className="hero__line-mask" key={line}>
+                  <span className="hero__reveal-line">{line}</span>
                 </span>
               ))}
             </h1>
+
             <div className="hero__lead">
               {LEAD_LINES.map((line) => (
-                <span className="hero__mask" key={line}>
-                  <span className="hero__lead-line hero__slide-up">{line}</span>
+                <span className="hero__line-mask" key={line}>
+                  <span className="hero__reveal-line hero__lead-line">{line}</span>
                 </span>
               ))}
             </div>
