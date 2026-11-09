@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { asset } from "../lib/asset";
 import { usePrefersReducedMotion } from "../lib/usePrefersReducedMotion";
+import { MarkRule } from "./MarkRule";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,6 +91,7 @@ export function Statement({
 
       <div className="shell statement__inner">
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+        <MarkRule className={tone === "navy" ? "mark-rule--light" : ""} />
 
         <ul className="statement__list">
           {lines.map((part, i) => (

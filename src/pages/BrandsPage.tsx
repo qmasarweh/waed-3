@@ -54,7 +54,10 @@ export function BrandsPage() {
 
         <section className="section brands-intro">
           <div className="shell brands-intro__grid">
-            <ScrollType text="A house of brands, manufactured with precision." mode="rise" />
+            <div>
+              <ScrollType text="A house of brands, manufactured with precision." mode="rise" />
+              <MarkRule className="mark-rule--left" />
+            </div>
             <p className="lead reveal reveal--up">{page.intro}</p>
           </div>
         </section>

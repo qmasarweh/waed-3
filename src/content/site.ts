@@ -26,7 +26,6 @@ export type NavItem = NavLink;
 
 export const nav: NavItem[] = [
   { href: "/#about", label: "About" },
-  { href: "/#about-us", label: "About Us" },
   { href: "/#factory", label: "Factory" },
   { href: "/brands", label: "Our Brands" },
   { href: "/#private-label", label: "Custom Brands" },
