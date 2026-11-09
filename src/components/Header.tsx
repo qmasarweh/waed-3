@@ -17,7 +17,7 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 12);
+      setScrolled(y > 48);
 
       if (isLightSurface) {
         setOverDark(false);

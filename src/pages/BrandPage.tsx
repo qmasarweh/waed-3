@@ -4,7 +4,6 @@ import { getBrand } from "../content/site";
 import { asset } from "../lib/asset";
 import { BrandTitle } from "../components/BrandTitle";
 import { MarkRule } from "../components/MarkRule";
-import { ProductVariants } from "../components/ProductVariants";
 import { RevealObserver } from "../components/RevealObserver";
 
 export function BrandPage() {
@@ -73,29 +72,18 @@ export function BrandPage() {
             </div>
 
             <ul className="brand-product-grid reveal reveal--up" aria-label={`${brand.name} products`}>
-              {brand.products.map((product, i) => {
-                const variants = ("variants" in product ? product.variants : undefined) ?? [];
-                return (
-                <li key={product.name} className="brand-product">
-                  <div className="brand-product__media">
-                    {variants.length > 1 ? (
-                      <ProductVariants name={product.name} variants={variants} />
-                    ) : product.image ? (
-                      <img src={asset(product.image)} alt={product.name} loading="lazy" />
-                    ) : (
-                      <div className="brand-product__placeholder" aria-hidden="true">
-                        <span>{String(i + 1).padStart(2, "0")}</span>
-                      </div>
-                    )}
-                  </div>
+              {brand.products.map((product, i) => (
+                <li key={product.name} className="brand-product brand-product--text">
                   <div className="brand-product__copy">
+                    <span className="brand-product__index" aria-hidden="true">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                     <span className="brand-product__cat">{product.category}</span>
                     <strong>{product.name}</strong>
                     <p>{product.body}</p>
                   </div>
                 </li>
-                );
-              })}
+              ))}
             </ul>
 
             <div className="brand-page__actions reveal reveal--up">

@@ -35,8 +35,8 @@ export function PrivateLabel() {
               <img
                 src={asset("/img/office.jpg")}
                 alt="WAED Industrial meeting room"
-                width={800}
-                height={1328}
+                width={616}
+                height={1024}
                 loading="lazy"
               />
             </Parallax>

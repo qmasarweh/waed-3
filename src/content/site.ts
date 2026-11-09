@@ -36,7 +36,7 @@ export const nav: NavItem[] = [
 
 export const home = {
   headline: "Innovating the Future of Cleaning Manufacturing.",
-  support: "Manufactured in Bahrain. Made for homes across the region.",
+  support: "Manufactured in Bahrain. Ready to Supply Regionally.",
   ctaPrimary: "Request a Quote",
   ctaSecondary: "Explore Factory",
   highlights: [
@@ -58,9 +58,9 @@ export const about = {
   profileEyebrow: "About Us",
   profileTitle: "Innovation in Manufacturing. Excellence in Every Product.",
   fullProfile: [
-    "At WAED Industrial, our ambition is to set a higher standard for cleaning products made for the home.",
+    "At WAED Industrial, our ambition is to set a higher standard for cleaning products across household, commercial, and industrial markets.",
     "We believe exceptional products are the result of disciplined execution, purposeful innovation, and uncompromising attention to detail.",
-    "This philosophy shapes the way we operate, the trust we build, and the lasting value we create for families who use our brands every day.",
+    "This philosophy shapes the way we operate, the trust we build, and the lasting value we create for customers and businesses who rely on our products and brands every day.",
     "We are building products designed not only to meet expectations, but to raise them.",
   ],
 } as const;
@@ -204,65 +204,31 @@ export const brands = {
       focus: ["Kitchen", "Bathroom", "Living spaces", "Everyday hygiene"],
       logo: "/img/enaya/logo.jpg",
       titleClass: "enaya-title",
-      gallery: [
-        {
-          src: "/img/enaya/dishwashing-lemon.png",
-          alt: "Enaya dishwashing liquid jerry can",
-          caption: "Dishwashing Liquid",
-        },
-        {
-          src: "/img/enaya/hand-soap-rose.png",
-          alt: "Enaya hand soap jerry can",
-          caption: "Hand Soap",
-        },
-        {
-          src: "/img/enaya/multipurpose-white.png",
-          alt: "Enaya multipurpose cleaner jerry can",
-          caption: "Multipurpose Cleaner",
-        },
-        {
-          src: "/img/enaya/disinfectant-rose.png",
-          alt: "Enaya disinfectant jerry can",
-          caption: "Disinfectant",
-        },
-      ],
+      gallery: [],
       products: [
         {
           name: "Dishwashing Liquid",
           category: "Kitchen",
           body: "Concentrated dishwashing liquid for everyday family kitchens.",
-          image: "/img/enaya/dishwashing-lemon.png",
+          image: "",
         },
         {
           name: "Hand Soap",
           category: "Hygiene",
           body: "Liquid hand soap for everyday use at home. Other variants are available.",
-          image: "/img/enaya/hand-soap-rose.png",
-          variants: [
-            { label: "Rose", image: "/img/enaya/hand-soap-rose.png" },
-            { label: "Oud", image: "/img/enaya/hand-soap-oud.png" },
-            { label: "White Floral", image: "/img/enaya/hand-soap-white-floral.png" },
-            { label: "Lavender", image: "/img/enaya/hand-soap-lavender.png" },
-          ],
+          image: "",
         },
         {
           name: "Multipurpose Cleaner",
           category: "Surface",
           body: "General-purpose cleaner for routine cleaning of hard surfaces.",
-          image: "/img/enaya/multipurpose-white.png",
+          image: "",
         },
         {
           name: "Disinfectant",
           category: "Hygiene",
           body: "Disinfectant for hygiene-focused cleaning around the home. Other variants are available.",
-          image: "/img/enaya/disinfectant-rose.png",
-          variants: [
-            { label: "Rose", image: "/img/enaya/disinfectant-rose.png" },
-            { label: "French Perfume", image: "/img/enaya/disinfectant-french-perfume.png" },
-            { label: "Lavender", image: "/img/enaya/disinfectant-lavender.png" },
-            { label: "Pine", image: "/img/enaya/disinfectant-pine.png" },
-            { label: "Al Haram", image: "/img/enaya/disinfectant-al-haram.png" },
-          ],
+          image: "",
         },
       ],
     },
@@ -275,52 +241,31 @@ export const brands = {
       focus: ["B2C retail", "Home shoppers", "Family cleaning", "Everyday use"],
       logo: "/img/leen-x/logo.svg",
       titleClass: "leenx-title",
-      gallery: [
-        {
-          src: "/img/leen-x/multipurpose.jpg",
-          alt: "leenX multipurpose cleaner retail spray bottle",
-          caption: "Multipurpose Cleaner · 750 ml",
-        },
-        {
-          src: "/img/leen-x/bathroom.jpg",
-          alt: "leenX bathroom cleaner retail spray bottle",
-          caption: "Bathroom Cleaner · 750 ml",
-        },
-        {
-          src: "/img/leen-x/floor.jpg",
-          alt: "leenX floor cleaner retail bottle",
-          caption: "Floor Cleaner · 1 L",
-        },
-        {
-          src: "/img/leen-x/glass.jpg",
-          alt: "leenX glass and window cleaner retail spray bottle",
-          caption: "Glass & Window · 750 ml",
-        },
-      ],
+      gallery: [],
       products: [
         {
           name: "Multipurpose Cleaner",
           category: "B2C · 750 ml",
           body: "A B2C retail spray for consumers — everyday multipurpose cleaner for counters, fixtures, and hard surfaces at home.",
-          image: "/img/leen-x/multipurpose.jpg",
+          image: "",
         },
         {
           name: "Floor Cleaner",
           category: "B2C · 1 L",
           body: "A B2C household bottle for consumers — floor cleaner for tiled and hard floors in living areas and hallways.",
-          image: "/img/leen-x/floor.jpg",
+          image: "",
         },
         {
           name: "Bathroom Cleaner",
           category: "B2C · 750 ml",
           body: "A B2C retail spray for consumers — bathroom cleaner for sinks, tiles, and washroom surfaces at home.",
-          image: "/img/leen-x/bathroom.jpg",
+          image: "",
         },
         {
           name: "Glass & Window",
           category: "B2C · 750 ml",
           body: "A B2C retail spray for consumers — streak-free cleaner for home windows, mirrors, and glass.",
-          image: "/img/leen-x/glass.jpg",
+          image: "",
         },
       ],
     },
