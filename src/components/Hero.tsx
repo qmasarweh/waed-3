@@ -23,7 +23,7 @@ const LEAD_LINES = home.support
   .filter(Boolean);
 
 /**
- * Sticky hero with cinematic photo slider and living typography.
+ * Sticky hero with cinematic photo slider and a compact living type block.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -146,62 +146,97 @@ export function Hero() {
     const phone = window.matchMedia("(max-width: 759px)").matches;
     const headlineLines = copy.querySelectorAll<HTMLElement>(".hero__hline");
     const words = copy.querySelectorAll<HTMLElement>(".hero__word");
+    const chars = copy.querySelectorAll<HTMLElement>(".hero__char");
     const leadLines = copy.querySelectorAll<HTMLElement>(".hero__lead-line");
     const place = copy.querySelector<HTMLElement>(".hero__place");
     const brand = copy.querySelector<HTMLElement>(".hero__brand");
     const rule = copy.querySelector<HTMLElement>(".hero__place-rule");
     const accent = copy.querySelector<HTMLElement>(".hero__accent");
-    const rail = copy.querySelector<HTMLElement>(".hero__lead-rail");
+    const panel = copy.querySelector<HTMLElement>(".hero__panel");
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set([place, brand, rule, words, leadLines, headlineLines, accent, rail], {
+        gsap.set([place, brand, rule, words, chars, leadLines, headlineLines, accent, panel], {
           clearProps: "all",
           opacity: 1,
           y: 0,
           x: 0,
+          yPercent: 0,
           filter: "none",
           clipPath: "none",
           scaleX: 1,
+          scale: 1,
         });
         return;
       }
 
-      gsap.set(place, { opacity: 0, y: 16, letterSpacing: "0.42em" });
+      gsap.set(panel, { opacity: 0, y: 28, scale: 0.96 });
+      gsap.set(place, { opacity: 0, y: 12 });
       gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
-      gsap.set(brand, { opacity: 0, y: 28, filter: "blur(10px)" });
-      gsap.set(headlineLines, { clipPath: "inset(0 0 100% 0)" });
-      gsap.set(words, { y: "110%", opacity: 0 });
+      gsap.set(brand, { opacity: 0, y: 16 });
+      gsap.set(headlineLines, { overflow: "hidden" });
+      gsap.set(words, { yPercent: 110, opacity: 0 });
+      gsap.set(chars, { yPercent: 120, opacity: 0 });
       gsap.set(accent, { scaleX: 0, transformOrigin: "left center" });
-      gsap.set(leadLines, { opacity: 0, x: -24 });
-      gsap.set(rail, { scaleY: 0, transformOrigin: "top center" });
+      gsap.set(leadLines, { opacity: 0, y: 14 });
 
-      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
       intro
-        .to(place, { opacity: 1, y: 0, letterSpacing: "0.2em", duration: 0.85 }, 0.1)
-        .to(rule, { scaleX: 1, duration: 0.9 }, 0.18)
-        .to(brand, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.95 }, 0.28)
-        .to(headlineLines, { clipPath: "inset(0 0 0% 0)", duration: 0.95, stagger: 0.16 }, 0.42)
-        .to(words, { y: "0%", opacity: 1, duration: 0.95, stagger: 0.055 }, 0.48)
-        .to(accent, { scaleX: 1, duration: 0.85 }, 1.15)
-        .to(rail, { scaleY: 1, duration: 0.8 }, 1.2)
-        .to(leadLines, { opacity: 1, x: 0, duration: 0.75, stagger: 0.16 }, 1.22);
+        .to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.9 }, 0.05)
+        .to(place, { opacity: 1, y: 0, duration: 0.55 }, 0.18)
+        .to(rule, { scaleX: 1, duration: 0.7 }, 0.22)
+        .to(brand, { opacity: 1, y: 0, duration: 0.7 }, 0.28)
+        .to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.018 }, 0.36)
+        .to(words, { yPercent: 0, opacity: 1, duration: 0.75, stagger: 0.045 }, 0.42)
+        .to(accent, { scaleX: 1, duration: 0.7 }, 0.95)
+        .to(leadLines, { opacity: 1, y: 0, duration: 0.55, stagger: 0.1 }, 1.0);
 
+      // Living loop — soft float + underline pulse (Awwwards-style after entrance).
       if (!phone) {
-        gsap.to(headlineLines, {
-          x: 6,
-          duration: 4.8,
-          ease: "sine.inOut",
-          stagger: { each: 0.35, repeat: -1, yoyo: true },
-          delay: 2.1,
-        });
-        gsap.to(accent, {
-          opacity: 0.55,
-          duration: 2.4,
+        gsap.to(panel, {
+          y: -5,
+          duration: 3.2,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
-          delay: 2.2,
+          delay: 1.6,
+        });
+        gsap.to(accent, {
+          opacity: 0.45,
+          duration: 1.8,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: 1.7,
+        });
+        gsap.to(words, {
+          y: "-=2",
+          duration: 2.8,
+          ease: "sine.inOut",
+          stagger: { each: 0.08, repeat: -1, yoyo: true },
+          delay: 1.8,
+        });
+      }
+
+      // Cursor parallax on the compact panel.
+      if (fine && panel) {
+        const onMove = (event: MouseEvent) => {
+          const rect = el.getBoundingClientRect();
+          const px = (event.clientX - rect.left) / rect.width - 0.5;
+          const py = (event.clientY - rect.top) / rect.height - 0.5;
+          gsap.to(panel, {
+            x: px * 14,
+            y: py * 10 - 2,
+            rotateX: py * -4,
+            rotateY: px * 5,
+            duration: 0.7,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        };
+        el.addEventListener("mousemove", onMove);
+        el.addEventListener("mouseleave", () => {
+          gsap.to(panel, { x: 0, y: 0, rotateX: 0, rotateY: 0, duration: 0.9, ease: "power3.out" });
         });
       }
 
@@ -211,9 +246,9 @@ export function Hero() {
         } else {
           gsap.fromTo(
             veil.current,
-            { opacity: 0.55 },
+            { opacity: 0.45 },
             {
-              opacity: 0.85,
+              opacity: 0.7,
               ease: "none",
               scrollTrigger: {
                 trigger: el,
@@ -230,8 +265,8 @@ export function Hero() {
         gsap.set(copy, { yPercent: 0, opacity: 1, clearProps: "transform,opacity" });
       } else {
         gsap.to(copy, {
-          yPercent: fine ? -40 : -24,
-          opacity: 0.4,
+          yPercent: fine ? -28 : -16,
+          opacity: 0.55,
           ease: "none",
           scrollTrigger: {
             trigger: el,
@@ -305,34 +340,43 @@ export function Hero() {
         </div>
 
         <div className="shell hero__content" ref={content}>
-          <div className="hero__place-row">
-            <span className="hero__place-rule" aria-hidden="true" />
-            <p className="hero__place">Bahrain · Al Hidd</p>
-          </div>
-          <img
-            className="hero__brand"
-            src={asset("/img/waed-logo-horizontal-white.svg")}
-            alt={site.legalName}
-            width={420}
-            height={90}
-          />
-          <h1 className="alive-headline" ref={headline}>
-            {HEADLINE_LINES.map((line, lineIndex) => (
-              <span
-                className={`hero__hline${lineIndex === HEADLINE_LINES.length - 1 ? " hero__hline--accent" : ""}`}
-                key={line.join("-")}
-              >
-                {line.map((word) => (
-                  <span className="hero__word" key={`${lineIndex}-${word}`}>
-                    {word}
-                  </span>
-                ))}
-              </span>
-            ))}
-            <span className="hero__accent" aria-hidden="true" />
-          </h1>
-          <div className="hero__lead-wrap">
-            <span className="hero__lead-rail" aria-hidden="true" />
+          <div className="hero__panel">
+            <div className="hero__place-row">
+              <span className="hero__place-rule" aria-hidden="true" />
+              <p className="hero__place">Bahrain · Al Hidd</p>
+            </div>
+            <img
+              className="hero__brand"
+              src={asset("/img/waed-logo-horizontal-navy.svg")}
+              alt={site.legalName}
+              width={280}
+              height={60}
+            />
+            <h1 className="alive-headline" ref={headline}>
+              {HEADLINE_LINES.map((line, lineIndex) => (
+                <span
+                  className={`hero__hline${lineIndex === HEADLINE_LINES.length - 1 ? " hero__hline--accent" : ""}`}
+                  key={line.join("-")}
+                >
+                  {line.map((word, wordIndex) =>
+                    lineIndex === 0 && wordIndex === 0 ? (
+                      <span className="hero__word hero__word--chars" key={`${lineIndex}-${word}`}>
+                        {word.split("").map((char, charIndex) => (
+                          <span className="hero__char" key={`${word}-${charIndex}`}>
+                            {char}
+                          </span>
+                        ))}
+                      </span>
+                    ) : (
+                      <span className="hero__word" key={`${lineIndex}-${word}`}>
+                        {word}
+                      </span>
+                    ),
+                  )}
+                </span>
+              ))}
+              <span className="hero__accent" aria-hidden="true" />
+            </h1>
             <p className="hero__lead">
               {LEAD_LINES.map((line) => (
                 <span className="hero__lead-line" key={line}>

@@ -686,26 +686,41 @@ textarea {
 .hero__content {
   position: relative;
   z-index: 2;
-  color: var(--white);
-  display: grid;
-  gap: 1.15rem;
-  max-width: 48rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   padding: 0;
   background: transparent;
   box-shadow: none;
+  perspective: 1000px;
+}
+
+.hero__panel {
+  width: min(26rem, 100%);
+  display: grid;
+  gap: 0.7rem;
+  padding: 1.15rem 1.25rem 1.2rem;
+  color: #0a0a0a;
+  background: rgba(247, 245, 240, 0.88);
+  backdrop-filter: blur(14px) saturate(1.05);
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  box-shadow: 0 18px 40px rgba(14, 24, 40, 0.18);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .hero__place-row {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.7rem;
 }
 
 .hero__place-rule {
   display: block;
-  width: 2.8rem;
+  width: 1.8rem;
   height: 1px;
-  background: rgba(247, 245, 240, 0.8);
+  background: rgba(10, 10, 10, 0.55);
   flex: 0 0 auto;
 }
 
@@ -713,46 +728,44 @@ textarea {
   margin: 0;
   width: fit-content;
   padding: 0;
-  font-size: 0.76rem;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.94);
+  color: #0a0a0a;
   background: transparent;
-  text-shadow: 0 1px 12px rgba(8, 14, 24, 0.55);
+  text-shadow: none;
 }
 
 .hero__brand {
-  width: min(360px, 78vw);
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
+  width: min(190px, 68%);
+  filter: none;
 }
 
 .alive-headline {
   position: relative;
   margin: 0;
   display: grid;
-  gap: 0.12em;
+  gap: 0.08em;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.5rem, 1.2rem + 4.8vw, 4.6rem);
-  line-height: 0.98;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.35rem, 0.95rem + 1.4vw, 1.85rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   text-align: left;
-  color: #fff;
-  text-shadow:
-    0 1px 2px rgba(8, 14, 24, 0.45),
-    0 18px 40px rgba(8, 14, 24, 0.45);
+  color: #0a0a0a;
+  text-shadow: none;
 }
 
 .hero__hline {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.06em;
+  padding-bottom: 0.04em;
 }
 
 .hero__word {
   display: inline-block;
-  margin-right: 0.28em;
+  margin-right: 0.26em;
   will-change: transform, opacity;
 }
 
@@ -760,26 +773,21 @@ textarea {
   margin-right: 0;
 }
 
+.hero__word--chars {
+  white-space: nowrap;
+}
+
+.hero__char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
 .hero__accent {
   display: block;
-  width: min(12rem, 42%);
-  height: 2px;
-  margin-top: 0.55rem;
-  background: linear-gradient(90deg, rgba(247, 245, 240, 0.95), rgba(247, 245, 240, 0));
-}
-
-.hero__lead-wrap {
-  display: grid;
-  grid-template-columns: 2px 1fr;
-  gap: 0.9rem;
-  align-items: stretch;
-  max-width: 34rem;
-}
-
-.hero__lead-rail {
-  display: block;
-  width: 2px;
-  background: rgba(247, 245, 240, 0.55);
+  width: min(7.5rem, 48%);
+  height: 1.5px;
+  margin-top: 0.4rem;
+  background: linear-gradient(90deg, rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0));
 }
 
 .scroll-type {
@@ -951,11 +959,11 @@ textarea {
 .hero__lead {
   margin: 0;
   display: grid;
-  gap: 0.22rem;
-  font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.2rem);
-  line-height: 1.55;
-  color: rgba(247, 245, 240, 0.92);
-  text-shadow: 0 1px 14px rgba(8, 14, 24, 0.55);
+  gap: 0.12rem;
+  font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.98rem);
+  line-height: 1.45;
+  color: rgba(10, 10, 10, 0.78);
+  text-shadow: none;
 }
 
 .hero__lead-line {
@@ -3920,22 +3928,30 @@ a.contact-chip:hover {
   .hero__content {
     position: absolute;
     z-index: 2;
-    gap: 0.55rem;
     width: auto;
     max-width: none;
     margin: 0;
-    left: 0.85rem;
-    right: 0.85rem;
-    bottom: 0.85rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
     top: auto;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
     background: transparent;
     box-shadow: none;
-    text-align: center;
-    justify-items: center;
     opacity: 1 !important;
     transform: none !important;
     translate: none !important;
+  }
+
+  .hero__panel {
+    width: min(22rem, 100%);
+    gap: 0.55rem;
+    padding: 0.95rem 1rem 1rem;
+    text-align: center;
+    justify-items: center;
   }
 
   .hero__place-row {
@@ -3943,7 +3959,7 @@ a.contact-chip:hover {
   }
 
   .hero__place-rule {
-    width: 1.5rem;
+    width: 1.35rem;
   }
 
   .hero__place {
@@ -3952,64 +3968,52 @@ a.contact-chip:hover {
     width: fit-content;
     margin: 0;
     padding: 0;
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     text-align: center;
-    color: #fff;
+    color: #0a0a0a;
     background: transparent;
-    text-shadow: 0 1px 12px rgba(8, 14, 24, 0.7);
+    text-shadow: none;
   }
 
   .hero__brand {
-    display: none;
+    display: block;
+    width: min(150px, 55%);
+    margin-inline: auto;
   }
 
   .alive-headline {
-    font-size: clamp(1.65rem, 6.4vw, 2.05rem);
-    line-height: 1.02;
-    letter-spacing: -0.04em;
+    font-size: clamp(1.2rem, 4.8vw, 1.45rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
     text-align: center;
-    max-width: 18ch;
+    max-width: 16ch;
     margin: 0 auto;
     justify-self: center;
     justify-items: center;
     transform: none !important;
-    color: #fff;
-    text-shadow: 0 1px 2px rgba(8, 14, 24, 0.55), 0 12px 28px rgba(8, 14, 24, 0.5);
+    color: #0a0a0a;
+    text-shadow: none;
   }
 
   .hero__accent {
     margin-inline: auto;
   }
 
-  .hero__lead-wrap {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
-    max-width: 22rem;
-    margin-inline: auto;
-    justify-items: center;
-  }
-
-  .hero__lead-rail {
-    width: 2.5rem;
-    height: 1px;
-    scale: none;
-  }
-
   .hero__lead {
     display: grid;
-    gap: 0.15rem;
+    gap: 0.12rem;
     margin: 0;
-    max-width: 22rem;
-    font-size: clamp(0.84rem, 2.7vw, 0.95rem);
+    max-width: 20rem;
+    font-size: clamp(0.78rem, 2.4vw, 0.88rem);
     line-height: 1.4;
     text-align: center;
-    color: #fff;
+    color: rgba(10, 10, 10, 0.78);
     position: relative;
     z-index: 1;
-    text-shadow: 0 1px 2px rgba(8, 14, 24, 0.65), 0 8px 18px rgba(8, 14, 24, 0.4);
+    text-shadow: none;
   }
 
   .hero__actions {
