@@ -171,7 +171,6 @@ export function Hero() {
           opacity: 0,
           x: from.x,
           y: from.y,
-          filter: "blur(6px)",
           force3D: true,
         });
 
@@ -181,7 +180,6 @@ export function Hero() {
             opacity: 1,
             x: 0,
             y: 0,
-            filter: "blur(0px)",
             duration: 0.55,
             ease: "power4.out",
           },
@@ -239,7 +237,6 @@ export function Hero() {
                 opacity: 0,
                 x: to.x * 0.55,
                 y: to.y * 0.55,
-                filter: "blur(4px)",
                 duration: 0.32,
                 ease: "power2.in",
               },

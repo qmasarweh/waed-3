@@ -698,9 +698,6 @@ textarea {
 .hero__panel {
   /* Same navy as About / section titles (WAED Industrial) */
   --hero-ink: var(--navy);
-  --hero-halo:
-    0 1px 0 rgba(255, 255, 255, 0.85),
-    0 0 1px rgba(255, 255, 255, 0.9);
   width: min(40rem, 100%);
   display: grid;
   gap: 0.85rem;
@@ -720,21 +717,24 @@ textarea {
   width: 100%;
   text-align: center;
   color: var(--hero-ink);
-  text-shadow: var(--hero-halo);
+  text-shadow: none;
   -webkit-text-fill-color: var(--hero-ink);
   font-family: var(--font-display);
   font-weight: 700;
   overflow: visible;
+  background: transparent;
 }
 
 .hero__word {
   display: inline-block;
   color: var(--hero-ink) !important;
-  text-shadow: var(--hero-halo) !important;
+  text-shadow: none !important;
   -webkit-text-fill-color: var(--hero-ink);
-  will-change: transform, opacity, filter;
+  filter: none;
+  will-change: transform, opacity;
   white-space: nowrap;
   backface-visibility: hidden;
+  background: transparent;
 }
 
 .hero__line--place {
