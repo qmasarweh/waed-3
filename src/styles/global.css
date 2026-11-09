@@ -694,8 +694,8 @@ textarea {
 }
 
 .hero__panel {
-  /* Navy on light slides; white on dark slides — no wash blob */
-  --hero-ink: var(--navy);
+  /* Fixed blue-black: black mixed with WAED navy */
+  --hero-ink: color-mix(in srgb, #000000 70%, var(--navy) 30%);
   position: relative;
   z-index: 1;
   width: min(40rem, 100%);
@@ -710,15 +710,6 @@ textarea {
   box-shadow: none;
   transform-origin: center center;
   will-change: transform;
-  transition: color 0.45s ease;
-}
-
-.hero__panel.is-on-dark {
-  --hero-ink: #ffffff;
-}
-
-.hero__panel.is-on-light {
-  --hero-ink: var(--navy);
 }
 
 .hero__line {

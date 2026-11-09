@@ -41,37 +41,6 @@ function offsetFor(dir: MotionDir, phone: boolean) {
   }
 }
 
-/** Sample the copy zone of a slide — dark photos get white type, light ones keep navy. */
-function slideNeedsLightType(img: HTMLImageElement): boolean {
-  if (!img.naturalWidth) return false;
-  try {
-    const canvas = document.createElement("canvas");
-    const w = 48;
-    const h = 28;
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    if (!ctx) return false;
-
-    // Center band where the hero copy sits.
-    const sx = img.naturalWidth * 0.22;
-    const sy = img.naturalHeight * 0.38;
-    const sw = img.naturalWidth * 0.56;
-    const sh = img.naturalHeight * 0.36;
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
-
-    const { data } = ctx.getImageData(0, 0, w, h);
-    let sum = 0;
-    const pixels = data.length / 4;
-    for (let i = 0; i < data.length; i += 4) {
-      sum += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
-    }
-    return sum / pixels < 145;
-  } catch {
-    return false;
-  }
-}
-
 /**
  * Sticky hero: photo slider + kinetic typography (AE-style word pop).
  */
@@ -86,30 +55,15 @@ export function Hero() {
 
   useEffect(() => {
     const stage = slider.current;
-    const copy = content.current;
-    if (!stage || !copy) return;
+    if (!stage) return;
 
     const slides = Array.from(stage.querySelectorAll<HTMLImageElement>(".hero__slide"));
-    const panel = copy.querySelector<HTMLElement>(".hero__panel");
-    if (!slides.length || !panel) return;
+    if (!slides.length) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const applyTone = (index: number) => {
-      const dark = slideNeedsLightType(slides[index]);
-      panel.classList.toggle("is-on-dark", dark);
-      panel.classList.toggle("is-on-light", !dark);
-    };
-
-    const readyTone = (index: number) => {
-      const img = slides[index];
-      if (img.complete && img.naturalWidth) applyTone(index);
-      else img.addEventListener("load", () => applyTone(index), { once: true });
-    };
-
     gsap.set(slides, { opacity: 0, scale: 1.08, zIndex: 1 });
     gsap.set(slides[0], { opacity: 1, scale: 1, zIndex: 3 });
-    readyTone(0);
 
     if (reduce) return;
 
@@ -131,7 +85,6 @@ export function Hero() {
       const fromRight = next % 2 === 0;
 
       kenBurns?.kill();
-      readyTone(next);
       gsap.set(incoming, {
         opacity: 1,
         zIndex: 4,
@@ -362,7 +315,6 @@ export function Hero() {
                   height={1080}
                   fetchPriority={index === 0 ? "high" : "low"}
                   loading={index === 0 ? "eager" : "lazy"}
-                  crossOrigin="anonymous"
                 />
               ))}
             </div>
@@ -374,7 +326,7 @@ export function Hero() {
         </div>
 
         <div className="shell hero__content" ref={content}>
-          <div className="hero__panel is-on-light">
+          <div className="hero__panel">
             <p className="hero__line hero__line--place">
               {PLACE_WORDS.map((word, index) => (
                 <span className="hero__word" key={`place-${word}-${index}`}>
