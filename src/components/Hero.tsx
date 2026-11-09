@@ -11,19 +11,38 @@ const HERO_SLIDES = Array.from({ length: 12 }, (_, index) => {
   return `/img/hero-slider/hero-slide-${n}.jpg`;
 });
 
+const PLACE_WORDS = ["Bahrain", "·", "Al", "Hidd"];
 const HEADLINE_LINES = [
-  "Innovating the Future",
-  "of Cleaning",
-  "Manufacturing.",
-];
-
+  ["Innovating", "the", "Future"],
+  ["of", "Cleaning"],
+  ["Manufacturing."],
+] as const;
 const LEAD_LINES = home.support
   .split(/(?<=\.)\s+/)
   .map((line) => line.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .map((line) => line.split(/\s+/));
+
+type MotionDir = "up" | "down" | "left" | "right";
+
+const DIRS: MotionDir[] = ["up", "up", "right", "up", "left", "up", "down", "up", "right", "up"];
+
+function offsetFor(dir: MotionDir, phone: boolean) {
+  const d = phone ? 36 : 56;
+  switch (dir) {
+    case "up":
+      return { x: 0, y: d };
+    case "down":
+      return { x: 0, y: -d };
+    case "left":
+      return { x: d, y: 0 };
+    case "right":
+      return { x: -d, y: 0 };
+  }
+}
 
 /**
- * Sticky hero: photo slider + reliable Sliding Text Reveal on every copy line.
+ * Sticky hero: photo slider + kinetic typography (AE-style word pop).
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -78,15 +97,43 @@ export function Hero() {
         .timeline({
           defaults: { ease: "power3.inOut" },
           onComplete: () => {
-            gsap.set(outgoing, { opacity: 0, zIndex: 1, scale: 1.08, xPercent: 0, filter: "blur(0px)", clipPath: "inset(0)" });
+            gsap.set(outgoing, {
+              opacity: 0,
+              zIndex: 1,
+              scale: 1.08,
+              xPercent: 0,
+              filter: "blur(0px)",
+              clipPath: "inset(0)",
+            });
             gsap.set(incoming, { zIndex: 3, filter: "blur(0px)", clipPath: "inset(0)" });
             active = next;
             locked = false;
             kenBurns = gsap.to(incoming, { scale: 1.12, duration: 6, ease: "none" });
           },
         })
-        .to(outgoing, { scale: 1.2, xPercent: fromRight ? -5 : 5, opacity: 0.2, filter: "blur(10px)", duration: 1.35 }, 0)
-        .to(incoming, { clipPath: "inset(0 0% 0 0%)", scale: 1.02, xPercent: 0, filter: "blur(0px)", duration: 1.45, ease: "power3.out" }, 0.05)
+        .to(
+          outgoing,
+          {
+            scale: 1.2,
+            xPercent: fromRight ? -5 : 5,
+            opacity: 0.2,
+            filter: "blur(10px)",
+            duration: 1.35,
+          },
+          0,
+        )
+        .to(
+          incoming,
+          {
+            clipPath: "inset(0 0% 0 0%)",
+            scale: 1.02,
+            xPercent: 0,
+            filter: "blur(0px)",
+            duration: 1.45,
+            ease: "power3.out",
+          },
+          0.05,
+        )
         .to(outgoing, { opacity: 0, duration: 0.3 }, 1.05);
     };
 
@@ -101,59 +148,107 @@ export function Hero() {
   useEffect(() => {
     const el = root.current;
     const copy = content.current;
-    if (!el || !media.current || !copy) return;
+    if (!el || !copy) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
     const phone = window.matchMedia("(max-width: 759px)").matches;
-    const lines = Array.from(copy.querySelectorAll<HTMLElement>(".hero__reveal-line"));
+    const panel = copy.querySelector<HTMLElement>(".hero__panel");
+    const words = Array.from(copy.querySelectorAll<HTMLElement>(".hero__word"));
 
-    const showLines = () => {
-      gsap.set(lines, { yPercent: 0, clearProps: "transform" });
-    };
-
-    const reveal = () => {
-      if (!lines.length) return null;
-      gsap.killTweensOf(lines);
-      return gsap.fromTo(
-        lines,
-        { yPercent: 110 },
-        {
-          yPercent: 0,
-          duration: 1,
-          stagger: 0.11,
-          ease: "power4.out",
-          overwrite: true,
-        },
-      );
-    };
+    if (!panel || !words.length) return;
 
     let loopId = 0;
-    const safety = window.setTimeout(showLines, 1800);
+    let master: gsap.core.Timeline | null = null;
+
+    const playKinetic = () => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      words.forEach((word, index) => {
+        const dir = DIRS[index % DIRS.length];
+        const from = offsetFor(dir, phone);
+        gsap.set(word, {
+          opacity: 0,
+          x: from.x,
+          y: from.y,
+          filter: "blur(6px)",
+          force3D: true,
+        });
+
+        tl.to(
+          word,
+          {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.55,
+            ease: "power4.out",
+          },
+          0.08 + index * 0.07,
+        );
+      });
+
+      // Secondary camera motion on the whole block (AE null object).
+      tl.fromTo(
+        panel,
+        { scale: 1.08, y: phone ? 8 : 14 },
+        {
+          scale: 1,
+          y: 0,
+          duration: 1.15,
+          ease: "power2.out",
+        },
+        0.12,
+      );
+
+      tl.to(
+        panel,
+        {
+          y: phone ? -3 : -6,
+          duration: 2.2,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: 1,
+        },
+        ">-0.2",
+      );
+
+      return tl;
+    };
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        showLines();
-        return;
-      }
+        gsap.set([panel, ...words], { clearProps: "all", opacity: 1 });
+      } else {
+        master = playKinetic();
 
-      // Immediate visible reveal — never leave copy stuck off-screen.
-      reveal();
-
-      loopId = window.setInterval(() => {
-        gsap
-          .timeline({
+        loopId = window.setInterval(() => {
+          master?.kill();
+          const exit = gsap.timeline({
             onComplete: () => {
-              reveal();
+              master = playKinetic();
             },
-          })
-          .to(lines, {
-            yPercent: -110,
-            duration: 0.45,
-            stagger: 0.05,
-            ease: "power3.in",
           });
-      }, 6500);
+          words.forEach((word, index) => {
+            const dir = DIRS[(index + 3) % DIRS.length];
+            const to = offsetFor(dir, phone);
+            exit.to(
+              word,
+              {
+                opacity: 0,
+                x: to.x * 0.55,
+                y: to.y * 0.55,
+                filter: "blur(4px)",
+                duration: 0.32,
+                ease: "power2.in",
+              },
+              index * 0.035,
+            );
+          });
+          exit.to(panel, { scale: 0.97, duration: 0.35, ease: "power2.in" }, 0);
+        }, 6200);
+      }
 
       if (veil.current) {
         gsap.set(veil.current, { opacity: phone ? 1 : 0.55 });
@@ -200,9 +295,8 @@ export function Hero() {
     }, el);
 
     return () => {
-      window.clearTimeout(safety);
-      window.clearInterval(loopId);
-      showLines();
+      if (loopId) window.clearInterval(loopId);
+      master?.kill();
       ctx.revert();
     };
   }, []);
@@ -235,23 +329,38 @@ export function Hero() {
 
         <div className="shell hero__content" ref={content}>
           <div className="hero__panel">
-            <div className="hero__line-mask">
-              <p className="hero__place hero__reveal-line">Bahrain · Al Hidd</p>
-            </div>
+            <p className="hero__line hero__line--place">
+              {PLACE_WORDS.map((word, index) => (
+                <span className="hero__word" key={`place-${word}-${index}`}>
+                  {word}
+                  {index < PLACE_WORDS.length - 1 ? "\u00A0" : ""}
+                </span>
+              ))}
+            </p>
 
             <h1 className="alive-headline">
               {HEADLINE_LINES.map((line) => (
-                <span className="hero__line-mask" key={line}>
-                  <span className="hero__reveal-line">{line}</span>
+                <span className="hero__line" key={line.join("-")}>
+                  {line.map((word, wordIndex) => (
+                    <span className="hero__word" key={`${line.join("-")}-${word}`}>
+                      {word}
+                      {wordIndex < line.length - 1 ? "\u00A0" : ""}
+                    </span>
+                  ))}
                 </span>
               ))}
             </h1>
 
             <div className="hero__lead">
-              {LEAD_LINES.map((line) => (
-                <span className="hero__line-mask" key={line}>
-                  <span className="hero__reveal-line hero__lead-line">{line}</span>
-                </span>
+              {LEAD_LINES.map((line, lineIndex) => (
+                <p className="hero__line" key={`lead-${lineIndex}`}>
+                  {line.map((word, wordIndex) => (
+                    <span className="hero__word" key={`lead-${lineIndex}-${word}`}>
+                      {word}
+                      {wordIndex < line.length - 1 ? "\u00A0" : ""}
+                    </span>
+                  ))}
+                </p>
               ))}
             </div>
           </div>
