@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { home, site } from "../content/site";
@@ -7,26 +7,39 @@ import { ScrollType } from "./motion/ScrollType";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HERO_SLIDES = Array.from({ length: 12 }, (_, index) => {
+  const n = String(index + 1).padStart(2, "0");
+  return `/img/hero-slider/hero-slide-${n}.jpg`;
+});
+
 /**
- * Sticky hero with snappy upward exit so copy stays readable and the page moves on.
+ * Sticky hero with a cleaning-product photo slider and snappy upward exit.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
-  const img = useRef<HTMLImageElement>(null);
+  const media = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const veil = useRef<HTMLDivElement>(null);
   const mark = useRef<HTMLDivElement>(null);
   const scrollCue = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => {
+      setActive((current) => (current + 1) % HERO_SLIDES.length);
+    }, 5200);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const el = root.current;
-    const media = img.current;
-    const copy = content.current;
-    if (!el || !media) return;
+    if (!el || !media.current) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const fine = window.matchMedia("(pointer: fine)").matches;
     const scrub = fine ? 0.25 : true;
+    const copy = content.current;
     const ctx = gsap.context(() => {
       if (veil.current) {
         const phoneVeil = window.matchMedia("(max-width: 759px)").matches;
@@ -50,7 +63,6 @@ export function Hero() {
         }
       }
 
-      // On a phone the type stays large, centered, and fully visible.
       const phone = window.matchMedia("(max-width: 759px)").matches;
       if (copy && phone) {
         gsap.set(copy, { yPercent: 0, opacity: 1, clearProps: "transform,opacity" });
@@ -103,18 +115,21 @@ export function Hero() {
     <section className="hero" id="top" ref={root} aria-label="Hero">
       <div className="hero__sticky">
         <div className="hero__stage" aria-hidden="true">
-          <div className="hero__media">
-            <picture>
-              <source media="(max-width: 759px)" srcSet={asset("/img/hero-facility-mobile.jpg")} />
-              <img
-                ref={img}
-                src={asset("/img/hero-facility.jpg")}
-                alt=""
-                width={3840}
-                height={2160}
-                fetchPriority="high"
-              />
-            </picture>
+          <div className="hero__media" ref={media}>
+            <div className="hero__slider">
+              {HERO_SLIDES.map((src, index) => (
+                <img
+                  key={src}
+                  className={index === active ? "is-active" : undefined}
+                  src={asset(src)}
+                  alt=""
+                  width={1920}
+                  height={1080}
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              ))}
+            </div>
             <div className="hero__veil" ref={veil} />
           </div>
           <div className="hero__watermark" ref={mark}>

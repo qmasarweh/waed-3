@@ -596,16 +596,42 @@ textarea {
   height: 100%;
 }
 
-.hero__media img {
+.hero__slider {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__media img,
+.hero__slider img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 42%;
 }
 
+.hero__slider img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.15s ease;
+  will-change: opacity;
+}
+
+.hero__slider img.is-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__slider img {
+    transition: none;
+  }
+}
+
 .hero__veil {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background:
     linear-gradient(180deg, rgba(14, 24, 40, 0.28) 0%, rgba(14, 24, 40, 0.12) 38%, rgba(14, 24, 40, 0.82) 100%);
 }
