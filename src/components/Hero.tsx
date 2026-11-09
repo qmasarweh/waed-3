@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { home, site } from "../content/site";
@@ -13,23 +13,117 @@ const HERO_SLIDES = Array.from({ length: 12 }, (_, index) => {
 });
 
 /**
- * Sticky hero with a cleaning-product photo slider and snappy upward exit.
+ * Sticky hero with a cinematic cleaning-product photo slider.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const media = useRef<HTMLDivElement>(null);
+  const slider = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const veil = useRef<HTMLDivElement>(null);
   const mark = useRef<HTMLDivElement>(null);
   const scrollCue = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = window.setInterval(() => {
-      setActive((current) => (current + 1) % HERO_SLIDES.length);
-    }, 5200);
-    return () => window.clearInterval(id);
+    const stage = slider.current;
+    if (!stage) return;
+
+    const slides = Array.from(stage.querySelectorAll<HTMLImageElement>(".hero__slide"));
+    if (!slides.length) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    gsap.set(slides, { opacity: 0, scale: 1.1, xPercent: 0, filter: "blur(0px)", clipPath: "inset(0 0 0 0)", zIndex: 1 });
+    gsap.set(slides[0], { opacity: 1, scale: 1, zIndex: 3 });
+
+    if (reduce) return;
+
+    let active = 0;
+    let kenBurns: gsap.core.Tween | null = gsap.to(slides[0], {
+      scale: 1.14,
+      duration: 6.2,
+      ease: "none",
+    });
+    let locked = false;
+
+    const goNext = () => {
+      if (locked) return;
+      locked = true;
+
+      const prev = active;
+      const next = (active + 1) % slides.length;
+      const outgoing = slides[prev];
+      const incoming = slides[next];
+      const fromRight = next % 2 === 0;
+
+      kenBurns?.kill();
+
+      gsap.set(incoming, {
+        opacity: 1,
+        zIndex: 4,
+        scale: 1.22,
+        xPercent: fromRight ? 10 : -10,
+        filter: "blur(8px)",
+        clipPath: fromRight ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)",
+      });
+      gsap.set(outgoing, { zIndex: 3 });
+
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.inOut" },
+        onComplete: () => {
+          gsap.set(outgoing, {
+            opacity: 0,
+            zIndex: 1,
+            scale: 1.1,
+            xPercent: 0,
+            filter: "blur(0px)",
+            clipPath: "inset(0 0 0 0)",
+          });
+          gsap.set(incoming, { zIndex: 3, filter: "blur(0px)", clipPath: "inset(0 0 0 0)" });
+          active = next;
+          locked = false;
+          kenBurns = gsap.to(incoming, {
+            scale: 1.14,
+            duration: 6.2,
+            ease: "none",
+          });
+        },
+      });
+
+      tl.to(
+        outgoing,
+        {
+          scale: 1.24,
+          xPercent: fromRight ? -6 : 6,
+          opacity: 0.25,
+          filter: "blur(12px)",
+          duration: 1.45,
+        },
+        0,
+      );
+
+      tl.to(
+        incoming,
+        {
+          clipPath: "inset(0 0% 0 0%)",
+          scale: 1.02,
+          xPercent: 0,
+          filter: "blur(0px)",
+          duration: 1.55,
+          ease: "power3.out",
+        },
+        0.08,
+      );
+
+      tl.to(outgoing, { opacity: 0, duration: 0.35 }, 1.15);
+    };
+
+    const id = window.setInterval(goNext, 5600);
+    return () => {
+      window.clearInterval(id);
+      kenBurns?.kill();
+      gsap.killTweensOf(slides);
+      if (veil.current) gsap.killTweensOf(veil.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -116,11 +210,11 @@ export function Hero() {
       <div className="hero__sticky">
         <div className="hero__stage" aria-hidden="true">
           <div className="hero__media" ref={media}>
-            <div className="hero__slider">
+            <div className="hero__slider" ref={slider}>
               {HERO_SLIDES.map((src, index) => (
                 <img
                   key={src}
-                  className={index === active ? "is-active" : undefined}
+                  className={`hero__slide${index === 0 ? " is-active" : ""}`}
                   src={asset(src)}
                   alt=""
                   width={1920}
