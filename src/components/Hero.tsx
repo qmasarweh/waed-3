@@ -172,49 +172,49 @@ export function Hero() {
 
       gsap.set(panel, { opacity: 0, y: 28, scale: 0.96 });
       gsap.set(place, { opacity: 0, y: 12 });
-      gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(rule, { scaleX: 0, transformOrigin: "center center" });
       gsap.set(brand, { opacity: 0, y: 16 });
       gsap.set(headlineLines, { overflow: "hidden" });
       gsap.set(words, { yPercent: 110, opacity: 0 });
       gsap.set(chars, { yPercent: 120, opacity: 0 });
-      gsap.set(accent, { scaleX: 0, transformOrigin: "left center" });
-      gsap.set(leadLines, { opacity: 0, y: 14 });
+      gsap.set(accent, { scaleX: 0, transformOrigin: "center center" });
+      gsap.set(leadLines, { opacity: 0, y: 18, filter: "blur(6px)" });
 
       const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
       intro
-        .to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.9 }, 0.05)
-        .to(place, { opacity: 1, y: 0, duration: 0.55 }, 0.18)
-        .to(rule, { scaleX: 1, duration: 0.7 }, 0.22)
-        .to(brand, { opacity: 1, y: 0, duration: 0.7 }, 0.28)
-        .to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.018 }, 0.36)
-        .to(words, { yPercent: 0, opacity: 1, duration: 0.75, stagger: 0.045 }, 0.42)
-        .to(accent, { scaleX: 1, duration: 0.7 }, 0.95)
-        .to(leadLines, { opacity: 1, y: 0, duration: 0.55, stagger: 0.1 }, 1.0);
+        .to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, 0.05)
+        .to(place, { opacity: 1, y: 0, duration: 0.55 }, 0.15)
+        .to(rule, { scaleX: 1, duration: 0.7 }, 0.2)
+        .to(brand, { opacity: 1, y: 0, duration: 0.7 }, 0.26)
+        .to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.02 }, 0.34)
+        .to(words, { yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.05 }, 0.4)
+        .to(accent, { scaleX: 1, duration: 0.75 }, 0.95)
+        .to(leadLines, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.65, stagger: 0.12 }, 1.0);
 
-      // Living loop — soft float + underline pulse (Awwwards-style after entrance).
+      // Keep the type breathing after entrance.
       if (!phone) {
         gsap.to(panel, {
-          y: -5,
-          duration: 3.2,
+          y: -6,
+          duration: 3.4,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
           delay: 1.6,
         });
         gsap.to(accent, {
-          opacity: 0.45,
-          duration: 1.8,
+          scaleX: 0.72,
+          duration: 1.9,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
           delay: 1.7,
         });
-        gsap.to(words, {
-          y: "-=2",
-          duration: 2.8,
+        gsap.to([...chars, ...words], {
+          y: "-=3",
+          duration: 2.6,
           ease: "sine.inOut",
-          stagger: { each: 0.08, repeat: -1, yoyo: true },
-          delay: 1.8,
+          stagger: { each: 0.05, repeat: -1, yoyo: true },
+          delay: 1.75,
         });
       }
 
