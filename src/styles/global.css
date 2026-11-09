@@ -693,6 +693,27 @@ textarea {
   box-shadow: none;
 }
 
+/* Static black lift — almost invisible, no readable shape, never moves with type */
+.hero__text-wash {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: 0.5rem;
+  width: min(32rem, 84%);
+  height: 8.75rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.14) 0%,
+    rgba(0, 0, 0, 0.06) 40%,
+    rgba(0, 0, 0, 0) 72%
+  );
+  filter: blur(32px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .hero__panel {
   /* Fixed blue-black: black mixed with WAED navy */
   --hero-ink: color-mix(in srgb, #000000 70%, var(--navy) 30%);
@@ -3898,6 +3919,13 @@ a.contact-chip:hover {
       rgba(14, 24, 40, 0) 55%,
       rgba(14, 24, 40, 0.18) 100%
     );
+  }
+
+  .hero__text-wash {
+    bottom: 0.2rem;
+    width: min(24rem, 90%);
+    height: 7.25rem;
+    opacity: 0.45;
   }
 
   .hero__content {
