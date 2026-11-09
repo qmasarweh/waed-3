@@ -23,7 +23,7 @@ const LEAD_LINES = home.support
   .filter(Boolean);
 
 /**
- * Sticky hero with cinematic photo slider and a compact living type block.
+ * Sticky hero with cinematic photo slider + Jitter-style Sliding Text Reveal.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -33,7 +33,6 @@ export function Hero() {
   const veil = useRef<HTMLDivElement>(null);
   const mark = useRef<HTMLDivElement>(null);
   const scrollCue = useRef<HTMLDivElement>(null);
-  const headline = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const stage = slider.current;
@@ -144,101 +143,48 @@ export function Hero() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
     const phone = window.matchMedia("(max-width: 759px)").matches;
-    const headlineLines = copy.querySelectorAll<HTMLElement>(".hero__hline");
-    const words = copy.querySelectorAll<HTMLElement>(".hero__word");
-    const chars = copy.querySelectorAll<HTMLElement>(".hero__char");
-    const leadLines = copy.querySelectorAll<HTMLElement>(".hero__lead-line");
-    const place = copy.querySelector<HTMLElement>(".hero__place");
-    const brand = copy.querySelector<HTMLElement>(".hero__brand");
-    const rule = copy.querySelector<HTMLElement>(".hero__place-rule");
-    const accent = copy.querySelector<HTMLElement>(".hero__accent");
+
+    const masks = copy.querySelectorAll<HTMLElement>(".hero__mask");
+    const slidesUp = copy.querySelectorAll<HTMLElement>(".hero__slide-up");
     const panel = copy.querySelector<HTMLElement>(".hero__panel");
+
+    const playReveal = () => {
+      gsap.killTweensOf([panel, ...masks, ...slidesUp]);
+      gsap.set(panel, { opacity: 1, y: 0, scale: 1 });
+      gsap.set(slidesUp, { yPercent: 110 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(slidesUp, {
+        yPercent: 0,
+        duration: 0.95,
+        stagger: 0.08,
+      });
+      return tl;
+    };
+
+    let loop = 0;
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set([place, brand, rule, words, chars, leadLines, headlineLines, accent, panel], {
-          clearProps: "all",
-          opacity: 1,
-          y: 0,
-          x: 0,
-          yPercent: 0,
-          filter: "none",
-          clipPath: "none",
-          scaleX: 1,
-          scale: 1,
-        });
+        gsap.set([panel, ...slidesUp], { clearProps: "all", opacity: 1, yPercent: 0, y: 0 });
         return;
       }
 
-      gsap.set(panel, { opacity: 0, y: 28, scale: 0.96 });
-      gsap.set(place, { opacity: 0, y: 12 });
-      gsap.set(rule, { scaleX: 0, transformOrigin: "center center" });
-      gsap.set(brand, { opacity: 0, y: 16 });
-      gsap.set(headlineLines, { overflow: "hidden" });
-      gsap.set(words, { yPercent: 110, opacity: 0 });
-      gsap.set(chars, { yPercent: 120, opacity: 0 });
-      gsap.set(accent, { scaleX: 0, transformOrigin: "center center" });
-      gsap.set(leadLines, { opacity: 0, y: 18, filter: "blur(6px)" });
+      playReveal();
 
-      const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
-      intro
-        .to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, 0.05)
-        .to(place, { opacity: 1, y: 0, duration: 0.55 }, 0.15)
-        .to(rule, { scaleX: 1, duration: 0.7 }, 0.2)
-        .to(brand, { opacity: 1, y: 0, duration: 0.7 }, 0.26)
-        .to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.02 }, 0.34)
-        .to(words, { yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.05 }, 0.4)
-        .to(accent, { scaleX: 1, duration: 0.75 }, 0.95)
-        .to(leadLines, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.65, stagger: 0.12 }, 1.0);
-
-      // Keep the type breathing after entrance.
-      if (!phone) {
-        gsap.to(panel, {
-          y: -6,
-          duration: 3.4,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          delay: 1.6,
+      // Loop the sliding reveal so it keeps the Jitter template feel.
+      loop = window.setInterval(() => {
+        const out = gsap.timeline();
+        out.to(slidesUp, {
+          yPercent: -110,
+          duration: 0.55,
+          stagger: 0.05,
+          ease: "power2.in",
         });
-        gsap.to(accent, {
-          scaleX: 0.72,
-          duration: 1.9,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          delay: 1.7,
+        out.add(() => {
+          playReveal();
         });
-        gsap.to([...chars, ...words], {
-          y: "-=3",
-          duration: 2.6,
-          ease: "sine.inOut",
-          stagger: { each: 0.05, repeat: -1, yoyo: true },
-          delay: 1.75,
-        });
-      }
-
-      // Cursor parallax on the compact panel.
-      if (fine && panel) {
-        const onMove = (event: MouseEvent) => {
-          const rect = el.getBoundingClientRect();
-          const px = (event.clientX - rect.left) / rect.width - 0.5;
-          const py = (event.clientY - rect.top) / rect.height - 0.5;
-          gsap.to(panel, {
-            x: px * 14,
-            y: py * 10 - 2,
-            rotateX: py * -4,
-            rotateY: px * 5,
-            duration: 0.7,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        };
-        el.addEventListener("mousemove", onMove);
-        el.addEventListener("mouseleave", () => {
-          gsap.to(panel, { x: 0, y: 0, rotateX: 0, rotateY: 0, duration: 0.9, ease: "power3.out" });
-        });
-      }
+      }, 7000);
 
       if (veil.current) {
         if (phone) {
@@ -248,7 +194,7 @@ export function Hero() {
             veil.current,
             { opacity: 0.45 },
             {
-              opacity: 0.7,
+              opacity: 0.75,
               ease: "none",
               scrollTrigger: {
                 trigger: el,
@@ -265,8 +211,8 @@ export function Hero() {
         gsap.set(copy, { yPercent: 0, opacity: 1, clearProps: "transform,opacity" });
       } else {
         gsap.to(copy, {
-          yPercent: fine ? -28 : -16,
-          opacity: 0.55,
+          yPercent: fine ? -22 : -12,
+          opacity: 0.7,
           ease: "none",
           scrollTrigger: {
             trigger: el,
@@ -305,7 +251,10 @@ export function Hero() {
       }
     }, el);
 
-    return () => ctx.revert();
+    return () => {
+      window.clearInterval(loop);
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -341,49 +290,38 @@ export function Hero() {
 
         <div className="shell hero__content" ref={content}>
           <div className="hero__panel">
-            <div className="hero__place-row">
-              <span className="hero__place-rule" aria-hidden="true" />
-              <p className="hero__place">Bahrain · Al Hidd</p>
+            <div className="hero__mask">
+              <p className="hero__place hero__slide-up">Bahrain · Al Hidd</p>
             </div>
-            <img
-              className="hero__brand"
-              src={asset("/img/waed-logo-horizontal-navy.svg")}
-              alt={site.legalName}
-              width={280}
-              height={60}
-            />
-            <h1 className="alive-headline" ref={headline}>
-              {HEADLINE_LINES.map((line, lineIndex) => (
-                <span
-                  className={`hero__hline${lineIndex === HEADLINE_LINES.length - 1 ? " hero__hline--accent" : ""}`}
-                  key={line.join("-")}
-                >
-                  {line.map((word, wordIndex) =>
-                    lineIndex === 0 && wordIndex === 0 ? (
-                      <span className="hero__word hero__word--chars" key={`${lineIndex}-${word}`}>
-                        {word.split("").map((char, charIndex) => (
-                          <span className="hero__char" key={`${word}-${charIndex}`}>
-                            {char}
-                          </span>
-                        ))}
-                      </span>
-                    ) : (
-                      <span className="hero__word" key={`${lineIndex}-${word}`}>
+            <div className="hero__mask">
+              <img
+                className="hero__brand hero__slide-up"
+                src={asset("/img/waed-logo-horizontal-navy.svg")}
+                alt={site.legalName}
+                width={420}
+                height={90}
+              />
+            </div>
+            <h1 className="alive-headline">
+              {HEADLINE_LINES.map((line) => (
+                <span className="hero__mask" key={line.join("-")}>
+                  <span className="hero__hline hero__slide-up">
+                    {line.map((word) => (
+                      <span className="hero__word" key={word}>
                         {word}
                       </span>
-                    ),
-                  )}
+                    ))}
+                  </span>
                 </span>
               ))}
-              <span className="hero__accent" aria-hidden="true" />
             </h1>
-            <p className="hero__lead">
+            <div className="hero__lead">
               {LEAD_LINES.map((line) => (
-                <span className="hero__lead-line" key={line}>
-                  {line}
+                <span className="hero__mask" key={line}>
+                  <span className="hero__lead-line hero__slide-up">{line}</span>
                 </span>
               ))}
-            </p>
+            </div>
           </div>
         </div>
 
