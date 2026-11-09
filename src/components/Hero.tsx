@@ -325,6 +325,7 @@ export function Hero() {
         </div>
 
         <div className="shell hero__content" ref={content}>
+          <div className="hero__text-wash" aria-hidden="true" />
           <div className="hero__panel">
             <p className="hero__line hero__line--place">
               {PLACE_WORDS.map((word, index) => (

@@ -693,11 +693,32 @@ textarea {
   box-shadow: none;
 }
 
+/* Static soft lift — almost invisible, no readable shape */
+.hero__text-wash {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: 0.6rem;
+  width: min(34rem, 88%);
+  height: 9.5rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(247, 245, 240, 0.14) 0%,
+    rgba(247, 245, 240, 0.06) 42%,
+    rgba(247, 245, 240, 0) 74%
+  );
+  filter: blur(28px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .hero__panel {
   /* Same navy as About / section titles (WAED Industrial) */
   --hero-ink: var(--navy);
   position: relative;
-  isolation: isolate;
+  z-index: 1;
   width: min(40rem, 100%);
   display: grid;
   gap: 0.85rem;
@@ -710,18 +731,6 @@ textarea {
   box-shadow: none;
   transform-origin: center center;
   will-change: transform;
-}
-
-/* Tiny soft lift only behind the words — low opacity, tight to the text */
-.hero__panel::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 4% 8%;
-  border-radius: 1.25rem;
-  background: rgba(247, 245, 240, 0.28);
-  filter: blur(14px);
-  pointer-events: none;
 }
 
 .hero__line {
@@ -3912,10 +3921,11 @@ a.contact-chip:hover {
     );
   }
 
-  .hero__panel::before {
-    inset: 6% 10%;
-    background: rgba(247, 245, 240, 0.32);
-    filter: blur(12px);
+  .hero__text-wash {
+    bottom: 0.25rem;
+    width: min(26rem, 92%);
+    height: 8rem;
+    opacity: 0.65;
   }
 
   .hero__content {
