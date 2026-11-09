@@ -646,9 +646,9 @@ textarea {
   z-index: 2;
   background: linear-gradient(
     180deg,
-    rgba(247, 245, 240, 0.06) 0%,
-    rgba(247, 245, 240, 0.04) 55%,
-    rgba(247, 245, 240, 0.18) 100%
+    rgba(14, 24, 40, 0.08) 0%,
+    rgba(14, 24, 40, 0) 42%,
+    rgba(14, 24, 40, 0.12) 100%
   );
 }
 
@@ -693,29 +693,8 @@ textarea {
   box-shadow: none;
 }
 
-/* Static soft lift — almost invisible, no readable shape */
-.hero__text-wash {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  bottom: 0.6rem;
-  width: min(34rem, 88%);
-  height: 9.5rem;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(247, 245, 240, 0.14) 0%,
-    rgba(247, 245, 240, 0.06) 42%,
-    rgba(247, 245, 240, 0) 74%
-  );
-  filter: blur(28px);
-  opacity: 0.7;
-  pointer-events: none;
-}
-
 .hero__panel {
-  /* Same navy as About / section titles (WAED Industrial) */
+  /* Navy on light slides; white on dark slides — no wash blob */
   --hero-ink: var(--navy);
   position: relative;
   z-index: 1;
@@ -731,6 +710,15 @@ textarea {
   box-shadow: none;
   transform-origin: center center;
   will-change: transform;
+  transition: color 0.45s ease;
+}
+
+.hero__panel.is-on-dark {
+  --hero-ink: #ffffff;
+}
+
+.hero__panel.is-on-light {
+  --hero-ink: var(--navy);
 }
 
 .hero__line {
@@ -3915,17 +3903,10 @@ a.contact-chip:hover {
     opacity: 1 !important;
     background: linear-gradient(
       180deg,
-      rgba(247, 245, 240, 0.04) 0%,
-      rgba(247, 245, 240, 0.08) 60%,
-      rgba(247, 245, 240, 0.22) 100%
+      rgba(14, 24, 40, 0.05) 0%,
+      rgba(14, 24, 40, 0) 55%,
+      rgba(14, 24, 40, 0.18) 100%
     );
-  }
-
-  .hero__text-wash {
-    bottom: 0.25rem;
-    width: min(26rem, 92%);
-    height: 8rem;
-    opacity: 0.65;
   }
 
   .hero__content {
