@@ -1,10 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { waedCacheBustPlugin } from "./vite.cacheBustPlugin";
 
 export default defineConfig({
   // GitHub Pages: /waed-industrial-site/ | Bluehost public_html: /
   base: process.env.VITE_BASE || "/waed-industrial-site/",
-  plugins: [react()],
+  plugins: [react(), waedCacheBustPlugin()],
   server: {
     port: 5173,
     host: true,

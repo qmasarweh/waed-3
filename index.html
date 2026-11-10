@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Strongly discourage Safari / in-app browsers from keeping a stale shell -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>WAED Industrial | Cleaning Products Manufacturer in Bahrain</title>
     <meta
       name="description"
@@ -68,6 +72,44 @@
         if (redirect && redirect !== location.href) {
           history.replaceState(null, "", redirect);
         }
+      })();
+    </script>
+    <!--
+      Deploy cache-bust: fetch a tiny build-id with cache:no-store.
+      If it changed since last visit, force one hard navigation so Safari
+      drops the old cached JS (fixes “works on some iPhones, not others”).
+      Placeholders __WAED_*__ are replaced at build time by vite.cacheBustPlugin.
+    -->
+    <script>
+      (function () {
+        var BUILD = "__WAED_BUILD_ID__";
+        var BASE = "__WAED_BASE__";
+        if (!BUILD || BUILD.indexOf("__WAED_") === 0) return; // dev / unreplaced
+        var KEY = "waed-build-id";
+        var bustKey = "waed-bust-" + BUILD;
+        var url = BASE.replace(/\/?$/, "/") + "build-id.txt?t=" + Date.now();
+        fetch(url, { cache: "no-store" })
+          .then(function (r) {
+            return r.ok ? r.text() : "";
+          })
+          .then(function (text) {
+            var id = String(text || "").trim();
+            if (!id) return;
+            var prev = null;
+            try {
+              prev = localStorage.getItem(KEY);
+              localStorage.setItem(KEY, id);
+            } catch (e) {}
+            if (!prev || prev === id) return;
+            try {
+              if (sessionStorage.getItem(bustKey)) return;
+              sessionStorage.setItem(bustKey, "1");
+            } catch (e) {}
+            var next = location.pathname + "?_b=" + encodeURIComponent(id);
+            if (location.hash) next += location.hash;
+            location.replace(next);
+          })
+          .catch(function () {});
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
