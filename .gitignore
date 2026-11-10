@@ -7,3 +7,5 @@ dist
 .vercel
 .env
 .env.*
+!.env.bluehost
+!.env.example

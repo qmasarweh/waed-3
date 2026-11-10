@@ -34,7 +34,13 @@ export function MediaBand({
           distance={framed ? 0 : undefined}
           className="media-band__layer"
         >
-          <img src={src} alt={alt} width={1920} height={1080} loading="lazy" />
+          <img
+            src={src}
+            alt={alt}
+            width={framed ? 2560 : 1920}
+            height={framed ? 1040 : 1080}
+            loading="lazy"
+          />
         </Parallax>
         <div className="media-band__veil" aria-hidden="true" />
         {caption ? <p className="media-band__caption">{caption}</p> : null}

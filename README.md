@@ -2,12 +2,6 @@
 
 High-motion marketing site for **WAED Industrial Innovation Company W.L.L**.
 
-## Source inputs
-
-- `../WAED_Website_Intake_Form_Final_Revised.docx` — all page copy
-- `../approved logo.pdf` — brand system + facility / fleet imagery
-- `../waed wide outro test one.mp4` — brand outro (converted to H.264 in `public/video/waed-outro.mp4`)
-
 ## Run locally
 
 ```bash
@@ -16,16 +10,28 @@ npm install
 npm run dev
 ```
 
-Open http://127.0.0.1:5173/
+Open http://127.0.0.1:5173/waed-industrial-site/
 
-## Production build
+## Builds
+
+### GitHub Pages style (default base `/waed-industrial-site/`)
 
 ```bash
 npm run build
 ```
 
-Static files land in `site/dist/` — upload that folder to any static host (Bluehost, Netlify, etc.).
+Output: `site/dist/`
+
+### Bluehost (root domain + PHP enquiry)
+
+```bash
+npm run build:bluehost
+```
+
+Uses [`.env.bluehost`](./.env.bluehost) (`VITE_BASE=/`, `VITE_ENQUIRY_ENDPOINT=/send-enquiry.php`) and writes to `../bluehost/`, then runs `prepare-bluehost.mjs`.
+
+Contact form posts to `send-enquiry.php` on Bluehost. Without that env var, the form falls back to `mailto:`.
 
 ## Stack
 
-Vite + React + TypeScript, GSAP ScrollTrigger (outro), Lenis smooth scroll. Brand palette from approved artwork: Navy `#1D2D44`, Steel `#3E5C77`, Sand `#DBD7CD`.
+Vite + React + TypeScript, GSAP, Lenis. Brand palette: Navy `#1D2D44`, Steel `#3E5C77`, Sand `#DBD7CD`.

@@ -11,8 +11,8 @@ export default defineConfig({
     // Cloudflare quick tunnels rotate hostnames
     allowedHosts: [".trycloudflare.com", "localhost", "127.0.0.1"],
     watch: {
-      // Large mp4s lock on Windows and crash the watcher (EBUSY)
-      ignored: ["**/public/video/**"],
+      // Large mp4s / temp upscaler files lock on Windows and crash the watcher (EBUSY)
+      ignored: ["**/public/video/**", "**/tmp-upscale/**"],
     },
   },
   build: { assetsInlineLimit: 0 },

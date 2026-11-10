@@ -54,7 +54,7 @@ $company = clean_line(isset($_POST['company']) ? $_POST['company'] : '', 160);
 $country = clean_line(isset($_POST['country']) ? $_POST['country'] : '', 120);
 $email = clean_line(isset($_POST['email']) ? $_POST['email'] : '', 180);
 $phone = clean_line(isset($_POST['phone']) ? $_POST['phone'] : '', 60);
-$enquiryType = clean_line(isset($_POST['enquiryType']) ? $_POST['enquiryType'] : 'General Enquiry', 120);
+$enquiryType = clean_line(isset($_POST['enquiryType']) ? $_POST['enquiryType'] : 'General Question', 120);
 $message = trim((string) (isset($_POST['message']) ? $_POST['message'] : ''));
 $message = str_replace("\0", '', $message);
 if (function_exists('mb_substr')) {
@@ -76,7 +76,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 if (!in_array($enquiryType, $allowedTypes, true)) {
-  $enquiryType = 'General Enquiry';
+  $enquiryType = 'General Question';
 }
 
 // Light rate limit by IP (tmp file, best-effort on shared hosting).

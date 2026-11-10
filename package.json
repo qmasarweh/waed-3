@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:bluehost": "tsc -b && vite build --outDir ../bluehost --emptyOutDir",
+    "build:bluehost": "tsc -b && vite build --mode bluehost --outDir ../bluehost --emptyOutDir && node scripts/prepare-bluehost.mjs",
+    "prepare-bluehost": "node scripts/prepare-bluehost.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
