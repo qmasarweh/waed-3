@@ -100,14 +100,35 @@ export function HeroDesktop() {
     const slide1Copy = () =>
       slides[0].querySelectorAll<HTMLElement>(".hero-hs__text, .hero-hs__logo, .hero-hs__bar");
 
-    gsap.set(slides, { autoAlpha: 0, zIndex: 1 });
-    gsap.set(slides[0], { autoAlpha: 1, zIndex: 3 });
-    gsap.set(shared, { autoAlpha: 0 });
-    gsap.set([textEl, barEl], { opacity: 1, y: 0 });
-    gsap.set(slide1Copy(), { opacity: 1, y: 0 });
+    // Opacity-only (no GSAP autoAlpha) — Safari/iPhone can leave visibility:hidden stuck,
+    // including when "Request Desktop Website" mounts this hero on a phone.
+    const showSlide = (el: HTMLElement, z: number) =>
+      gsap.set(el, { opacity: 1, visibility: "visible", zIndex: z });
+    const hideSlide = (el: HTMLElement, z = 1) =>
+      gsap.set(el, { opacity: 0, visibility: "visible", zIndex: z });
+
+    slides.forEach((slide, i) => (i === 0 ? showSlide(slide, 3) : hideSlide(slide, 1)));
+    gsap.set(shared, { opacity: 0, visibility: "visible" });
+    gsap.set([textEl, barEl], { opacity: 1, y: 0, visibility: "visible" });
+    gsap.set(slide1Copy(), { opacity: 1, y: 0, visibility: "visible" });
 
     let index = 0;
     let locked = false;
+    let tl: gsap.core.Timeline | null = null;
+
+    const settle = (next: number) => {
+      slides.forEach((slide, i) => (i === next ? showSlide(slide, 3) : hideSlide(slide, 1)));
+      gsap.set(shared, {
+        opacity: next >= 1 ? 1 : 0,
+        visibility: "visible",
+      });
+      gsap.set([textEl, barEl], { opacity: 1, y: 0, visibility: "visible" });
+      gsap.set(slide1Copy(), {
+        opacity: next === 0 ? 1 : 0,
+        y: 0,
+        visibility: "visible",
+      });
+    };
 
     const goTo = (next: number) => {
       if (locked || next === index || next < 0 || next >= slides.length) return;
@@ -122,31 +143,27 @@ export function HeroDesktop() {
       const sharedToShared = fromShared && toShared;
 
       if (reduce) {
-        gsap.set(outgoing, { autoAlpha: 0, zIndex: 1 });
-        gsap.set(incoming, { autoAlpha: 1, zIndex: 3 });
-        gsap.set(shared, { autoAlpha: toShared ? 1 : 0 });
-        gsap.set(slide1Copy(), { opacity: next === 0 ? 1 : 0, y: 0 });
+        settle(next);
         index = next;
         setActive(next);
         locked = false;
         return;
       }
 
-      gsap.set(incoming, { autoAlpha: 1, zIndex: 4 });
-      gsap.set(outgoing, { zIndex: 3 });
-      gsap.set(inMedia, { opacity: 0 });
+      tl?.kill();
+      showSlide(incoming, 4);
+      gsap.set(outgoing, { zIndex: 3, visibility: "visible" });
+      gsap.set(inMedia, { opacity: 0, visibility: "visible" });
 
-      const tl = gsap.timeline({
+      tl = gsap.timeline({
         defaults: { ease: "power2.out" },
         onComplete: () => {
-          gsap.set(outgoing, { autoAlpha: 0, zIndex: 1 });
+          settle(next);
           gsap.set(outMedia, { opacity: 1 });
-          gsap.set(incoming, { zIndex: 3 });
           gsap.set(inMedia, { opacity: 1 });
-          gsap.set([textEl, barEl], { opacity: 1, y: 0 });
-          if (next === 0) gsap.set(slide1Copy(), { opacity: 1, y: 0 });
           index = next;
           locked = false;
+          tl = null;
         },
       });
 
@@ -168,7 +185,7 @@ export function HeroDesktop() {
       if (fromShared) {
         tl.to(textEl, { opacity: 0, y: -16, duration: 0.35, ease: "power2.in" }, 0);
         tl.to(barEl, { opacity: 0, y: 12, duration: 0.35, ease: "power2.in" }, 0);
-        tl.to(shared, { autoAlpha: 0, duration: 0.25 }, 0.3);
+        tl.to(shared, { opacity: 0, duration: 0.25 }, 0.3);
       } else {
         tl.to(slide1Copy(), { opacity: 0, y: -16, duration: 0.4, ease: "power2.in" }, 0);
       }
@@ -178,7 +195,7 @@ export function HeroDesktop() {
       }, 0.4);
 
       if (toShared) {
-        tl.set(shared, { autoAlpha: 1 }, 0.42);
+        tl.set(shared, { opacity: 1, visibility: "visible" }, 0.42);
         tl.fromTo(textEl, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5 }, 0.45);
         tl.fromTo(barEl, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5 }, 0.52);
       } else {
@@ -200,7 +217,9 @@ export function HeroDesktop() {
     return () => {
       if (autoId) window.clearInterval(autoId);
       goToRef.current = () => {};
+      tl?.kill();
       gsap.killTweensOf([slides, shared, textEl, barEl, slide1Copy()]);
+      settle(index);
     };
   }, []);
 

@@ -631,6 +631,8 @@ textarea {
   position: absolute;
   inset: 0;
   opacity: 0;
+  /* Never visibility:hidden — matches mobile hero Safari fix */
+  visibility: visible;
   z-index: 1;
   overflow: hidden;
   background: #0a2a5e;
@@ -638,6 +640,7 @@ textarea {
 }
 
 .hero-hs__slide.is-active {
+  opacity: 1;
   pointer-events: auto;
 }
 
@@ -719,11 +722,13 @@ textarea {
   inset: 0;
   z-index: 5;
   pointer-events: none;
-  visibility: hidden;
+  /* Opacity-only hide — avoid visibility:hidden Safari stuck state */
+  opacity: 0;
+  visibility: visible;
 }
 
 .hero-hs__shared.is-on {
-  visibility: visible;
+  opacity: 1;
 }
 
 .hero-hs__text--shared {
