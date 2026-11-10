@@ -1,4 +1,4 @@
-/** Renders brand names; leenX keeps soft lowercase leen beside a large X. */
+/** Renders brand names as normal text (same treatment as ENAYA). */
 export function BrandTitle({
   name,
   className = "",
@@ -6,14 +6,5 @@ export function BrandTitle({
   name: string;
   className?: string;
 }) {
-  if (className.includes("leenx-title")) {
-    return (
-      <span className={className.trim()}>
-        <span className="leenx-title__soft">leen</span>
-        <span className="leenx-title__x">X</span>
-      </span>
-    );
-  }
-
   return <span className={className.trim()}>{name}</span>;
 }

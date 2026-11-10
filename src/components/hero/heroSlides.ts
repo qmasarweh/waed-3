@@ -121,3 +121,6 @@ export const ICONS: Record<string, string[]> = {
 
 /** Flip to true when ready to restore auto-advance. */
 export const HERO_AUTOPLAY = true;
+
+/** Auto-advance interval for desktop + phone heroes (ms). */
+export const HERO_AUTOPLAY_MS = 6000;

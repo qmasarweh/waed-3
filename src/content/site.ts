@@ -180,6 +180,70 @@ export type BrandEntry = {
   gallery: BrandGalleryShot[];
 };
 
+/** Shared catalog for ENAYA + leenX — keep both brands identical. */
+const SHARED_BRAND_PRODUCTS = [
+  {
+    name: "Liquid Laundry",
+    category: "Laundry",
+    body: "Liquid laundry detergent for everyday washes.",
+    image: "",
+  },
+  {
+    name: "Fabric Softener",
+    category: "Laundry",
+    body: "Fabric softener for soft, fresh-feeling laundry.",
+    image: "",
+  },
+  {
+    name: "Dishwashing Liquid",
+    category: "Kitchen",
+    body: "Concentrated dishwashing liquid for everyday kitchens.",
+    image: "",
+  },
+  {
+    name: "Floor Cleaner / Disinfectant",
+    category: "Floor",
+    body: "Floor cleaner and disinfectant for tiled and hard floors.",
+    image: "",
+  },
+  {
+    name: "Hand Soap",
+    category: "Hygiene",
+    body: "Liquid hand soap for everyday use.",
+    image: "",
+  },
+  {
+    name: "Multipurpose Cleaner",
+    category: "Surface",
+    body: "Everyday multipurpose cleaner for counters, fixtures, and hard surfaces.",
+    image: "",
+  },
+  {
+    name: "Bathroom Cleaner",
+    category: "Bathroom",
+    body: "Bathroom cleaner for sinks, tiles, and washroom surfaces.",
+    image: "",
+  },
+  {
+    name: "Degreaser",
+    category: "Kitchen",
+    body: "Degreaser for tough kitchen grease and oily surfaces.",
+    image: "",
+  },
+  {
+    name: "Glass and Window Cleaner",
+    category: "Surface",
+    body: "Streak-free cleaner for windows, mirrors, and glass.",
+    image: "",
+  },
+  {
+    name: "Car Shampoo",
+    category: "Automotive",
+    body: "Car shampoo for washing vehicle exteriors.",
+    image: "",
+  },
+] as const satisfies readonly BrandProduct[];
+
 export const brands = {
   title: "Our Brands",
   lead:
@@ -201,73 +265,23 @@ export const brands = {
       tagline: "Everyday household cleaning from Bahrain.",
       story:
         "Enaya brings dependable home cleaning products from our manufacturing facility in Bahrain. Clear formulations. Family-friendly packs. Fresh results you can trust.",
-      focus: ["Kitchen", "Bathroom", "Living spaces", "Everyday hygiene"],
+      focus: ["Kitchen", "Bathroom", "Laundry", "Everyday cleaning"],
       logo: "/img/enaya/logo.jpg",
       titleClass: "enaya-title",
       gallery: [],
-      products: [
-        {
-          name: "Dishwashing Liquid",
-          category: "Kitchen",
-          body: "Concentrated dishwashing liquid for everyday family kitchens.",
-          image: "",
-        },
-        {
-          name: "Hand Soap",
-          category: "Hygiene",
-          body: "Liquid hand soap for everyday use at home. Other variants are available.",
-          image: "",
-        },
-        {
-          name: "Multipurpose Cleaner",
-          category: "Surface",
-          body: "General-purpose cleaner for routine cleaning of hard surfaces.",
-          image: "",
-        },
-        {
-          name: "Disinfectant",
-          category: "Hygiene",
-          body: "Disinfectant for hygiene-focused cleaning around the home. Other variants are available.",
-          image: "",
-        },
-      ],
+      products: [...SHARED_BRAND_PRODUCTS],
     },
     {
       id: "leen-x",
       name: "leenX",
-      tagline: "A B2C home-cleaning brand for everyday consumers.",
+      tagline: "Everyday home cleaning for every space.",
       story:
-        "leenX is a B2C product line — made for shoppers and families, not for wholesale or industrial buyers. These are ready-to-use retail bottles for the home: multipurpose, floor, bathroom, and glass cleaners in consumer pack sizes you can keep under the sink or in a cleaning cupboard.",
-      focus: ["B2C retail", "Home shoppers", "Family cleaning", "Everyday use"],
+        "leenX brings dependable cleaning products for everyday use. Clear formulations. Fresh results you can trust — from laundry and kitchen to bathroom, floors, and more.",
+      focus: ["Kitchen", "Bathroom", "Laundry", "Everyday cleaning"],
       logo: "/img/leen-x/logo.svg",
       titleClass: "leenx-title",
       gallery: [],
-      products: [
-        {
-          name: "Multipurpose Cleaner",
-          category: "B2C · 750 ml",
-          body: "A B2C retail spray for consumers — everyday multipurpose cleaner for counters, fixtures, and hard surfaces at home.",
-          image: "",
-        },
-        {
-          name: "Floor Cleaner",
-          category: "B2C · 1 L",
-          body: "A B2C household bottle for consumers — floor cleaner for tiled and hard floors in living areas and hallways.",
-          image: "",
-        },
-        {
-          name: "Bathroom Cleaner",
-          category: "B2C · 750 ml",
-          body: "A B2C retail spray for consumers — bathroom cleaner for sinks, tiles, and washroom surfaces at home.",
-          image: "",
-        },
-        {
-          name: "Glass & Window",
-          category: "B2C · 750 ml",
-          body: "A B2C retail spray for consumers — streak-free cleaner for home windows, mirrors, and glass.",
-          image: "",
-        },
-      ],
+      products: [...SHARED_BRAND_PRODUCTS],
     },
     // Add brand 3–5 here as the house grows.
   ] satisfies BrandEntry[],

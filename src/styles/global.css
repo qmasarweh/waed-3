@@ -1957,29 +1957,9 @@ textarea {
 }
 
 .leenx-title {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.02em;
-  letter-spacing: 0 !important;
+  letter-spacing: 0.02em !important;
   text-transform: none !important;
-  color: #5f9e84;
-}
-
-.leenx-title__soft {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  font-size: 0.72em;
-  letter-spacing: 0.01em;
-  color: #7cb89a;
-}
-
-.leenx-title__x {
-  /* Match leenX logo.svg X: Arial Black / ultra-bold sans */
-  font-family: "Arial Black", Arial, Helvetica, sans-serif;
-  font-weight: 900;
-  font-size: 1.28em;
-  line-height: 0.85;
-  color: #7eb8e8;
+  color: var(--navy);
 }
 
 .split {
@@ -2651,7 +2631,7 @@ textarea {
 
 .brand-page__identity {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.75rem;
   justify-items: center;
   text-align: center;
 }
@@ -2660,7 +2640,7 @@ textarea {
   .brand-page__identity {
     grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2.75rem;
     text-align: left;
     justify-items: start;
   }
@@ -2688,6 +2668,8 @@ textarea {
   border-radius: 0;
   box-shadow: none;
   mix-blend-mode: multiply;
+  display: block;
+  flex: none;
 }
 
 .brand-page__intro {

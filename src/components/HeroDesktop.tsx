@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { asset } from "../lib/asset";
 import {
   HERO_AUTOPLAY,
+  HERO_AUTOPLAY_MS,
   HERO_SLIDES,
   ICONS,
   type HeroSlide,
@@ -193,7 +194,7 @@ export function HeroDesktop() {
     goToRef.current = goTo;
 
     const autoId = HERO_AUTOPLAY
-      ? window.setInterval(() => goTo((index + 1) % slides.length), 4000)
+      ? window.setInterval(() => goTo((index + 1) % slides.length), HERO_AUTOPLAY_MS)
       : 0;
 
     return () => {
