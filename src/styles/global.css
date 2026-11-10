@@ -1054,7 +1054,9 @@ textarea {
 /* ========== Phone-only hero (full-bleed portrait) ========== */
 .hero--mobile {
   position: relative;
+  height: 100vh; /* fallback for older iOS without svh */
   height: 100svh;
+  min-height: 100vh;
   min-height: 100svh;
   margin: 0;
   padding: 0;
@@ -1082,11 +1084,16 @@ textarea {
   position: absolute;
   inset: 0;
   opacity: 0;
+  /* Never use visibility:hidden here — GSAP autoAlpha was stuck on iPhone
+     leaving only the navy stage fallback (solid blue hero). */
+  visibility: visible;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .hero-m__media.is-active {
   opacity: 1;
+  z-index: 3;
 }
 
 .hero-m__media img {
@@ -1095,6 +1102,9 @@ textarea {
   object-fit: cover;
   object-position: center center;
   display: block;
+  /* Avoid iOS skipping decode while a parent is opacity:0 during init. */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .hero-m__veil {
@@ -4679,7 +4689,9 @@ a.contact-chip:hover {
   }
 
   .hero--mobile {
+    height: 100vh;
     height: 100svh;
+    min-height: 100vh;
     min-height: 100svh;
   }
 

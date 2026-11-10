@@ -43,6 +43,15 @@ function MobileCopy({ slide }: { slide: HeroSlide }) {
   );
 }
 
+/** Opacity-only — never touch visibility (GSAP autoAlpha was leaving portraits stuck hidden on iOS). */
+function showPanel(el: HTMLElement, z: number) {
+  gsap.set(el, { opacity: 1, visibility: "visible", zIndex: z });
+}
+
+function hidePanel(el: HTMLElement, z = 1) {
+  gsap.set(el, { opacity: 0, visibility: "visible", zIndex: z });
+}
+
 /**
  * Phone hero: full-bleed 9:16 photo with overlay copy + 2×2 features.
  * No letterbox bands — photo owns the viewport; UI sits on soft washes.
@@ -69,13 +78,32 @@ export function HeroMobile() {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    gsap.set(panels, { autoAlpha: 0, zIndex: 1 });
-    gsap.set(panels[0], { autoAlpha: 1, zIndex: 3 });
-    gsap.set([copy, feats], { opacity: 1, y: 0 });
-    if (logoEl.current) gsap.set(logoEl.current, { autoAlpha: 1 });
+    // Clear any leftover inline visibility from prior mounts / GSAP autoAlpha.
+    panels.forEach((panel, i) => {
+      if (i === 0) showPanel(panel, 3);
+      else hidePanel(panel, 1);
+    });
+    gsap.set([copy, feats], { opacity: 1, y: 0, visibility: "visible" });
+    if (logoEl.current) gsap.set(logoEl.current, { opacity: 1, visibility: "visible" });
 
     let index = 0;
     let locked = false;
+    let tl: gsap.core.Timeline | null = null;
+
+    const settle = (next: number) => {
+      panels.forEach((panel, i) => {
+        if (i === next) showPanel(panel, 3);
+        else hidePanel(panel, 1);
+      });
+      gsap.set([copy, feats], { opacity: 1, y: 0, visibility: "visible" });
+      if (logoEl.current) {
+        const showLogo = HERO_SLIDES[next].logo !== "none";
+        gsap.set(logoEl.current, {
+          opacity: showLogo ? 1 : 0,
+          visibility: "visible",
+        });
+      }
+    };
 
     const goTo = (next: number) => {
       if (locked || next === index || next < 0 || next >= panels.length) return;
@@ -87,34 +115,32 @@ export function HeroMobile() {
       const showLogoPrev = HERO_SLIDES[prev].logo !== "none";
 
       if (reduce) {
-        gsap.set(outgoing, { autoAlpha: 0, zIndex: 1 });
-        gsap.set(incoming, { autoAlpha: 1, zIndex: 3 });
-        if (logoEl.current) gsap.set(logoEl.current, { autoAlpha: showLogoNext ? 1 : 0 });
+        settle(next);
         index = next;
         setActive(next);
         locked = false;
         return;
       }
 
-      gsap.set(incoming, { autoAlpha: 1, zIndex: 4 });
-      gsap.set(outgoing, { zIndex: 3 });
-      gsap.set(incoming, { opacity: 0 });
+      tl?.kill();
+      showPanel(incoming, 4);
+      gsap.set(outgoing, { zIndex: 3, visibility: "visible" });
+      gsap.set(incoming, { opacity: 0, visibility: "visible" });
 
-      const tl = gsap.timeline({
+      tl = gsap.timeline({
         defaults: { ease: "power2.out" },
         onComplete: () => {
-          gsap.set(outgoing, { autoAlpha: 0, zIndex: 1, opacity: 1 });
-          gsap.set(incoming, { zIndex: 3, opacity: 1 });
-          gsap.set([copy, feats], { opacity: 1, y: 0 });
+          settle(next);
           index = next;
           locked = false;
+          tl = null;
         },
       });
 
       tl.to(copy, { opacity: 0, y: -12, duration: 0.32, ease: "power2.in" }, 0);
       tl.to(feats, { opacity: 0, y: 10, duration: 0.32, ease: "power2.in" }, 0);
       if (logoEl.current && showLogoPrev && !showLogoNext) {
-        tl.to(logoEl.current, { autoAlpha: 0, duration: 0.25 }, 0);
+        tl.to(logoEl.current, { opacity: 0, duration: 0.25 }, 0);
       }
 
       tl.to(outgoing, { opacity: 0, duration: 0.75, ease: "power2.inOut" }, 0.08);
@@ -123,11 +149,11 @@ export function HeroMobile() {
       tl.add(() => {
         flushSync(() => setActive(next));
         gsap.set([copy, feats], { y: 16 });
-        if (logoEl.current && showLogoNext) gsap.set(logoEl.current, { autoAlpha: 0 });
+        if (logoEl.current && showLogoNext) gsap.set(logoEl.current, { opacity: 0 });
       }, 0.34);
 
       if (logoEl.current && showLogoNext) {
-        tl.to(logoEl.current, { autoAlpha: 1, duration: 0.4 }, 0.4);
+        tl.to(logoEl.current, { opacity: 1, duration: 0.4 }, 0.4);
       }
       tl.to(copy, { opacity: 1, y: 0, duration: 0.48 }, 0.42);
       tl.to(feats, { opacity: 1, y: 0, duration: 0.48 }, 0.48);
@@ -142,7 +168,10 @@ export function HeroMobile() {
     return () => {
       if (autoId) window.clearInterval(autoId);
       goToRef.current = () => {};
+      tl?.kill();
       gsap.killTweensOf([panels, copy, feats, logoEl.current].filter(Boolean));
+      // If a crossfade was interrupted, never leave the stage as solid navy.
+      settle(index);
     };
   }, []);
 

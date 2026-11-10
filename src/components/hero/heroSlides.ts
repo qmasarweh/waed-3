@@ -19,7 +19,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: "1",
     src: "/img/hero-redesign/slide-01.jpg",
-    mobileSrc: "/img/hero-redesign/slide-01-portrait.jpg?v=6",
+    mobileSrc: "/img/hero-redesign/slide-01-portrait.jpg?v=7",
     alt: "WAED manufacturing plant collage",
     logo: "left",
     title: ["Innovating the Future of", "Cleaning Manufacturing."],
@@ -35,7 +35,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: "2",
     src: "/img/hero-redesign/slide-02.jpg",
-    mobileSrc: "/img/hero-redesign/slide-02-portrait.jpg?v=3",
+    mobileSrc: "/img/hero-redesign/slide-02-portrait.jpg?v=7",
     alt: "WAED laboratory testing",
     logo: "none",
     accent: true,
@@ -51,7 +51,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: "3",
     src: "/img/hero-redesign/slide-03.jpg",
-    mobileSrc: "/img/hero-redesign/slide-03-portrait.jpg?v=3",
+    mobileSrc: "/img/hero-redesign/slide-03-portrait.jpg?v=7",
     alt: "WAED packaging solutions",
     logo: "none",
     accent: true,
@@ -67,7 +67,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: "4",
     src: "/img/hero-redesign/slide-04.jpg",
-    mobileSrc: "/img/hero-redesign/slide-04-portrait.jpg?v=6",
+    mobileSrc: "/img/hero-redesign/slide-04-portrait.jpg?v=7",
     alt: "WAED cleaning environments collage",
     logo: "none",
     accent: true,
