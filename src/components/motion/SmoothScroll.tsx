@@ -11,13 +11,6 @@ export function SmoothScroll() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reduced.matches) return;
 
-    // Lenis + iOS WebKit has caused blank/stuck first paints on some iPhones.
-    const ua = navigator.userAgent || "";
-    const ios =
-      /iP(hone|ad|od)/i.test(ua) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    if (ios || window.matchMedia("(pointer: coarse)").matches) return;
-
     const fine = window.matchMedia("(pointer: fine)").matches;
 
     const lenis = new Lenis({
