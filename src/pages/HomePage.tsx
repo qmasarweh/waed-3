@@ -20,6 +20,8 @@ const INTRO_KEY = "waed-intro-seen";
 /** Keep desktop splash; skip on phones so Safari/Chrome never freeze on navy. */
 function shouldSkipIntroOnPhone() {
   if (typeof window === "undefined") return false;
+  if (document.documentElement.classList.contains("waed-skip-intro")) return true;
+  if (document.documentElement.classList.contains("waed-phone")) return true;
   try {
     if (sessionStorage.getItem(INTRO_KEY) === "1") return true;
   } catch {
@@ -29,11 +31,13 @@ function shouldSkipIntroOnPhone() {
   const touch =
     window.matchMedia("(hover: none)").matches ||
     window.matchMedia("(pointer: coarse)").matches;
+  const shortSide = Math.min(screen.width || 0, screen.height || 0);
   const ios =
     /iP(hone|ad|od)/i.test(navigator.userAgent) ||
     /CriOS|FxiOS/i.test(navigator.userAgent) ||
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
-    (typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 1);
+    (typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 1) ||
+    (shortSide > 0 && shortSide <= 500);
   return narrow || touch || ios;
 }
 

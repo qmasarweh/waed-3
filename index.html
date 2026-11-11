@@ -64,26 +64,89 @@
     </script>
   </head>
   <body>
+    <!-- Visible before React: phones must ALWAYS see this until real hero text is on screen. -->
+    <style>
+      .waed-boot {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483000;
+        display: none;
+        flex-direction: column;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        padding: max(1rem, env(safe-area-inset-top)) 1rem max(2rem, env(safe-area-inset-bottom));
+        color: #ffffff !important;
+        background-color: #061a3d;
+        background-image: linear-gradient(180deg, rgba(4, 16, 40, 0.45) 0%, rgba(4, 14, 36, 0.75) 100%),
+          url("./img/hero-redesign/slide-01-portrait.jpg?v=9");
+        background-size: cover;
+        background-position: center;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        -webkit-text-size-adjust: 100%;
+      }
+      /* Show on phones even when “Request Desktop Website” lies about width/hover/pointer */
+      html.waed-phone .waed-boot,
+      html.waed-skip-intro .waed-boot {
+        display: flex !important;
+      }
+      .waed-boot h1 {
+        margin: 0.75rem 0 0;
+        font-size: clamp(1.45rem, 6.2vw, 2rem);
+        line-height: 1.15;
+        font-weight: 700;
+        color: #ffffff !important;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.65);
+      }
+      .waed-boot p {
+        margin: 0.55rem 0 0;
+        font-size: 0.98rem;
+        color: #ffffff !important;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+      }
+      .waed-boot__brand {
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #ffffff !important;
+        opacity: 0.95;
+      }
+      html.waed-app-ready .waed-boot {
+        display: none !important;
+      }
+    </style>
+    <div id="waed-boot" class="waed-boot" aria-hidden="true">
+      <div>
+        <div class="waed-boot__brand">WAED Industrial</div>
+        <h1>Innovating the Future of<br />Cleaning Manufacturing.</h1>
+        <p>Manufactured in Bahrain. Ready to Supply Regionally.</p>
+      </div>
+    </div>
     <div id="root"></div>
     <script>
       (function () {
         // Phones / iPad / “Request Desktop Website” on iPhone:
         // mark skip BEFORE React mounts so navy splash never appears.
         var ua = navigator.userAgent || "";
+        var shortSide = Math.min(screen.width || 0, screen.height || 0);
         var phone =
           /iP(hone|ad|od)/i.test(ua) ||
-          (/Mobile|Android/i.test(ua) && /Safari|Chrome|CriOS|FxiOS/i.test(ua)) ||
+          /CriOS|FxiOS|Android.+Mobile|Mobile.+Safari/i.test(ua) ||
           (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
           (typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 1) ||
+          shortSide > 0 && shortSide <= 500 ||
           (window.matchMedia &&
             (window.matchMedia("(max-width: 920px)").matches ||
               window.matchMedia("(hover: none)").matches ||
               window.matchMedia("(pointer: coarse)").matches));
         if (phone) {
           document.documentElement.classList.add("waed-skip-intro");
+          document.documentElement.classList.add("waed-phone");
           try {
             sessionStorage.setItem("waed-intro-seen", "1");
           } catch (e) {}
+        } else {
+          // Desktops: boot is CSS-hidden; mark ready so it never sticks.
+          document.documentElement.classList.add("waed-app-ready");
         }
       })();
     </script>

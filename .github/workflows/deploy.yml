@@ -1,4 +1,4 @@
-﻿name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -12,6 +12,7 @@ permissions:
 
 concurrency:
   group: pages
+  # Do not cancel mid-sync — can leave Pages stuck in syncing_files.
   cancel-in-progress: false
 
 jobs:
@@ -41,6 +42,7 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
         with:
+          # Max allowed by the action (10m). Retries help transient syncing_files stalls.
           timeout: 600000
           error_count: 20
           reporting_interval: 10000

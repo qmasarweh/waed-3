@@ -5,10 +5,10 @@ import { waedCacheBustPlugin } from "./vite.cacheBustPlugin";
 export default defineConfig(({ mode }) => {
   // Load .env.[mode] into config (needed so bluehost mode picks up VITE_BASE=/)
   const env = loadEnv(mode, process.cwd(), "");
-  const base = env.VITE_BASE || process.env.VITE_BASE || "/waed-industrial-site/";
+  const base = env.VITE_BASE || process.env.VITE_BASE || "/waed-3/";
 
   return {
-    // GitHub Pages: /waed-industrial-site/ | Bluehost public_html: /
+    // GitHub Pages: /waed-3/ | Bluehost public_html: / (mode bluehost + .env.bluehost)
     base,
     plugins: [react(), waedCacheBustPlugin()],
     server: {

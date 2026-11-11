@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
-import gsap from "gsap";
 import { asset } from "../lib/asset";
 import {
   HERO_AUTOPLAY,
@@ -44,161 +42,100 @@ function MobileCopy({ slide }: { slide: HeroSlide }) {
   );
 }
 
-/** Opacity-only — never touch visibility (GSAP autoAlpha was leaving portraits stuck hidden on iOS). */
-function showPanel(el: HTMLElement, z: number) {
-  gsap.set(el, { opacity: 1, visibility: "visible", zIndex: z });
-}
-
-function hidePanel(el: HTMLElement, z = 1) {
-  gsap.set(el, { opacity: 0, visibility: "visible", zIndex: z });
+function markAppReady() {
+  // Only dismiss the HTML boot once real hero copy is painted and measurable.
+  const title = document.querySelector(".hero-m__title") as HTMLElement | null;
+  if (!title) return false;
+  const rect = title.getBoundingClientRect();
+  if (rect.width < 24 || rect.height < 12) return false;
+  const style = window.getComputedStyle(title);
+  if (style.opacity === "0" || style.visibility === "hidden") return false;
+  document.documentElement.classList.add("waed-app-ready");
+  return true;
 }
 
 /**
- * Phone hero: full-bleed 9:16 photo with overlay copy + 2×2 features.
- * No letterbox bands — photo owns the viewport; UI sits on soft washes.
+ * Phone hero — CSS-only crossfade (no GSAP).
+ * GSAP opacity/visibility was leaving a solid navy stage on some iPhones.
  */
 export function HeroMobile() {
-  const root = useRef<HTMLElement>(null);
-  const mediaStage = useRef<HTMLDivElement>(null);
-  const copyEl = useRef<HTMLDivElement>(null);
-  const featsEl = useRef<HTMLUListElement>(null);
-  const logoEl = useRef<HTMLImageElement>(null);
   const goToRef = useRef<(next: number) => void>(() => {});
   const [active, setActive] = useState(0);
+  const [imgReady, setImgReady] = useState(false);
 
   const slide = HERO_SLIDES[active];
+  const stageBg = asset(HERO_SLIDES[active]?.mobileSrc ?? HERO_SLIDES[0].mobileSrc);
 
   useEffect(() => {
-    const stage = mediaStage.current;
-    const copy = copyEl.current;
-    const feats = featsEl.current;
-    if (!stage || !copy || !feats) return;
+    let tries = 0;
+    const tick = () => {
+      if (markAppReady()) return;
+      tries += 1;
+      // Keep boot visible; retry until hero text is real. Hard stop at ~8s.
+      if (tries < 40) window.setTimeout(tick, 200);
+      else document.documentElement.classList.add("waed-app-ready");
+    };
+    const start = window.setTimeout(tick, 50);
+    return () => window.clearTimeout(start);
+  }, []);
 
-    const panels = Array.from(stage.querySelectorAll<HTMLElement>(".hero-m__media"));
-    if (!panels.length) return;
+  useEffect(() => {
+    if (imgReady) markAppReady();
+  }, [imgReady, active]);
 
+  useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!HERO_AUTOPLAY || reduce) return;
 
-    // Clear any leftover inline visibility from prior mounts / GSAP autoAlpha.
-    panels.forEach((panel, i) => {
-      if (i === 0) showPanel(panel, 3);
-      else hidePanel(panel, 1);
-    });
-    gsap.set([copy, feats], { opacity: 1, y: 0, visibility: "visible" });
-    if (logoEl.current) gsap.set(logoEl.current, { opacity: 1, visibility: "visible" });
+    const id = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, HERO_AUTOPLAY_MS);
 
-    let index = 0;
-    let locked = false;
-    let tl: gsap.core.Timeline | null = null;
-
-    const settle = (next: number) => {
-      panels.forEach((panel, i) => {
-        if (i === next) showPanel(panel, 3);
-        else hidePanel(panel, 1);
-      });
-      gsap.set([copy, feats], { opacity: 1, y: 0, visibility: "visible" });
-      if (logoEl.current) {
-        const showLogo = HERO_SLIDES[next].logo !== "none";
-        gsap.set(logoEl.current, {
-          opacity: showLogo ? 1 : 0,
-          visibility: "visible",
-        });
-      }
+    goToRef.current = (next: number) => {
+      if (next < 0 || next >= HERO_SLIDES.length) return;
+      setActive(next);
     };
-
-    const goTo = (next: number) => {
-      if (locked || next === index || next < 0 || next >= panels.length) return;
-      locked = true;
-      const prev = index;
-      const outgoing = panels[prev];
-      const incoming = panels[next];
-      const showLogoNext = HERO_SLIDES[next].logo !== "none";
-      const showLogoPrev = HERO_SLIDES[prev].logo !== "none";
-
-      if (reduce) {
-        settle(next);
-        index = next;
-        setActive(next);
-        locked = false;
-        return;
-      }
-
-      tl?.kill();
-      showPanel(incoming, 4);
-      gsap.set(outgoing, { zIndex: 3, visibility: "visible" });
-      gsap.set(incoming, { opacity: 0, visibility: "visible" });
-
-      tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
-        onComplete: () => {
-          settle(next);
-          index = next;
-          locked = false;
-          tl = null;
-        },
-      });
-
-      tl.to(copy, { opacity: 0, y: -12, duration: 0.32, ease: "power2.in" }, 0);
-      tl.to(feats, { opacity: 0, y: 10, duration: 0.32, ease: "power2.in" }, 0);
-      if (logoEl.current && showLogoPrev && !showLogoNext) {
-        tl.to(logoEl.current, { opacity: 0, duration: 0.25 }, 0);
-      }
-
-      tl.to(outgoing, { opacity: 0, duration: 0.75, ease: "power2.inOut" }, 0.08);
-      tl.to(incoming, { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 0.12);
-
-      tl.add(() => {
-        flushSync(() => setActive(next));
-        gsap.set([copy, feats], { y: 16 });
-        if (logoEl.current && showLogoNext) gsap.set(logoEl.current, { opacity: 0 });
-      }, 0.34);
-
-      if (logoEl.current && showLogoNext) {
-        tl.to(logoEl.current, { opacity: 1, duration: 0.4 }, 0.4);
-      }
-      tl.to(copy, { opacity: 1, y: 0, duration: 0.48 }, 0.42);
-      tl.to(feats, { opacity: 1, y: 0, duration: 0.48 }, 0.48);
-    };
-
-    goToRef.current = goTo;
-
-    const autoId = HERO_AUTOPLAY
-      ? window.setInterval(() => goTo((index + 1) % panels.length), HERO_AUTOPLAY_MS)
-      : 0;
 
     return () => {
-      if (autoId) window.clearInterval(autoId);
+      window.clearInterval(id);
       goToRef.current = () => {};
-      tl?.kill();
-      gsap.killTweensOf([panels, copy, feats, logoEl.current].filter(Boolean));
-      // If a crossfade was interrupted, never leave the stage as solid navy.
-      settle(index);
+    };
+  }, []);
+
+  useEffect(() => {
+    goToRef.current = (next: number) => {
+      if (next < 0 || next >= HERO_SLIDES.length) return;
+      setActive(next);
     };
   }, []);
 
   return (
-    <section className="hero hero--mobile" id="top" ref={root} aria-label="Hero">
+    <section className="hero hero--mobile" id="top" aria-label="Hero">
       <div className="hero-m">
-        <div className="hero-m__stage" ref={mediaStage} aria-hidden="true">
+        <div
+          className="hero-m__stage"
+          aria-hidden="true"
+          style={{ backgroundImage: `url("${stageBg}")` }}
+        >
           {HERO_SLIDES.map((item, index) => (
             <div
               key={item.id}
               className={`hero-m__media${index === active ? " is-active" : ""}`}
-              // Inline first-paint safety: iPhone can keep CSS/GSAP opacity at 0 → solid blue stage.
-              style={
-                index === active
-                  ? { opacity: 1, visibility: "visible", zIndex: 3 }
-                  : { opacity: 0, visibility: "visible", zIndex: 1 }
-              }
             >
               <img
                 src={asset(item.mobileSrc)}
                 alt=""
                 width={1080}
                 height={1920}
-                fetchPriority={index === 0 ? "high" : "auto"}
-                loading="eager"
-                decoding={index === 0 ? "sync" : "async"}
+                fetchPriority={index === 0 ? "high" : "low"}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                onLoad={() => {
+                  if (index === 0) setImgReady(true);
+                }}
+                onError={() => {
+                  if (index === 0) setImgReady(true);
+                }}
               />
             </div>
           ))}
@@ -210,19 +147,22 @@ export function HeroMobile() {
         <div className="hero-m__chrome">
           <div className="hero-m__top">
             <img
-              ref={logoEl}
               className="hero-m__logo"
               src={asset("/img/hero-redesign/waed-hero-lockup.png")}
               alt={active === 0 ? "WAED Industrial Innovation Company" : ""}
               width={288}
               height={103}
+              style={{
+                opacity: slide.logo === "none" ? 0 : 1,
+                visibility: "visible",
+              }}
             />
-            <div className="hero-m__copy" ref={copyEl}>
+            <div className="hero-m__copy">
               <MobileCopy slide={slide} />
             </div>
           </div>
 
-          <ul className="hero-m__feats" ref={featsEl} aria-label="Capabilities">
+          <ul className="hero-m__feats" aria-label="Capabilities">
             {slide.features.map((feature) => (
               <li className="hero-m__feat" key={feature.lines.join("-")}>
                 <FeatureIcon name={feature.icon} />

@@ -1082,23 +1082,35 @@ textarea {
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  background: #061a3d;
+  background-color: #061a3d;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .hero-m__media {
   position: absolute;
   inset: 0;
   opacity: 0;
-  /* Never use visibility:hidden here — GSAP autoAlpha was stuck on iPhone
-     leaving only the navy stage fallback (solid blue hero). */
+  /* Never use visibility:hidden — stuck hidden = solid navy stage on iPhone. */
   visibility: visible;
   overflow: hidden;
   pointer-events: none;
+  transition: opacity 0.55s ease;
 }
 
 .hero-m__media.is-active {
   opacity: 1 !important;
   z-index: 3;
+}
+
+.hero-m__chrome,
+.hero-m__copy,
+.hero-m__feats,
+.hero-m__logo {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
 }
 
 .hero-m__media img {
@@ -1291,16 +1303,21 @@ textarea {
   box-shadow: 0 0 0 3px rgba(25, 174, 224, 0.18);
 }
 
-@media (min-width: 760px) {
-  .hero--mobile {
+/* Only hide phone hero on real desktop pointers — not iPhone “Desktop Website”. */
+@media (min-width: 760px) and (hover: hover) and (pointer: fine) {
+  html:not(.waed-phone) .hero--mobile {
     display: none !important;
   }
 }
 
-@media (max-width: 759px) {
+@media (max-width: 759px), (hover: none), (pointer: coarse) {
   .hero--desktop {
     display: none !important;
   }
+}
+
+html.waed-phone .hero--desktop {
+  display: none !important;
 }
 
 .hero__sticky {

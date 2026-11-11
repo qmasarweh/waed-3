@@ -18,22 +18,27 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
   const [exiting, setExiting] = useState(false);
   const done = useRef(false);
 
-  const finish = useCallback(() => {
+  const finish = useCallback((instant = false) => {
     if (done.current) return;
     done.current = true;
+    if (instant) {
+      onComplete();
+      return;
+    }
     setExiting(true);
     window.setTimeout(() => onComplete(), 700);
   }, [onComplete]);
 
   useEffect(() => {
-    // Safety net: if this component mounts on a phone, exit immediately.
+    // Safety net: if this component mounts on a phone, exit instantly (no 700ms navy).
     const phone =
       document.documentElement.classList.contains("waed-skip-intro") ||
+      document.documentElement.classList.contains("waed-phone") ||
       window.matchMedia("(max-width: 768px)").matches ||
       window.matchMedia("(hover: none), (pointer: coarse)").matches ||
       /iP(hone|ad|od)/i.test(navigator.userAgent);
     if (phone) {
-      finish();
+      finish(true);
       return;
     }
     document.documentElement.classList.add("intro-active");
@@ -94,13 +99,13 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         preload="auto"
         disablePictureInPicture
         controlsList="nodownload noplaybackrate noremoteplayback"
-        onEnded={finish}
+        onEnded={() => finish()}
         onError={() => finish()}
       />
       <div className="intro-loader__veil" aria-hidden="true" />
       <div className="intro-loader__chrome">
         <p className="intro-loader__brand">WAED Industrial</p>
-        <button type="button" className="intro-loader__skip" onClick={finish}>
+        <button type="button" className="intro-loader__skip" onClick={() => finish()}>
           Enter site
         </button>
       </div>

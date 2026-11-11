@@ -4,8 +4,20 @@ import { HeroMobile } from "./HeroMobile";
 
 const MOBILE_MQ = "(max-width: 759px)";
 
+function isPhoneLike() {
+  if (typeof window === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  if (/iP(hone|ad|od)/i.test(ua) || /CriOS|FxiOS|Android.+Mobile/i.test(ua)) return true;
+  if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return true;
+  if (window.matchMedia("(hover: none)").matches && window.matchMedia("(pointer: coarse)").matches) {
+    return true;
+  }
+  // iPhone “Request Desktop Website” still reports a narrow physical screen.
+  if (Math.min(screen.width, screen.height) <= 500) return true;
+  return window.matchMedia(MOBILE_MQ).matches;
+}
+
 function subscribeMq(mq: MediaQueryList, apply: () => void) {
-  // Safari < 14 used addListener/removeListener
   if (typeof mq.addEventListener === "function") {
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
@@ -19,17 +31,14 @@ function subscribeMq(mq: MediaQueryList, apply: () => void) {
 }
 
 /**
- * Breakpoint switcher: desktop hero ≥760px, phone hero ≤759px.
- * Only one tree is mounted so GSAP + assets stay lean.
+ * Prefer the phone hero on any real phone — even if “Desktop Website” widens the layout.
  */
 export function Hero() {
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia(MOBILE_MQ).matches : false,
-  );
+  const [isMobile, setIsMobile] = useState(() => isPhoneLike());
 
   useEffect(() => {
     const mq = window.matchMedia(MOBILE_MQ);
-    const apply = () => setIsMobile(mq.matches);
+    const apply = () => setIsMobile(isPhoneLike());
     apply();
     return subscribeMq(mq, apply);
   }, []);
