@@ -53,6 +53,11 @@ export function HomePage() {
     setIntroDone(true);
   }, []);
 
+  // Belt + suspenders: if a phone somehow started with intro on, kill it immediately.
+  useEffect(() => {
+    if (shouldSkipIntroOnPhone()) setIntroDone(true);
+  }, []);
+
   useEffect(() => {
     if (!introDone) return;
     const hash = window.location.hash;
@@ -65,7 +70,9 @@ export function HomePage() {
 
   return (
     <>
-      {!introDone && <IntroLoader onComplete={handleIntroComplete} />}
+      {!introDone && !shouldSkipIntroOnPhone() && (
+        <IntroLoader onComplete={handleIntroComplete} />
+      )}
       <main className={`page-parallax${introDone ? " is-ready" : ""}`}>
         <Hero />
         <About />

@@ -1,12 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { asset } from "../lib/asset";
-import {
-  HERO_AUTOPLAY,
-  HERO_AUTOPLAY_MS,
-  HERO_SLIDES,
-  ICONS,
-  type HeroSlide,
-} from "./hero/heroSlides";
+import { HERO_SLIDES, ICONS, type HeroSlide } from "./hero/heroSlides";
 
 function FeatureIcon({ name }: { name: string }) {
   const paths = ICONS[name] ?? ICONS.layers;
@@ -42,85 +36,44 @@ function MobileCopy({ slide }: { slide: HeroSlide }) {
   );
 }
 
-function markAppReady() {
-  // Only dismiss the HTML boot once real hero copy is painted and measurable.
-  const title = document.querySelector(".hero-m__title") as HTMLElement | null;
-  if (!title) return false;
-  const rect = title.getBoundingClientRect();
-  if (rect.width < 24 || rect.height < 12) return false;
-  const style = window.getComputedStyle(title);
-  if (style.opacity === "0" || style.visibility === "hidden") return false;
-  document.documentElement.classList.add("waed-app-ready");
-  return true;
-}
-
 /**
- * Phone hero — CSS-only crossfade (no GSAP).
- * GSAP opacity/visibility was leaving a solid navy stage on some iPhones.
+ * Phone hero: PHOTO is the background. No navy. No GSAP. No autoplay.
  */
 export function HeroMobile() {
-  const goToRef = useRef<(next: number) => void>(() => {});
   const [active, setActive] = useState(0);
-  const [imgReady, setImgReady] = useState(false);
-
   const slide = HERO_SLIDES[active];
-  const stageBg = asset(HERO_SLIDES[active]?.mobileSrc ?? HERO_SLIDES[0].mobileSrc);
+  const photo = asset(slide.mobileSrc);
 
   useEffect(() => {
-    let tries = 0;
-    const tick = () => {
-      if (markAppReady()) return;
-      tries += 1;
-      // Keep boot visible; retry until hero text is real. Hard stop at ~8s.
-      if (tries < 40) window.setTimeout(tick, 200);
-      else document.documentElement.classList.add("waed-app-ready");
-    };
-    const start = window.setTimeout(tick, 50);
-    return () => window.clearTimeout(start);
-  }, []);
-
-  useEffect(() => {
-    if (imgReady) markAppReady();
-  }, [imgReady, active]);
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!HERO_AUTOPLAY || reduce) return;
-
-    const id = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, HERO_AUTOPLAY_MS);
-
-    goToRef.current = (next: number) => {
-      if (next < 0 || next >= HERO_SLIDES.length) return;
-      setActive(next);
-    };
-
-    return () => {
-      window.clearInterval(id);
-      goToRef.current = () => {};
-    };
-  }, []);
-
-  useEffect(() => {
-    goToRef.current = (next: number) => {
-      if (next < 0 || next >= HERO_SLIDES.length) return;
-      setActive(next);
-    };
+    // Photo is on the section itself — boot can go; nothing navy underneath.
+    document.documentElement.classList.add("waed-app-ready");
   }, []);
 
   return (
-    <section className="hero hero--mobile" id="top" aria-label="Hero">
+    <section
+      className="hero hero--mobile"
+      id="top"
+      aria-label="Hero"
+      style={{
+        backgroundImage: `url("${photo}")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "transparent",
+      }}
+    >
       <div className="hero-m">
-        <div
-          className="hero-m__stage"
-          aria-hidden="true"
-          style={{ backgroundImage: `url("${stageBg}")` }}
-        >
+        <div className="hero-m__stage" aria-hidden="true">
           {HERO_SLIDES.map((item, index) => (
             <div
               key={item.id}
               className={`hero-m__media${index === active ? " is-active" : ""}`}
+              style={{
+                backgroundImage: `url("${asset(item.mobileSrc)}")`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundColor: "transparent",
+              }}
             >
               <img
                 src={asset(item.mobileSrc)}
@@ -130,12 +83,6 @@ export function HeroMobile() {
                 fetchPriority={index === 0 ? "high" : "low"}
                 loading={index === 0 ? "eager" : "lazy"}
                 decoding="async"
-                onLoad={() => {
-                  if (index === 0) setImgReady(true);
-                }}
-                onError={() => {
-                  if (index === 0) setImgReady(true);
-                }}
               />
             </div>
           ))}
@@ -187,7 +134,7 @@ export function HeroMobile() {
               className={`hero-m__dot${index === active ? " is-active" : ""}`}
               aria-label={`Go to slide ${index + 1}`}
               aria-current={index === active ? "true" : undefined}
-              onClick={() => goToRef.current(index)}
+              onClick={() => setActive(index)}
             />
           ))}
         </div>

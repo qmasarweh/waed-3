@@ -1057,6 +1057,7 @@ textarea {
 }
 
 /* ========== Phone-only hero (full-bleed portrait) ========== */
+/* NO navy fallback — photo is the background. */
 .hero--mobile {
   position: relative;
   height: 100vh; /* fallback for older iOS without svh */
@@ -1066,7 +1067,10 @@ textarea {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #061a3d;
+  background-color: transparent;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .hero-m {
@@ -1082,25 +1086,24 @@ textarea {
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  background-color: #061a3d;
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background: transparent;
 }
 
 .hero-m__media {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  /* Never use visibility:hidden — stuck hidden = solid navy stage on iPhone. */
-  visibility: visible;
+  /* Inactive slides are display:none — never opacity:0. */
+  display: none;
   overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.55s ease;
+  background-color: transparent;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .hero-m__media.is-active {
-  opacity: 1 !important;
+  display: block !important;
   z-index: 3;
 }
 
@@ -1119,9 +1122,6 @@ textarea {
   object-fit: cover;
   object-position: center center;
   display: block;
-  /* Avoid iOS skipping decode while a parent is opacity:0 during init. */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 
 .hero-m__veil {
@@ -5294,7 +5294,8 @@ html.waed-skip-intro.intro-active body {
   z-index: 200;
   display: grid;
   place-items: center;
-  background: var(--navy-deep);
+  /* Desktop intro only — phones never mount this. Photo/video fills; no solid navy plate. */
+  background: transparent;
   color: var(--sand);
   transition: opacity 0.7s var(--ease-out), visibility 0.7s;
 }
@@ -5312,7 +5313,7 @@ html.waed-skip-intro.intro-active body {
   height: 100%;
   object-fit: cover;
   object-position: center center;
-  background: var(--navy-deep);
+  background: transparent;
 }
 
 .intro-loader__veil {
