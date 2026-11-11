@@ -1,0 +1,14 @@
+Options -Indexes
+RewriteEngine On
+RewriteBase /
+
+# Enquiry endpoint and real files stay untouched.
+RewriteRule ^send-enquiry\.php$ - [L]
+RewriteRule ^index\.html$ - [L]
+RewriteRule ^robots\.txt$ - [L]
+RewriteRule ^sitemap\.xml$ - [L]
+
+# SPA fallback for React Router routes.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]

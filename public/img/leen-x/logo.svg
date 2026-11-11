@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="leenX">
+  <rect width="640" height="360" rx="28" fill="#F4FBFF"/>
+  <circle cx="520" cy="70" r="46" fill="#B8E0F5" opacity="0.55"/>
+  <circle cx="90" cy="290" r="58" fill="#BFE8CF" opacity="0.5"/>
+  <!-- soft lowercase leen + large bold X on one line -->
+  <text x="292" y="210" text-anchor="end" font-family="Georgia, 'Times New Roman', serif" font-size="78" font-weight="400" fill="#7CB89A">leen</text>
+  <text x="304" y="218" text-anchor="start" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="168" font-weight="900" fill="#7EB8E8">X</text>
+</svg>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WAED Industrial</title>
+    <script>
+      sessionStorage.redirect = location.href;
+      (function () {
+        // Bluehost (root domain) → "/". GitHub project Pages → "/repo-name/".
+        var base = "/";
+        if (/\.github\.io$/i.test(location.hostname)) {
+          var seg = location.pathname.split("/").filter(Boolean)[0];
+          if (seg) base = "/" + seg + "/";
+        }
+        location.replace(base);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

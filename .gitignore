@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.local
+.share
+*.tsbuildinfo
+.vercel
+.env
+.env.*
+!.env.bluehost
+!.env.example
