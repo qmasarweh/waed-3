@@ -1089,39 +1089,18 @@ textarea {
   background: transparent;
 }
 
-.hero-m__media {
+/* One real photo — no opacity / display stack (that blanked on her iPhone). */
+.hero-m__photo {
   position: absolute;
   inset: 0;
-  /* Inactive slides are display:none — never opacity:0. */
-  display: none;
-  overflow: hidden;
-  pointer-events: none;
-  background-color: transparent;
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.hero-m__media.is-active {
-  display: block !important;
-  z-index: 3;
-}
-
-.hero-m__chrome,
-.hero-m__copy,
-.hero-m__feats,
-.hero-m__logo {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-}
-
-.hero-m__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
   display: block;
+  border: 0;
+  opacity: 1;
+  visibility: visible;
 }
 
 .hero-m__veil {
@@ -1182,7 +1161,6 @@ textarea {
   position: relative;
   padding-left: 0.85rem;
   max-width: 22rem;
-  will-change: transform, opacity;
 }
 
 .hero-m__accent {
@@ -1244,7 +1222,6 @@ textarea {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.45rem 0.5rem;
-  will-change: transform, opacity;
 }
 
 .hero-m__feat {
@@ -1257,11 +1234,10 @@ textarea {
   font-weight: 600;
   line-height: 1.2;
   color: #fff;
-  background: rgba(4, 18, 46, 0.72);
+  /* Solid fill — no backdrop-filter (iOS was blanking the chrome layer). */
+  background: rgba(4, 18, 46, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: 0 6px 18px rgba(0, 8, 28, 0.35);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   text-shadow: 0 1px 8px rgba(0, 10, 30, 0.55);
 }
 

@@ -37,7 +37,10 @@ function MobileCopy({ slide }: { slide: HeroSlide }) {
 }
 
 /**
- * Phone hero: PHOTO is the background. No navy. No GSAP. No autoplay.
+ * Phone hero foreground fix:
+ * - ONE slide <img> at a time (no opacity/display stack — that blanked on her iPhone)
+ * - Chrome has no will-change / backdrop-filter
+ * - Section photo bg stays as safety net
  */
 export function HeroMobile() {
   const [active, setActive] = useState(0);
@@ -45,7 +48,6 @@ export function HeroMobile() {
   const photo = asset(slide.mobileSrc);
 
   useEffect(() => {
-    // Photo is on the section itself — boot can go; nothing navy underneath.
     document.documentElement.classList.add("waed-app-ready");
   }, []);
 
@@ -63,29 +65,19 @@ export function HeroMobile() {
       }}
     >
       <div className="hero-m">
+        {/* Single photo layer — remount on slide change, no hidden panels */}
         <div className="hero-m__stage" aria-hidden="true">
-          {HERO_SLIDES.map((item, index) => (
-            <div
-              key={item.id}
-              className={`hero-m__media${index === active ? " is-active" : ""}`}
-              style={{
-                backgroundImage: `url("${asset(item.mobileSrc)}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundColor: "transparent",
-              }}
-            >
-              <img
-                src={asset(item.mobileSrc)}
-                alt=""
-                width={1080}
-                height={1920}
-                fetchPriority={index === 0 ? "high" : "low"}
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-              />
-            </div>
-          ))}
+          <img
+            key={slide.id}
+            className="hero-m__photo"
+            src={photo}
+            alt=""
+            width={1080}
+            height={1920}
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+          />
         </div>
 
         <div className="hero-m__veil hero-m__veil--top" aria-hidden="true" />
@@ -93,17 +85,15 @@ export function HeroMobile() {
 
         <div className="hero-m__chrome">
           <div className="hero-m__top">
-            <img
-              className="hero-m__logo"
-              src={asset("/img/hero-redesign/waed-hero-lockup.png")}
-              alt={active === 0 ? "WAED Industrial Innovation Company" : ""}
-              width={288}
-              height={103}
-              style={{
-                opacity: slide.logo === "none" ? 0 : 1,
-                visibility: "visible",
-              }}
-            />
+            {slide.logo !== "none" ? (
+              <img
+                className="hero-m__logo"
+                src={asset("/img/hero-redesign/waed-hero-lockup.png")}
+                alt={active === 0 ? "WAED Industrial Innovation Company" : ""}
+                width={288}
+                height={103}
+              />
+            ) : null}
             <div className="hero-m__copy">
               <MobileCopy slide={slide} />
             </div>
