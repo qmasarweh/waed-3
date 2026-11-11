@@ -57,6 +57,7 @@ export function HeroMobile() {
       id="top"
       aria-label="Hero"
       style={{
+        position: "relative",
         backgroundImage: `url("${photo}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -64,9 +65,16 @@ export function HeroMobile() {
         backgroundColor: "transparent",
       }}
     >
-      <div className="hero-m">
-        {/* Single photo layer — remount on slide change, no hidden panels */}
-        <div className="hero-m__stage" aria-hidden="true">
+      {/* Absolute fill — never height:100% (collapses to 0 on her iPhone). */}
+      <div
+        className="hero-m"
+        style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0, zIndex: 2 }}
+      >
+        <div
+          className="hero-m__stage"
+          aria-hidden="true"
+          style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}
+        >
           <img
             key={slide.id}
             className="hero-m__photo"
@@ -77,13 +85,35 @@ export function HeroMobile() {
             fetchPriority="high"
             loading="eager"
             decoding="async"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
           />
         </div>
 
         <div className="hero-m__veil hero-m__veil--top" aria-hidden="true" />
         <div className="hero-m__veil hero-m__veil--bottom" aria-hidden="true" />
 
-        <div className="hero-m__chrome">
+        <div
+          className="hero-m__chrome"
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            zIndex: 4,
+            color: "#fff",
+            opacity: 1,
+            visibility: "visible",
+          }}
+        >
           <div className="hero-m__top">
             {slide.logo !== "none" ? (
               <img
