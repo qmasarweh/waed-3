@@ -57,9 +57,9 @@ export function HeroMobile() {
     document.documentElement.classList.add("waed-app-ready");
   }, []);
 
+  // Phone-only auto-advance (desktop hero has its own). Always on for phones.
   useEffect(() => {
     if (!HERO_AUTOPLAY) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = window.setInterval(() => {
       setActive((prev) => (prev + 1) % HERO_SLIDES.length);
     }, HERO_AUTOPLAY_MS);
