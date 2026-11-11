@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { asset } from "../lib/asset";
-import { HERO_SLIDES, ICONS, type HeroSlide } from "./hero/heroSlides";
+import {
+  HERO_AUTOPLAY,
+  HERO_AUTOPLAY_MS,
+  HERO_SLIDES,
+  ICONS,
+  type HeroSlide,
+} from "./hero/heroSlides";
 
 function FeatureIcon({ name }: { name: string }) {
   const paths = ICONS[name] ?? ICONS.layers;
@@ -49,6 +55,15 @@ export function HeroMobile() {
 
   useEffect(() => {
     document.documentElement.classList.add("waed-app-ready");
+  }, []);
+
+  useEffect(() => {
+    if (!HERO_AUTOPLAY) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, HERO_AUTOPLAY_MS);
+    return () => window.clearInterval(id);
   }, []);
 
   return (
