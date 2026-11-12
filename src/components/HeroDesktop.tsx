@@ -208,14 +208,27 @@ export function HeroDesktop() {
       }
     };
 
-    goToRef.current = goTo;
+    let autoId = 0;
+    const clearAuto = () => {
+      if (autoId) {
+        window.clearInterval(autoId);
+        autoId = 0;
+      }
+    };
+    const armAuto = () => {
+      clearAuto();
+      if (!HERO_AUTOPLAY) return;
+      autoId = window.setInterval(() => goTo((index + 1) % slides.length), HERO_AUTOPLAY_MS);
+    };
 
-    const autoId = HERO_AUTOPLAY
-      ? window.setInterval(() => goTo((index + 1) % slides.length), HERO_AUTOPLAY_MS)
-      : 0;
+    goToRef.current = (next: number) => {
+      goTo(next);
+      armAuto(); // manual dot click restarts the autoplay clock
+    };
+    armAuto();
 
     return () => {
-      if (autoId) window.clearInterval(autoId);
+      clearAuto();
       goToRef.current = () => {};
       tl?.kill();
       gsap.killTweensOf([slides, shared, textEl, barEl, slide1Copy()]);

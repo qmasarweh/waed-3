@@ -31,7 +31,8 @@ function subscribeMq(mq: MediaQueryList, apply: () => void) {
 }
 
 /**
- * Prefer the phone hero on any real phone — even if “Desktop Website” widens the layout.
+ * Desktop browsers get HeroDesktop (16:9). Real phones get HeroMobile —
+ * including “Request Desktop Website” on a narrow physical screen.
  */
 export function Hero() {
   const [isMobile, setIsMobile] = useState(() => isPhoneLike());

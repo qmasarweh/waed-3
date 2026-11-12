@@ -128,16 +128,17 @@
         // mark skip BEFORE React mounts so navy splash never appears.
         var ua = navigator.userAgent || "";
         var shortSide = Math.min(screen.width || 0, screen.height || 0);
+        // Keep in sync with Hero.tsx isPhoneLike — avoid marking Windows touch
+        // desktops as phones (that hid HeroDesktop via html.waed-phone).
         var phone =
           /iP(hone|ad|od)/i.test(ua) ||
           /CriOS|FxiOS|Android.+Mobile|Mobile.+Safari/i.test(ua) ||
           (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
-          (typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 1) ||
-          shortSide > 0 && shortSide <= 500 ||
+          (shortSide > 0 && shortSide <= 500) ||
           (window.matchMedia &&
-            (window.matchMedia("(max-width: 920px)").matches ||
-              window.matchMedia("(hover: none)").matches ||
-              window.matchMedia("(pointer: coarse)").matches));
+            (window.matchMedia("(max-width: 759px)").matches ||
+              (window.matchMedia("(hover: none)").matches &&
+                window.matchMedia("(pointer: coarse)").matches)));
         if (phone) {
           document.documentElement.classList.add("waed-skip-intro");
           document.documentElement.classList.add("waed-phone");

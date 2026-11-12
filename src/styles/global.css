@@ -1056,148 +1056,813 @@ textarea {
   bottom: 0.45rem;
 }
 
-/* ========== Phone-only hero (full-bleed portrait) ========== */
-/* NO navy fallback — photo is the background. */
-.hero--mobile {
+/* ========== Phone hero — client 720×1280 comps (~90% match) ========== */
+.hero--mobile,
+.hero--mobile-client {
+  --hm-navy: #0a2a5e;
+  --hm-navy-deep: #06204a;
+  --hm-navy-mid: #0d3b85;
+  --hm-bar: #0a2756;
+  --hm-cyan: #22d3f5;
+  --hm-blue: #1e6bff;
+  --hm-u: calc(100svh / 1280);
   position: relative;
-  height: 100vh; /* fallback for older iOS without svh */
+  height: 100vh;
   height: 100svh;
   min-height: 100vh;
   min-height: 100svh;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: transparent;
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  /* Allow vertical page scroll; horizontal swipes change slides in JS */
+  touch-action: pan-y;
+  background: linear-gradient(180deg, var(--hm-navy-deep) 0%, var(--hm-navy) 45%, var(--hm-navy-mid) 100%);
 }
 
-/*
-  CRITICAL (her iPhone): height:100% inside a 100svh parent can compute to 0,
-  so the whole foreground (photo img + writing) collapses while the SECTION
-  background-image still paints. Pin .hero-m with inset:0 instead.
-*/
-.hero-m {
+.hero-m,
+.hero-m--client {
   position: absolute;
   inset: 0;
-  width: auto;
-  height: auto;
-  overflow: hidden;
+  /* Measured from nnnn Performance comp (720×1280): ~28% / ~56% / ~16% */
+  display: grid;
+  grid-template-rows: 28fr 56fr 16fr;
+  grid-template-areas:
+    "top"
+    "photo"
+    "feats";
   color: #fff;
   z-index: 2;
-}
-
-.hero-m__stage {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+  background: var(--hm-navy);
   overflow: hidden;
-  background: transparent;
+  padding: 0;
+  justify-content: stretch;
 }
 
-/* One real photo — no opacity / display stack (that blanked on her iPhone). */
-.hero-m__photo {
+/* ========== Gemini full-bleed + text placement from WhatsApp comps ========== */
+.hero-m--gemini {
+  display: block;
+  grid-template-rows: none;
+  grid-template-areas: none;
+  background: #0a2a5e;
+}
+
+.hero-m__gemini-photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  max-width: none;
   object-fit: cover;
-  object-position: center center;
+  object-position: center top;
   display: block;
-  border: 0;
-  opacity: 1;
-  visibility: visible;
+  z-index: 1;
 }
 
-.hero-m__veil {
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  pointer-events: none;
+/* Slide 1 — crop ~5% from top and shift photo up */
+.hero-m--gemini.hero-m--factory .hero-m__gemini-photo {
+  top: -5%;
+  bottom: auto;
+  height: 105%;
+  object-position: center top;
 }
 
-.hero-m__veil--top {
-  top: 0;
-  height: 34%;
-  background: linear-gradient(
-    180deg,
-    rgba(4, 16, 40, 0.62) 0%,
-    rgba(4, 16, 40, 0.28) 55%,
-    rgba(4, 16, 40, 0) 100%
-  );
-}
-
-.hero-m__veil--bottom {
-  bottom: 0;
-  height: 36%;
-  background: linear-gradient(
-    0deg,
-    rgba(4, 14, 36, 0.78) 0%,
-    rgba(4, 14, 36, 0.4) 48%,
-    rgba(4, 14, 36, 0) 100%
-  );
-}
-
-.hero-m__chrome {
+.hero-m--gemini .hero-m__overlay {
   position: absolute;
   inset: 0;
-  z-index: 4;
-  display: -webkit-flex;
+  z-index: 2;
   display: flex;
-  -webkit-flex-direction: column;
   flex-direction: column;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
-  padding: max(0.85rem, env(safe-area-inset-top, 0px)) 0.9rem
-    max(2.1rem, calc(env(safe-area-inset-bottom, 0px) + 1.55rem));
   pointer-events: none;
-  opacity: 1;
-  visibility: visible;
-  color: #fff;
 }
 
-.hero-m__top {
-  display: grid;
-  gap: 0.55rem;
+.hero-m--gemini .hero-m__brand,
+.hero-m--gemini .hero-m__copy,
+.hero-m--gemini .hero-m__feats {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border-top: 0;
 }
 
-.hero-m__logo {
-  width: min(58%, 220px);
+.hero-m--gemini .hero-m__brand {
+  flex: 0 0 auto;
+  padding-top: max(calc(28 * var(--hm-u)), env(safe-area-inset-top, 0px));
+}
+
+.hero-m--gemini .hero-m__brand-logo {
+  width: 56%;
+  max-width: 400px;
+}
+
+/* Slide 1 — logo only, larger, nudged up + soft navy blue blur wash */
+.hero-m--gemini.hero-m--factory .hero-m__brand,
+.hero-m--gemini.hero-m--factory .hero-m__brand--logo-only {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding-top: max(calc(14 * var(--hm-u)), env(safe-area-inset-top, 0px));
+  padding-left: 0;
+  padding-right: 0;
+  isolation: isolate;
+  text-align: center;
+  overflow: visible;
+}
+
+/* Stronger navy blue wash behind slide 1 logo */
+.hero-m--gemini.hero-m--factory .hero-m__brand::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  width: 130%;
+  height: 170%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 80% at 50% 42%,
+    rgba(6, 32, 78, 0.98) 0%,
+    rgba(8, 40, 96, 0.92) 28%,
+    rgba(10, 42, 94, 0.72) 52%,
+    rgba(10, 42, 94, 0.32) 74%,
+    transparent 100%
+  );
+  filter: blur(16px);
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__brand-logo {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 108%;
+  max-width: none;
+  margin: 0;
+  /* Centered, then nudged slightly right */
+  left: 50%;
+  transform: translateX(calc(-50% + 2.5%));
+  filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0, 20, 60, 0.4));
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__brand-name,
+.hero-m--gemini.hero-m--factory .hero-m__brand-tag {
+  display: none !important;
+}
+
+.hero-m--gemini .hero-m__brand-name {
+  font-size: calc(20 * var(--hm-u));
+  margin-top: calc(8 * var(--hm-u));
+}
+
+.hero-m--gemini .hero-m__brand-tag {
+  font-size: calc(16 * var(--hm-u));
+  margin-top: calc(6 * var(--hm-u));
+}
+
+.hero-m--gemini .hero-m__copy {
+  flex: 0 0 auto;
+}
+
+.hero-m--gemini .hero-m__feats {
+  margin-top: auto;
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
+/* —— Slide 1 Manufacturing: blue blur wash behind all 3 headline lines as one block ——
+   Wrapper must shrink to text (not flex-grow) or 130%×170% wash covers the whole slide. */
+.hero-m--gemini.hero-m--factory .hero-m__copy {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  bottom: auto;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  /* Top padding cut 20% (22 → 17.6) so less wash sits above line 1 */
+  padding: calc(17.6 * var(--hm-u)) calc(36 * var(--hm-u)) calc(22 * var(--hm-u));
+  text-align: center;
+  z-index: 3;
+  min-height: 0;
+  width: max-content;
   height: auto;
-  justify-self: start;
-  filter: drop-shadow(0 4px 18px rgba(0, 12, 40, 0.55));
+  max-width: none;
+  box-sizing: border-box;
+  background: transparent;
+  isolation: isolate;
+  overflow: visible;
+  transform: translateY(calc(-100 * var(--hm-u)));
 }
 
+/* Original wash size 130×170; top soft-fades via mask (no hard clip) */
+.hero-m--gemini.hero-m--factory .hero-m__copy::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  width: 130%;
+  height: 170%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 80% at 50% 42%,
+    rgba(6, 32, 78, 0.98) 0%,
+    rgba(8, 40, 96, 0.92) 28%,
+    rgba(10, 42, 94, 0.72) 52%,
+    rgba(10, 42, 94, 0.32) 74%,
+    transparent 100%
+  );
+  filter: blur(16px);
+  /* Soft dissolve upward — top ~20% fades to transparent */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 12%,
+    #000 28%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 12%,
+    #000 28%,
+    #000 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__title,
+.hero-m--gemini.hero-m--factory .hero-m__support {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__title {
+  /* ~20% larger than 44 → 53 */
+  font-size: calc(53 * var(--hm-u));
+  line-height: 1.12;
+  text-align: center;
+  letter-spacing: 0.04em;
+  max-width: none;
+  width: max-content;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__title .hero-m__keep {
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__support {
+  /* ~20% larger than 22 → 26 */
+  font-size: calc(26 * var(--hm-u));
+  text-align: center;
+  width: max-content;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__support span {
+  white-space: nowrap;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__feats {
+  /* Approved: 0 — not auto (auto stole flex space and shifted the text wash up) */
+  margin-top: 0;
+  flex: 0 0 auto;
+  min-height: calc(172 * var(--hm-u));
+  padding-top: calc(9 * var(--hm-u));
+  padding-bottom: max(calc(13 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  /* Solid navy housing behind the 4 feature icons */
+  background: #0a2756;
+  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
+  z-index: 4;
+}
+
+/* —— Slide 2 Quality: bigger logo + one wash behind logo + text —— */
+.hero-m--gemini.hero-m--lab .hero-m__wash-block {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  isolation: isolate;
+  overflow: visible;
+  /* No side padding — was shrinking logo % vs slide 1 (full-bleed brand) */
+  padding: calc(8 * var(--hm-u)) 0 calc(22 * var(--hm-u));
+  box-sizing: border-box;
+}
+
+/* One connected wash behind logo + remaining text (130×170, soft top fade, stronger blur) */
+.hero-m--gemini.hero-m--lab .hero-m__wash-block::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  width: 130%;
+  height: 170%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 80% at 50% 42%,
+    rgba(6, 32, 78, 0.98) 0%,
+    rgba(8, 40, 96, 0.92) 28%,
+    rgba(10, 42, 94, 0.72) 52%,
+    rgba(10, 42, 94, 0.32) 74%,
+    transparent 100%
+  );
+  /* ~60% stronger soft blur vs slide-1 16px → 26px */
+  filter: blur(26px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 12%,
+    #000 28%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.35) 12%,
+    #000 28%,
+    #000 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__brand,
+.hero-m--gemini.hero-m--lab .hero-m__brand--logo-only,
+.hero-m--gemini.hero-m--lab .hero-m__copy {
+  position: relative;
+  z-index: 1;
+}
+
+/* Same brand chrome as slide 1 so 108% resolves to the same pixel width */
+.hero-m--gemini.hero-m--lab .hero-m__brand,
+.hero-m--gemini.hero-m--lab .hero-m__brand--logo-only {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding-top: max(calc(14 * var(--hm-u)), env(safe-area-inset-top, 0px));
+  padding-left: 0;
+  padding-right: 0;
+  overflow: visible;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__brand-name,
+.hero-m--gemini.hero-m--lab .hero-m__brand-tag {
+  display: none !important;
+}
+
+/* Slides 3–4 brand chrome = slide 1/2 full-bleed so 108% matches pixel-for-pixel */
+.hero-m--gemini.hero-m--pack .hero-m__brand,
+.hero-m--gemini.hero-m--pack .hero-m__brand--logo-only,
+.hero-m--gemini.hero-m--env .hero-m__brand,
+.hero-m--gemini.hero-m--env .hero-m__brand--logo-only {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding-top: max(calc(14 * var(--hm-u)), env(safe-area-inset-top, 0px));
+  padding-left: 0;
+  padding-right: 0;
+  overflow: visible;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__brand-tag,
+.hero-m--gemini.hero-m--env .hero-m__brand-tag {
+  display: none !important;
+}
+
+/* Slides 2–4: same logo size + position as slide 1 factory */
+.hero-m--gemini.hero-m--lab .hero-m__brand-logo,
+.hero-m--gemini.hero-m--pack .hero-m__brand-logo,
+.hero-m--gemini.hero-m--env .hero-m__brand-logo {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 108% !important;
+  max-width: none !important;
+  margin: 0;
+  left: 50%;
+  transform: translateX(calc(-50% + 2.5%));
+  filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0, 20, 60, 0.4));
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__copy {
+  flex: 0 0 auto;
+  /* Center the text box on the slide; keep left-aligned content inside */
+  align-self: center;
+  width: max-content;
+  /* Widen with text (~20% larger) — do not clip at 100% */
+  max-width: none;
+  margin-top: calc(24 * var(--hm-u));
+  margin-left: auto;
+  margin-right: auto;
+  /* Side padding on copy only (not brand) so logo matches slide 1 width */
+  padding: calc(8 * var(--hm-u)) calc(20 * var(--hm-u)) calc(8 * var(--hm-u)) calc(28 * var(--hm-u));
+  text-align: left;
+  background: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__copy::before {
+  content: none;
+  display: none;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__title,
+.hero-m--gemini.hero-m--lab .hero-m__support {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__title {
+  /* ~20% larger than 54 → 65; container stays max-content so no clip */
+  font-size: calc(65 * var(--hm-u));
+  /* Match slide 1 factory headline line spacing */
+  line-height: 1.12;
+  margin: 0;
+  max-width: none;
+  width: max-content;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__title .hero-m__keep,
+.hero-m--gemini.hero-m--lab .hero-m__title span {
+  line-height: 1.12;
+  white-space: nowrap;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__support {
+  /* ~20% larger than 28 → 34 */
+  font-size: calc(34 * var(--hm-u));
+  max-width: none;
+  width: max-content;
+  display: block;
+}
+
+/* Keep "Performance and Consistency." unbroken — no orphan "Consistency" */
+.hero-m--gemini.hero-m--lab .hero-m__support span {
+  white-space: nowrap;
+}
+
+/* Cyan accent — pin to title top + support bottom (same inset as copy padding) */
+.hero-m--gemini.hero-m--lab .hero-m__accent {
+  position: absolute;
+  z-index: 2;
+  left: calc(10 * var(--hm-u));
+  /* Cause of misalignment: fixed height 209 + bottom:auto left bottom ~39u short of support.
+     Restore top/bottom stretch so both edges track the text block. */
+  top: calc(8 * var(--hm-u));
+  bottom: calc(8 * var(--hm-u));
+  height: auto;
+  width: calc(10 * var(--hm-u));
+  min-width: 3px;
+  background: #22d3f5;
+  border-radius: 1px;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__feats {
+  margin-top: auto;
+  flex: 0 0 auto;
+  /* Navy box wrapping all 4 footer features (slide 2) */
+  min-height: calc(190 * var(--hm-u));
+  width: 100%;
+  padding-top: calc(4 * var(--hm-u));
+  padding-bottom: max(calc(8 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  background: #062a6b;
+  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
+  z-index: 4;
+  box-sizing: border-box;
+}
+
+/* —— Slide 3 Packaging: left headline + cyan accent; 4-col footer —— */
+.hero-m--gemini.hero-m--pack .hero-m__copy {
+  margin-top: calc(48 * var(--hm-u));
+  padding-top: calc(10 * var(--hm-u));
+  padding-bottom: calc(12 * var(--hm-u));
+  text-align: left;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__brand-name,
+.hero-m--gemini.hero-m--env .hero-m__brand-name {
+  display: none !important;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__title {
+  /* ~20% larger than 50 → 60 */
+  font-size: calc(60 * var(--hm-u));
+  line-height: 1.12;
+  max-width: none;
+  width: max-content;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__title span {
+  white-space: nowrap;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__copy {
+  width: max-content;
+  max-width: none;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__support {
+  font-size: calc(26 * var(--hm-u));
+  /* Match slide 2: no 90% clamp — keep "Retail Packaging" on one line */
+  max-width: none;
+  width: max-content;
+  white-space: nowrap;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__support span {
+  white-space: nowrap;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__accent {
+  /* Pack copy uses padding-left 13.2% (lab uses 28u). left:10u sat far left of text.
+     Place bar so gap ≈ slide 2 (~26u): text at 13.2%+18u, width 10u → left = 13.2%−18u */
+  left: calc(13.2% - 18 * var(--hm-u));
+  width: calc(10 * var(--hm-u));
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__feats {
+  min-height: calc(210 * var(--hm-u));
+  padding-bottom: max(calc(20 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+}
+
+/* —— Slide 4 Performance: centered headline; skew support; 4-col footer —— */
+.hero-m--gemini.hero-m--env .hero-m__copy {
+  margin-top: calc(22 * var(--hm-u));
+  padding-top: calc(8 * var(--hm-u));
+  padding-bottom: calc(10 * var(--hm-u));
+  text-align: center;
+}
+
+.hero-m--gemini.hero-m--env .hero-m__title {
+  font-size: calc(42 * var(--hm-u));
+  line-height: 1.14;
+  text-align: center;
+}
+
+.hero-m--gemini.hero-m--env .hero-m__support {
+  font-size: calc(22 * var(--hm-u));
+  text-align: center;
+}
+
+.hero-m--gemini.hero-m--env .hero-m__feats {
+  /* Shorter footer bar — fixed height so content can’t stretch it */
+  margin-top: auto;
+  flex: 0 0 auto;
+  height: calc(145 * var(--hm-u));
+  min-height: 0;
+  max-height: calc(145 * var(--hm-u));
+  padding: calc(4 * var(--hm-u)) calc(6 * var(--hm-u))
+    max(calc(6 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+  align-content: center;
+  overflow: hidden;
+  background: #0a2756;
+  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
+  z-index: 4;
+}
+
+.hero-m--gemini.hero-m--env .hero-m__feat {
+  gap: calc(3 * var(--hm-u));
+  padding: 0 calc(4 * var(--hm-u));
+  font-size: calc(15 * var(--hm-u));
+  line-height: 1.12;
+}
+
+.hero-m--gemini.hero-m--env .hero-m__icon {
+  width: calc(48 * var(--hm-u));
+  height: calc(48 * var(--hm-u));
+}
+
+/* ========== Slide 2 Quality — rebuilt from AM (1).jpeg ==========
+   Full-bleed lab photo + navy scrim + left cyan accent + 2×2 footer */
+.hero-m--quality {
+  display: flex;
+  flex-direction: column;
+  grid-template-rows: none;
+  grid-template-areas: none;
+  background: #002e60;
+}
+
+.hero-m__quality-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-m__quality-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  display: block;
+}
+
+.hero-m__quality-scrim {
+  position: absolute;
+  inset: 0 0 30% 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 46, 96, 0.92) 0%,
+    rgba(0, 46, 96, 0.72) 42%,
+    rgba(0, 46, 96, 0.28) 72%,
+    rgba(0, 46, 96, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-m--quality .hero-m__brand,
+.hero-m--quality .hero-m__copy {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-m--quality .hero-m__brand {
+  flex: 0 0 auto;
+  padding-top: max(calc(36 * var(--hm-u)), env(safe-area-inset-top, 0px));
+}
+
+.hero-m--quality .hero-m__brand-logo {
+  width: 52%;
+  max-width: 380px;
+}
+
+.hero-m--quality .hero-m__copy {
+  flex: 0 0 auto;
+  margin-top: calc(36 * var(--hm-u));
+  padding-top: calc(8 * var(--hm-u));
+  padding-bottom: calc(24 * var(--hm-u));
+}
+
+.hero-m--quality .hero-m__title {
+  font-size: calc(54 * var(--hm-u));
+  line-height: 1.12;
+}
+
+.hero-m--quality .hero-m__support {
+  font-size: calc(28 * var(--hm-u));
+  max-width: 92%;
+}
+
+.hero-m--quality .hero-m__accent {
+  left: calc(48 / 720 * 100%);
+  width: calc(11 * var(--hm-u));
+  top: calc(6 * var(--hm-u));
+  bottom: calc(4 * var(--hm-u));
+  background: var(--hm-cyan);
+}
+
+.hero-m--quality .hero-m__feats {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  flex: 0 0 auto;
+  min-height: calc(260 * var(--hm-u));
+  background: #00325d;
+  border-top: 1px solid rgba(34, 211, 245, 0.75);
+}
+
+/* —— Shared header (all slides) —— */
+.hero-m__brand {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* Ref (3): logo top ≈ y22–40 on 1280 */
+  padding: max(calc(22 * var(--hm-u)), env(safe-area-inset-top, 0px)) 1rem 0;
+  pointer-events: none;
+}
+
+.hero-m__brand-logo {
+  /* Ref: lockup ≈ 58–60% of 720 */
+  width: 60%;
+  max-width: 440px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: brightness(0) invert(1);
+}
+
+.hero-m__brand-name {
+  margin: calc(10 * var(--hm-u)) 0 0;
+  font-family: var(--font-display);
+  font-size: calc(22 * var(--hm-u));
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.hero-m__brand-tag {
+  margin: calc(8 * var(--hm-u)) 0 0;
+  font-family: var(--font-display);
+  font-size: calc(17.5 * var(--hm-u));
+  font-weight: 400;
+  letter-spacing: 0.17em;
+  color: #fff;
+  line-height: 1.2;
+}
+
+/* —— Headlines —— */
 .hero-m__copy {
   position: relative;
-  padding-left: 0.85rem;
-  max-width: 22rem;
+  z-index: 4;
+  flex: 0 0 auto;
+  padding: calc(18 * var(--hm-u)) calc(40 * var(--hm-u) / 720 * 100vw);
+}
+
+.hero-m__copy--left {
+  text-align: left;
+  padding-left: calc(95 * var(--hm-u) * 720 / 720);
+  padding-left: 13.2%;
+}
+
+.hero-m__copy--center {
+  text-align: center;
+  padding-left: 6%;
+  padding-right: 6%;
+}
+
+.hero-m__copy--accent.hero-m__copy--left {
+  padding-left: 13.2%;
 }
 
 .hero-m__accent {
   position: absolute;
-  left: 0;
-  top: 0.2rem;
-  width: 3px;
-  height: calc(100% - 1.6rem);
-  min-height: 2.4rem;
-  max-height: 4.2rem;
-  background: #2bb5f5;
+  left: calc(55 / 720 * 100%);
+  top: calc(8 * var(--hm-u));
+  bottom: calc(8 * var(--hm-u));
+  width: calc(10 * var(--hm-u));
+  min-width: 3px;
+  background: var(--hm-cyan);
   border-radius: 1px;
-  box-shadow: 0 0 10px rgba(43, 181, 245, 0.45);
+}
+
+.hero-m--pack .hero-m__accent {
+  left: calc(40 / 720 * 100%);
+  width: calc(8 * var(--hm-u));
 }
 
 .hero-m__title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 6.4vw, 1.95rem);
+  font-size: calc(52 * var(--hm-u));
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.hero-m--factory .hero-m__title,
+.hero-m--env .hero-m__title {
+  font-size: calc(42 * var(--hm-u));
   font-weight: 700;
   line-height: 1.12;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 18px rgba(0, 12, 40, 0.65);
+}
+
+.hero-m--pack .hero-m__title {
+  font-size: calc(52 * var(--hm-u));
+  line-height: 1.12;
+}
+
+.hero-m__copy--left .hero-m__title,
+.hero-m__copy--left .hero-m__support {
+  padding-left: calc(18 * var(--hm-u));
 }
 
 .hero-m__keep {
@@ -1205,73 +1870,192 @@ textarea {
 }
 
 .hero-m__support {
-  margin: 0.45rem 0 0;
+  margin: calc(14 * var(--hm-u)) 0 0;
   font-family: var(--font-display);
-  font-size: clamp(0.84rem, 3.5vw, 1rem);
-  font-weight: 500;
-  line-height: 1.35;
-  color: rgba(255, 255, 255, 0.96);
-  text-shadow: 0 1px 12px rgba(0, 12, 40, 0.55);
+  font-size: calc(26 * var(--hm-u));
+  font-weight: 400;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.hero-m--factory .hero-m__support,
+.hero-m--env .hero-m__support {
+  font-size: calc(22 * var(--hm-u));
 }
 
 .hero-m__support--skew {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  justify-content: center;
+  gap: calc(14 * var(--hm-u));
 }
 
 .hero-m__support--skew::before {
   content: "";
-  width: 1.1rem;
-  height: 0.32rem;
-  background: #1a6edc;
+  width: calc(25 * var(--hm-u));
+  height: calc(10 * var(--hm-u));
+  background: var(--hm-blue);
   transform: skewX(-28deg);
   flex: none;
 }
 
+/* —— Top chrome (logo + headline) — navy band ~28% —— */
+.hero-m__top {
+  grid-area: top;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  background: linear-gradient(180deg, var(--hm-navy-deep) 0%, var(--hm-navy) 100%);
+  padding-bottom: calc(8 * var(--hm-u));
+}
+
+.hero-m__brand {
+  padding-top: max(calc(18 * var(--hm-u)), env(safe-area-inset-top, 0px));
+}
+
+/* —— Middle: full desktop landscape photo ~56% —— */
+.hero-m__media {
+  grid-area: photo;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  width: 100%;
+  background: var(--hm-navy);
+}
+
+.hero-m__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Exact mid-band crops from WhatsApp comps — fill the photo area without redesign */
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  border: 0;
+}
+
+/* —— Bottom feature bar ~16% —— */
 .hero-m__feats {
+  grid-area: feats;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: calc(12 * var(--hm-u)) calc(10 * var(--hm-u))
+    max(calc(14 * var(--hm-u)), calc(env(safe-area-inset-bottom, 0px) + 0.7rem));
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.45rem 0.5rem;
+  gap: 0;
+  background: var(--hm-bar);
+  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
+  z-index: 4;
+  min-height: 0;
+  align-content: center;
+}
+
+.hero-m--lab .hero-m__feats {
+  /* Quality slide keeps 2×2 grid inside the same footer band */
+  align-content: stretch;
+}
+
+.hero-m__feats--row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.hero-m__feats--row .hero-m__feat {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--hm-u));
+  padding: calc(8 * var(--hm-u)) calc(6 * var(--hm-u));
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.hero-m__feats--row .hero-m__feat:last-child {
+  border-right: 0;
+}
+
+.hero-m__feats--grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  padding: 0;
+  padding-bottom: max(0.2rem, env(safe-area-inset-bottom, 0px));
+  min-height: calc(175 * var(--hm-u));
+}
+
+.hero-m__feats--grid .hero-m__feat {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: calc(10 * var(--hm-u));
+  padding: calc(12 * var(--hm-u)) calc(20 * var(--hm-u));
+  text-align: left;
+  border-right: 1px solid rgba(34, 211, 245, 0.7);
+  border-bottom: 1px solid rgba(34, 211, 245, 0.7);
+}
+
+.hero-m__feats--grid .hero-m__feat:nth-child(2n) {
+  border-right: 0;
+}
+
+.hero-m__feats--grid .hero-m__feat:nth-child(n + 3) {
+  border-bottom: 0;
 }
 
 .hero-m__feat {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 0.65rem;
   font-family: var(--font-display);
-  font-size: 0.74rem;
+  font-size: calc(20 * var(--hm-u));
   font-weight: 600;
   line-height: 1.2;
   color: #fff;
-  /* Solid fill — no backdrop-filter (iOS was blanking the chrome layer). */
-  background: rgba(4, 18, 46, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 6px 18px rgba(0, 8, 28, 0.35);
-  text-shadow: 0 1px 8px rgba(0, 10, 30, 0.55);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.hero-m__feats--grid .hero-m__feat {
+  font-size: calc(20 * var(--hm-u));
+}
+
+.hero-m__feat-text {
+  display: block;
 }
 
 .hero-m__icon {
-  width: 1.15rem;
-  height: 1.15rem;
+  width: calc(46 * var(--hm-u));
+  height: calc(46 * var(--hm-u));
   flex: none;
   fill: none;
-  stroke: #2bb5f5;
-  stroke-width: 1.65;
+  stroke: var(--hm-cyan);
+  stroke-width: 1.7;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px rgba(43, 181, 245, 0.35));
+}
+
+.hero-m__feats--grid .hero-m__icon {
+  width: calc(38 * var(--hm-u));
+  height: calc(38 * var(--hm-u));
+}
+
+.hero-m__feats--light {
+  border-top-color: rgba(255, 255, 255, 0.35);
+}
+
+.hero-m__feats--light .hero-m__feat {
+  border-right-color: rgba(255, 255, 255, 0.25);
+}
+
+.hero-m__feats--light .hero-m__icon {
+  stroke: #fff;
 }
 
 .hero-m__dots {
   position: absolute;
   left: 50%;
-  bottom: max(0.45rem, env(safe-area-inset-bottom, 0px));
-  z-index: 6;
+  bottom: max(0.18rem, env(safe-area-inset-bottom, 0px));
+  z-index: 8;
   display: flex;
   gap: 0.4rem;
   transform: translateX(-50%);
@@ -1279,8 +2063,8 @@ textarea {
 }
 
 .hero-m__dot {
-  width: 0.35rem;
-  height: 0.35rem;
+  width: 0.32rem;
+  height: 0.32rem;
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -1289,18 +2073,22 @@ textarea {
 }
 
 .hero-m__dot.is-active {
-  background: #19aee0;
-  box-shadow: 0 0 0 3px rgba(25, 174, 224, 0.18);
+  background: var(--hm-cyan);
+  box-shadow: 0 0 0 3px rgba(34, 211, 245, 0.18);
 }
 
-/* Only hide phone hero on real desktop pointers — not iPhone “Desktop Website”. */
-@media (min-width: 760px) and (hover: hover) and (pointer: fine) {
+/*
+  Hero mount is decided in Hero.tsx (one of desktop/mobile is in the DOM).
+  CSS only reinforces phone vs desktop — do NOT use (hover:none)/(pointer:coarse)
+  alone to hide desktop (Windows touch laptops would blank the hero).
+*/
+@media (min-width: 760px) {
   html:not(.waed-phone) .hero--mobile {
     display: none !important;
   }
 }
 
-@media (max-width: 759px), (hover: none), (pointer: coarse) {
+@media (max-width: 759px) {
   .hero--desktop {
     display: none !important;
   }

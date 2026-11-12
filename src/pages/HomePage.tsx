@@ -27,18 +27,18 @@ function shouldSkipIntroOnPhone() {
   } catch {
     /* ignore */
   }
-  const narrow = window.matchMedia("(max-width: 920px)").matches;
-  const touch =
-    window.matchMedia("(hover: none)").matches ||
+  // Align with Hero.tsx isPhoneLike — touch-desktop must still get the intro/desktop hero.
+  const narrow = window.matchMedia("(max-width: 759px)").matches;
+  const phoneTouch =
+    window.matchMedia("(hover: none)").matches &&
     window.matchMedia("(pointer: coarse)").matches;
   const shortSide = Math.min(screen.width || 0, screen.height || 0);
   const ios =
     /iP(hone|ad|od)/i.test(navigator.userAgent) ||
-    /CriOS|FxiOS/i.test(navigator.userAgent) ||
+    /CriOS|FxiOS|Android.+Mobile/i.test(navigator.userAgent) ||
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
-    (typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 1) ||
     (shortSide > 0 && shortSide <= 500);
-  return narrow || touch || ios;
+  return narrow || phoneTouch || ios;
 }
 
 export function HomePage() {
