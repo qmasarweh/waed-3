@@ -1247,18 +1247,18 @@ textarea {
   margin-left: auto;
   margin-right: auto;
   /* Top padding cut 20% (22 → 17.6) so less wash sits above line 1 */
-  padding: calc(17.6 * var(--hm-u)) calc(36 * var(--hm-u)) calc(22 * var(--hm-u));
+  padding: calc(17.6 * var(--hm-u)) calc(28 * var(--hm-u)) calc(22 * var(--hm-u));
   text-align: center;
   z-index: 3;
   min-height: 0;
-  width: max-content;
+  width: min(100%, 92vw);
   height: auto;
-  max-width: none;
+  max-width: 92vw;
   box-sizing: border-box;
   background: transparent;
   isolation: isolate;
   overflow: visible;
-  transform: translateY(calc(-100 * var(--hm-u)));
+  transform: translateY(calc(-72 * var(--hm-u)));
 }
 
 /* Original wash size 130×170; top soft-fades via mask (no hard clip) */
@@ -1309,33 +1309,33 @@ textarea {
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__title {
-  /* ~20% larger than 44 → 53 */
-  font-size: calc(53 * var(--hm-u));
-  line-height: 1.12;
+  /* Cap by viewport width so Pro Max / Pixel don’t clip the headline */
+  font-size: clamp(1.15rem, 5.6vw, calc(50 * var(--hm-u)));
+  line-height: 1.14;
   text-align: center;
-  letter-spacing: 0.04em;
-  max-width: none;
-  width: max-content;
+  letter-spacing: 0.02em;
+  width: min(100%, 92vw);
+  max-width: 92vw;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__title .hero-m__keep {
   white-space: nowrap;
   display: inline-block;
+  max-width: 92vw;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__support {
-  /* ~20% larger than 22 → 26 */
-  font-size: calc(26 * var(--hm-u));
+  font-size: clamp(0.78rem, 3.4vw, calc(24 * var(--hm-u)));
   text-align: center;
-  width: max-content;
-  max-width: none;
+  width: min(100%, 92vw);
+  max-width: 92vw;
   margin-left: auto;
   margin-right: auto;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__support span {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__feats {
@@ -1563,7 +1563,11 @@ textarea {
   margin-top: calc(48 * var(--hm-u));
   padding-top: calc(10 * var(--hm-u));
   padding-bottom: calc(12 * var(--hm-u));
+  padding-right: calc(24 * var(--hm-u));
   text-align: left;
+  width: min(100%, 92vw);
+  max-width: 92vw;
+  box-sizing: border-box;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__brand-name,
@@ -1572,32 +1576,27 @@ textarea {
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__title {
-  /* ~20% larger than 50 → 60 */
-  font-size: calc(60 * var(--hm-u));
-  line-height: 1.12;
-  max-width: none;
-  width: max-content;
+  font-size: clamp(1.25rem, 6.2vw, calc(52 * var(--hm-u)));
+  line-height: 1.14;
+  max-width: 100%;
+  width: auto;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__title span {
   white-space: nowrap;
-}
-
-.hero-m--gemini.hero-m--pack .hero-m__copy {
-  width: max-content;
-  max-width: none;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__support {
-  font-size: calc(26 * var(--hm-u));
-  /* Match slide 2: no 90% clamp — keep "Retail Packaging" on one line */
-  max-width: none;
-  width: max-content;
-  white-space: nowrap;
+  font-size: clamp(0.8rem, 3.5vw, calc(24 * var(--hm-u)));
+  max-width: 100%;
+  width: auto;
+  white-space: normal;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__support span {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__accent {
