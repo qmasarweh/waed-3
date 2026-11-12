@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
-import gsap from "gsap";
+import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
 import { asset } from "../lib/asset";
 import {
   HERO_AUTOPLAY,
@@ -21,230 +19,207 @@ function FeatureIcon({ name }: { name: string }) {
   );
 }
 
-function MobileCopy({ slide }: { slide: HeroSlide }) {
+function BrandHeader({ logoOnly = false }: { logoOnly?: boolean }) {
   return (
-    <>
-      {slide.accent ? <span className="hero-m__accent" aria-hidden="true" /> : null}
+    <header className={`hero-m__brand${logoOnly ? " hero-m__brand--logo-only" : ""}`}>
+      <img
+        className="hero-m__brand-logo"
+        src={asset("/img/hero-redesign/waed-hero-lockup.png")}
+        alt="WAED"
+        width={440}
+        height={97}
+      />
+      {logoOnly ? null : (
+        <>
+          <p className="hero-m__brand-name">Industrial Innovation Company</p>
+          <p className="hero-m__brand-tag">Innovation Made To Perform</p>
+        </>
+      )}
+    </header>
+  );
+}
+
+function Headline({ slide }: { slide: HeroSlide }) {
+  const left = slide.layout === "lab" || slide.layout === "pack";
+  return (
+    <div
+      className={[
+        "hero-m__copy",
+        left ? "hero-m__copy--left" : "hero-m__copy--center",
+        slide.accent ? "hero-m__copy--accent" : "",
+        slide.skewSupport ? "hero-m__copy--skew" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {slide.accent && left ? <span className="hero-m__accent" aria-hidden="true" /> : null}
       <h1 className="hero-m__title">
         {slide.title.map((line, lineIndex) => {
           const isLast = lineIndex === slide.title.length - 1;
-          const keep = slide.keepIndex === lineIndex;
+          // Factory slide: every title line must stay unbroken (no mid-phrase wrap)
+          const keep = slide.keepIndex === lineIndex || slide.layout === "factory";
           return (
-            <span key={line} className={keep ? "hero-m__keep" : undefined}>
-              {line}
+            <span key={`${line}-${lineIndex}`}>
+              <span className={keep ? "hero-m__keep" : undefined}>{line}</span>
               {!isLast ? <br /> : null}
             </span>
           );
         })}
       </h1>
       <p className={`hero-m__support${slide.skewSupport ? " hero-m__support--skew" : ""}`}>
-        {slide.support}
+        {slide.support.split("\n").map((line, i, arr) => (
+          <span key={`${line}-${i}`}>
+            {line}
+            {i < arr.length - 1 ? <br /> : null}
+          </span>
+        ))}
       </p>
-    </>
+    </div>
   );
 }
 
-/** Opacity-only — never touch visibility (GSAP autoAlpha was leaving portraits stuck hidden on iOS). */
-function showPanel(el: HTMLElement, z: number) {
-  gsap.set(el, { opacity: 1, visibility: "visible", zIndex: z });
+function FeatureBar({ slide }: { slide: HeroSlide }) {
+  const grid = slide.featGrid === "grid2";
+  const light = slide.featTone === "white";
+  return (
+    <ul
+      className={[
+        "hero-m__feats",
+        grid ? "hero-m__feats--grid" : "hero-m__feats--row",
+        light ? "hero-m__feats--light" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      aria-label="Capabilities"
+    >
+      {slide.features.map((feature) => (
+        <li className="hero-m__feat" key={feature.lines.join("-")}>
+          <FeatureIcon name={feature.icon} />
+          <span className="hero-m__feat-text">
+            {feature.lines.map((line, i) => (
+              <span key={line}>
+                {line}
+                {i < feature.lines.length - 1 ? <br /> : null}
+              </span>
+            ))}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
-function hidePanel(el: HTMLElement, z = 1) {
-  gsap.set(el, { opacity: 0, visibility: "visible", zIndex: z });
-}
+const SWIPE_MIN_PX = 48;
 
 /**
- * Phone hero: full-bleed 9:16 photo with overlay copy + 2×2 features.
- * No letterbox bands — photo owns the viewport; UI sits on soft washes.
+ * Gemini full-bleed photo + text overlay only.
+ * Placement (position / size / alignment) from WhatsApp comps.
+ * No GSAP slide panels — avoids iPhone visibility:hidden solid-navy failure mode.
  */
 export function HeroMobile() {
-  const root = useRef<HTMLElement>(null);
-  const mediaStage = useRef<HTMLDivElement>(null);
-  const copyEl = useRef<HTMLDivElement>(null);
-  const featsEl = useRef<HTMLUListElement>(null);
-  const logoEl = useRef<HTMLImageElement>(null);
-  const goToRef = useRef<(next: number) => void>(() => {});
   const [active, setActive] = useState(0);
+  const [autoKey, setAutoKey] = useState(0);
+  const slides = HERO_SLIDES;
+  const slide = slides[active];
+  const photoSrc = asset(slide.mobileSrc.split("?")[0]);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  const slide = HERO_SLIDES[active];
+  const goTo = useCallback(
+    (next: number) => {
+      const len = slides.length;
+      const wrapped = ((next % len) + len) % len;
+      setActive(wrapped);
+      setAutoKey((k) => k + 1);
+    },
+    [slides.length],
+  );
 
   useEffect(() => {
-    const stage = mediaStage.current;
-    const copy = copyEl.current;
-    const feats = featsEl.current;
-    if (!stage || !copy || !feats) return;
-
-    const panels = Array.from(stage.querySelectorAll<HTMLElement>(".hero-m__media"));
-    if (!panels.length) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    // Clear any leftover inline visibility from prior mounts / GSAP autoAlpha.
-    panels.forEach((panel, i) => {
-      if (i === 0) showPanel(panel, 3);
-      else hidePanel(panel, 1);
-    });
-    gsap.set([copy, feats], { opacity: 1, y: 0, visibility: "visible" });
-    if (logoEl.current) gsap.set(logoEl.current, { opacity: 1, visibility: "visible" });
-
-    let index = 0;
-    let locked = false;
-    let tl: gsap.core.Timeline | null = null;
-
-    const settle = (next: number) => {
-      panels.forEach((panel, i) => {
-        if (i === next) showPanel(panel, 3);
-        else hidePanel(panel, 1);
-      });
-      gsap.set([copy, feats], { opacity: 1, y: 0, visibility: "visible" });
-      if (logoEl.current) {
-        const showLogo = HERO_SLIDES[next].logo !== "none";
-        gsap.set(logoEl.current, {
-          opacity: showLogo ? 1 : 0,
-          visibility: "visible",
-        });
-      }
-    };
-
-    const goTo = (next: number) => {
-      if (locked || next === index || next < 0 || next >= panels.length) return;
-      locked = true;
-      const prev = index;
-      const outgoing = panels[prev];
-      const incoming = panels[next];
-      const showLogoNext = HERO_SLIDES[next].logo !== "none";
-      const showLogoPrev = HERO_SLIDES[prev].logo !== "none";
-
-      if (reduce) {
-        settle(next);
-        index = next;
-        setActive(next);
-        locked = false;
-        return;
-      }
-
-      tl?.kill();
-      showPanel(incoming, 4);
-      gsap.set(outgoing, { zIndex: 3, visibility: "visible" });
-      gsap.set(incoming, { opacity: 0, visibility: "visible" });
-
-      tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
-        onComplete: () => {
-          settle(next);
-          index = next;
-          locked = false;
-          tl = null;
-        },
-      });
-
-      tl.to(copy, { opacity: 0, y: -12, duration: 0.32, ease: "power2.in" }, 0);
-      tl.to(feats, { opacity: 0, y: 10, duration: 0.32, ease: "power2.in" }, 0);
-      if (logoEl.current && showLogoPrev && !showLogoNext) {
-        tl.to(logoEl.current, { opacity: 0, duration: 0.25 }, 0);
-      }
-
-      tl.to(outgoing, { opacity: 0, duration: 0.75, ease: "power2.inOut" }, 0.08);
-      tl.to(incoming, { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 0.12);
-
-      tl.add(() => {
-        flushSync(() => setActive(next));
-        gsap.set([copy, feats], { y: 16 });
-        if (logoEl.current && showLogoNext) gsap.set(logoEl.current, { opacity: 0 });
-      }, 0.34);
-
-      if (logoEl.current && showLogoNext) {
-        tl.to(logoEl.current, { opacity: 1, duration: 0.4 }, 0.4);
-      }
-      tl.to(copy, { opacity: 1, y: 0, duration: 0.48 }, 0.42);
-      tl.to(feats, { opacity: 1, y: 0, duration: 0.48 }, 0.48);
-    };
-
-    goToRef.current = goTo;
-
-    const autoId = HERO_AUTOPLAY
-      ? window.setInterval(() => goTo((index + 1) % panels.length), HERO_AUTOPLAY_MS)
-      : 0;
-
-    return () => {
-      if (autoId) window.clearInterval(autoId);
-      goToRef.current = () => {};
-      tl?.kill();
-      gsap.killTweensOf([panels, copy, feats, logoEl.current].filter(Boolean));
-      // If a crossfade was interrupted, never leave the stage as solid navy.
-      settle(index);
-    };
+    document.documentElement.classList.add("waed-app-ready");
   }, []);
 
+  useEffect(() => {
+    if (!HERO_AUTOPLAY) return;
+    const id = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % slides.length);
+    }, HERO_AUTOPLAY_MS);
+    return () => window.clearInterval(id);
+  }, [slides.length, autoKey]);
+
+  const onTouchStart = (e: TouchEvent) => {
+    const t = e.changedTouches[0] ?? e.touches[0];
+    if (!t) return;
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    // Horizontal swipe only — ignore mostly-vertical scrolls
+    if (Math.abs(dx) < SWIPE_MIN_PX || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) goTo(active + 1); // swipe left → next
+    else goTo(active - 1); // swipe right → previous
+  };
+
   return (
-    <section className="hero hero--mobile" id="top" ref={root} aria-label="Hero">
-      <div className="hero-m">
-        <div className="hero-m__stage" ref={mediaStage} aria-hidden="true">
-          {HERO_SLIDES.map((item, index) => (
-            <div
-              key={item.id}
-              className={`hero-m__media${index === active ? " is-active" : ""}`}
-            >
-              <img
-                src={asset(item.mobileSrc)}
-                alt=""
-                width={1080}
-                height={1920}
-                fetchPriority={index === 0 ? "high" : "auto"}
-                loading="eager"
-                decoding="async"
+    <section
+      className="hero hero--mobile hero--mobile-client"
+      id="top"
+      aria-label="Hero"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <div className={`hero-m hero-m--client hero-m--gemini hero-m--${slide.layout}`}>
+        <img
+          key={slide.id}
+          className="hero-m__gemini-photo"
+          src={photoSrc}
+          alt={slide.alt}
+          width={768}
+          height={1365}
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          draggable={false}
+        />
+        <div className="hero-m__overlay">
+          {slide.layout === "lab" ? (
+            <div className="hero-m__wash-block">
+              <BrandHeader logoOnly />
+              <Headline slide={slide} />
+            </div>
+          ) : (
+            <>
+              <BrandHeader
+                logoOnly={
+                  slide.layout === "factory" ||
+                  slide.layout === "pack" ||
+                  slide.layout === "env"
+                }
               />
-            </div>
-          ))}
+              <Headline slide={slide} />
+            </>
+          )}
+          <FeatureBar slide={slide} />
         </div>
+      </div>
 
-        <div className="hero-m__veil hero-m__veil--top" aria-hidden="true" />
-        <div className="hero-m__veil hero-m__veil--bottom" aria-hidden="true" />
-
-        <div className="hero-m__chrome">
-          <div className="hero-m__top">
-            <img
-              ref={logoEl}
-              className="hero-m__logo"
-              src={asset("/img/hero-redesign/waed-hero-lockup.png")}
-              alt={active === 0 ? "WAED Industrial Innovation Company" : ""}
-              width={288}
-              height={103}
-            />
-            <div className="hero-m__copy" ref={copyEl}>
-              <MobileCopy slide={slide} />
-            </div>
-          </div>
-
-          <ul className="hero-m__feats" ref={featsEl} aria-label="Capabilities">
-            {slide.features.map((feature) => (
-              <li className="hero-m__feat" key={feature.lines.join("-")}>
-                <FeatureIcon name={feature.icon} />
-                <span>
-                  {feature.lines.map((line, i) => (
-                    <span key={line}>
-                      {line}
-                      {i < feature.lines.length - 1 ? <br /> : null}
-                    </span>
-                  ))}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="hero-m__dots" role="tablist" aria-label="Hero slides">
-          {HERO_SLIDES.map((item, index) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`hero-m__dot${index === active ? " is-active" : ""}`}
-              aria-label={`Go to slide ${index + 1}`}
-              aria-current={index === active ? "true" : undefined}
-              onClick={() => goToRef.current(index)}
-            />
-          ))}
-        </div>
+      <div className="hero-m__dots" role="tablist" aria-label="Hero slides">
+        {slides.map((item, index) => (
+          <button
+            key={item.id}
+            type="button"
+            className={`hero-m__dot${index === active ? " is-active" : ""}`}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === active ? "true" : undefined}
+            onClick={() => goTo(index)}
+          />
+        ))}
       </div>
     </section>
   );

@@ -17,14 +17,32 @@ import { asset } from "../lib/asset";
 
 const INTRO_KEY = "waed-intro-seen";
 
+/** Keep desktop splash; skip on phones so Safari/Chrome never freeze on navy. */
+function shouldSkipIntroOnPhone() {
+  if (typeof window === "undefined") return false;
+  if (document.documentElement.classList.contains("waed-skip-intro")) return true;
+  if (document.documentElement.classList.contains("waed-phone")) return true;
+  try {
+    if (sessionStorage.getItem(INTRO_KEY) === "1") return true;
+  } catch {
+    /* ignore */
+  }
+  // Align with Hero.tsx isPhoneLike — touch-desktop must still get the intro/desktop hero.
+  const narrow = window.matchMedia("(max-width: 759px)").matches;
+  const phoneTouch =
+    window.matchMedia("(hover: none)").matches &&
+    window.matchMedia("(pointer: coarse)").matches;
+  const shortSide = Math.min(screen.width || 0, screen.height || 0);
+  const ios =
+    /iP(hone|ad|od)/i.test(navigator.userAgent) ||
+    /CriOS|FxiOS|Android.+Mobile/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
+    (shortSide > 0 && shortSide <= 500);
+  return narrow || phoneTouch || ios;
+}
+
 export function HomePage() {
-  const [introDone, setIntroDone] = useState(() => {
-    try {
-      return sessionStorage.getItem(INTRO_KEY) === "1";
-    } catch {
-      return false;
-    }
-  });
+  const [introDone, setIntroDone] = useState(() => shouldSkipIntroOnPhone());
 
   const handleIntroComplete = useCallback(() => {
     try {
@@ -33,6 +51,11 @@ export function HomePage() {
       /* ignore */
     }
     setIntroDone(true);
+  }, []);
+
+  // Belt + suspenders: if a phone somehow started with intro on, kill it immediately.
+  useEffect(() => {
+    if (shouldSkipIntroOnPhone()) setIntroDone(true);
   }, []);
 
   useEffect(() => {
@@ -47,7 +70,9 @@ export function HomePage() {
 
   return (
     <>
-      {!introDone && <IntroLoader onComplete={handleIntroComplete} />}
+      {!introDone && !shouldSkipIntroOnPhone() && (
+        <IntroLoader onComplete={handleIntroComplete} />
+      )}
       <main className={`page-parallax${introDone ? " is-ready" : ""}`}>
         <Hero />
         <About />
