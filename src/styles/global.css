@@ -1111,17 +1111,15 @@ textarea {
   inset: 0;
   width: 100%;
   height: 100%;
+  /* Assets are pre-cropped to iPhone 16 Pro Max / Pixel-tall ratio (1320×2868) */
   object-fit: cover;
-  object-position: center top;
+  object-position: center center;
   display: block;
   z-index: 1;
 }
 
-/* Slide 1 — crop ~5% from top and shift photo up */
+/* Slide 1 — keep facility tops in frame on very tall viewports */
 .hero-m--gemini.hero-m--factory .hero-m__gemini-photo {
-  top: -5%;
-  bottom: auto;
-  height: 105%;
   object-position: center top;
 }
 

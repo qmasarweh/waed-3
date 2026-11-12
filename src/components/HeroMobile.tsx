@@ -138,6 +138,16 @@ export function HeroMobile() {
     document.documentElement.classList.add("waed-app-ready");
   }, []);
 
+  // Warm slides 2–4 so autoplay/swipe doesn’t flash navy on slow networks
+  useEffect(() => {
+    slides.forEach((s, i) => {
+      if (i === 0) return;
+      const img = new Image();
+      img.decoding = "async";
+      img.src = asset(s.mobileSrc.split("?")[0]);
+    });
+  }, [slides]);
+
   useEffect(() => {
     if (!HERO_AUTOPLAY) return;
     const id = window.setInterval(() => {
@@ -180,8 +190,8 @@ export function HeroMobile() {
           className="hero-m__gemini-photo"
           src={photoSrc}
           alt={slide.alt}
-          width={768}
-          height={1365}
+          width={1320}
+          height={2868}
           fetchPriority="high"
           loading="eager"
           decoding="async"
