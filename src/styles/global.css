@@ -1247,18 +1247,18 @@ textarea {
   margin-left: auto;
   margin-right: auto;
   /* Top padding cut 20% (22 → 17.6) so less wash sits above line 1 */
-  padding: calc(17.6 * var(--hm-u)) calc(28 * var(--hm-u)) calc(22 * var(--hm-u));
+  padding: calc(17.6 * var(--hm-u)) calc(36 * var(--hm-u)) calc(22 * var(--hm-u));
   text-align: center;
   z-index: 3;
   min-height: 0;
-  width: min(100%, 92vw);
+  width: max-content;
   height: auto;
-  max-width: 92vw;
+  max-width: none;
   box-sizing: border-box;
   background: transparent;
   isolation: isolate;
   overflow: visible;
-  transform: translateY(calc(-72 * var(--hm-u)));
+  transform: translateY(calc(-100 * var(--hm-u)));
 }
 
 /* Original wash size 130×170; top soft-fades via mask (no hard clip) */
@@ -1309,33 +1309,33 @@ textarea {
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__title {
-  /* Cap by viewport width so Pro Max / Pixel don’t clip the headline */
-  font-size: clamp(1.15rem, 5.6vw, calc(50 * var(--hm-u)));
-  line-height: 1.14;
+  /* Phone-fit: smaller than desktop-comp 53 so lines stay on-screen */
+  font-size: calc(40 * var(--hm-u));
+  line-height: 1.12;
   text-align: center;
-  letter-spacing: 0.02em;
-  width: min(100%, 92vw);
-  max-width: 92vw;
+  letter-spacing: 0.04em;
+  max-width: none;
+  width: max-content;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__title .hero-m__keep {
   white-space: nowrap;
   display: inline-block;
-  max-width: 92vw;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__support {
-  font-size: clamp(0.78rem, 3.4vw, calc(24 * var(--hm-u)));
+  /* Phone-fit: match smaller headline */
+  font-size: calc(19 * var(--hm-u));
   text-align: center;
-  width: min(100%, 92vw);
-  max-width: 92vw;
+  width: max-content;
+  max-width: none;
   margin-left: auto;
   margin-right: auto;
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__support span {
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__feats {
@@ -1563,11 +1563,7 @@ textarea {
   margin-top: calc(48 * var(--hm-u));
   padding-top: calc(10 * var(--hm-u));
   padding-bottom: calc(12 * var(--hm-u));
-  padding-right: calc(24 * var(--hm-u));
   text-align: left;
-  width: min(100%, 92vw);
-  max-width: 92vw;
-  box-sizing: border-box;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__brand-name,
@@ -1576,27 +1572,32 @@ textarea {
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__title {
-  font-size: clamp(1.25rem, 6.2vw, calc(52 * var(--hm-u)));
-  line-height: 1.14;
-  max-width: 100%;
-  width: auto;
+  /* Phone-fit: smaller so 3 lines stay inside the frame */
+  font-size: calc(44 * var(--hm-u));
+  line-height: 1.12;
+  max-width: none;
+  width: max-content;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__title span {
   white-space: nowrap;
-  display: inline-block;
-  max-width: 100%;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__copy {
+  width: max-content;
+  max-width: none;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__support {
-  font-size: clamp(0.8rem, 3.5vw, calc(24 * var(--hm-u)));
-  max-width: 100%;
-  width: auto;
-  white-space: normal;
+  font-size: calc(19 * var(--hm-u));
+  /* Keep "Retail Packaging" on one line */
+  max-width: none;
+  width: max-content;
+  white-space: nowrap;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__support span {
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__accent {
