@@ -24,10 +24,10 @@ function BrandHeader({ logoOnly = false }: { logoOnly?: boolean }) {
     <header className={`hero-m__brand${logoOnly ? " hero-m__brand--logo-only" : ""}`}>
       <img
         className="hero-m__brand-logo"
-        src={asset("/img/hero-redesign/waed-hero-lockup.png?v=approved3")}
+        src={asset("/img/hero-redesign/waed-hero-lockup.png?v=approved4")}
         alt="WAED"
-        width={1600}
-        height={414}
+        width={563}
+        height={124}
       />
       {logoOnly ? null : (
         <>
