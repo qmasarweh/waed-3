@@ -877,8 +877,9 @@ textarea {
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
   column-gap: 0;
-  background: #041230;
-  border-top: 1px solid rgba(80, 150, 230, 0.28);
+  /* Align with approved mobile footer navy */
+  background: #0a2756;
+  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   will-change: transform, opacity;
@@ -1118,8 +1119,26 @@ textarea {
   z-index: 1;
 }
 
-/* Slide 1 — keep facility tops in frame on very tall viewports */
+/* Slide 1 — crop ~5% from top and shift photo up (original pre-tall-crop) */
 .hero-m--gemini.hero-m--factory .hero-m__gemini-photo {
+  top: -5%;
+  bottom: auto;
+  height: 105%;
+  object-position: center top;
+}
+
+/* Slide 3 — user packaging photo; show full image, no crop */
+.hero-m--gemini.hero-m--pack {
+  background: #003062; /* exact upper photo blue */
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__gemini-photo {
+  object-fit: contain;
+  object-position: center center;
+}
+
+/* Slide 4 — original gemini framing (leave slide 2 / lab at center center) */
+.hero-m--gemini.hero-m--env .hero-m__gemini-photo {
   object-position: center top;
 }
 
@@ -1173,14 +1192,14 @@ textarea {
   content: "";
   position: absolute;
   z-index: 0;
-  left: 50%;
-  top: 42%;
+  left: 38%; /* bias to the left area only */
+  top: 56%; /* a little more down */
   transform: translate(-50%, -50%);
   width: 130%;
   height: 170%;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 78% 80% at 50% 42%,
+    ellipse 78% 80% at 38% 56%,
     rgba(6, 32, 78, 0.98) 0%,
     rgba(8, 40, 96, 0.92) 28%,
     rgba(10, 42, 94, 0.72) 52%,
@@ -1266,14 +1285,14 @@ textarea {
   content: "";
   position: absolute;
   z-index: 0;
-  left: 50%;
-  top: 42%;
+  left: 38%; /* bias to the left area only */
+  top: 56%; /* a little more down */
   transform: translate(-50%, -50%);
   width: 130%;
   height: 170%;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 78% 80% at 50% 42%,
+    ellipse 78% 80% at 38% 56%,
     rgba(6, 32, 78, 0.98) 0%,
     rgba(8, 40, 96, 0.92) 28%,
     rgba(10, 42, 94, 0.72) 52%,
@@ -1342,13 +1361,44 @@ textarea {
   /* Approved: 0 — not auto (auto stole flex space and shifted the text wash up) */
   margin-top: 0;
   flex: 0 0 auto;
-  min-height: calc(172 * var(--hm-u));
-  padding-top: calc(9 * var(--hm-u));
-  padding-bottom: max(calc(13 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
-  /* Solid navy housing behind the 4 feature icons */
-  background: #0a2756;
-  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
+  /* Tall enough to fully cover the gemini photo’s light floor strip */
+  min-height: calc(230 * var(--hm-u));
+  padding-top: calc(14 * var(--hm-u));
+  padding-bottom: max(calc(18 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  padding-left: calc(4 * var(--hm-u));
+  padding-right: calc(4 * var(--hm-u));
+  background: #0b1a3c;
+  border-top: 1.5px solid #00e5ff;
   z-index: 4;
+  overflow: hidden;
+  align-content: center;
+}
+
+/* Slide 1 footer cells — clean columns, no ghost boxes / overflow */
+.hero-m--gemini.hero-m--factory .hero-m__feats--row .hero-m__feat {
+  gap: calc(8 * var(--hm-u));
+  padding: calc(6 * var(--hm-u)) calc(4 * var(--hm-u));
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+  outline: none;
+  box-shadow: none;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__feat-text {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: calc(18 * var(--hm-u));
+  line-height: 1.15;
+  overflow: hidden;
+}
+
+.hero-m--gemini.hero-m--factory .hero-m__icon {
+  width: calc(48 * var(--hm-u));
+  height: calc(48 * var(--hm-u));
+  outline: none;
+  overflow: visible;
 }
 
 /* —— Slide 2 Quality: bigger logo + one wash behind logo + text —— */
@@ -1367,7 +1417,7 @@ textarea {
   box-sizing: border-box;
 }
 
-/* One connected wash behind logo + remaining text (130×170, soft top fade, stronger blur) */
+/* One connected wash behind logo + text — same navy family as footer (#0a2756) */
 .hero-m--gemini.hero-m--lab .hero-m__wash-block::before {
   content: "";
   position: absolute;
@@ -1380,13 +1430,12 @@ textarea {
   pointer-events: none;
   background: radial-gradient(
     ellipse 78% 80% at 50% 42%,
-    rgba(6, 32, 78, 0.98) 0%,
-    rgba(8, 40, 96, 0.92) 28%,
-    rgba(10, 42, 94, 0.72) 52%,
-    rgba(10, 42, 94, 0.32) 74%,
+    rgba(10, 39, 86, 0.96) 0%,
+    rgba(10, 39, 86, 0.88) 28%,
+    rgba(10, 39, 86, 0.62) 52%,
+    rgba(10, 39, 86, 0.28) 74%,
     transparent 100%
   );
-  /* ~60% stronger soft blur vs slide-1 16px → 26px */
   filter: blur(26px);
   -webkit-mask-image: linear-gradient(
     to bottom,
@@ -1439,6 +1488,7 @@ textarea {
 .hero-m--gemini.hero-m--pack .hero-m__brand--logo-only,
 .hero-m--gemini.hero-m--env .hero-m__brand,
 .hero-m--gemini.hero-m--env .hero-m__brand--logo-only {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1448,6 +1498,28 @@ textarea {
   padding-left: 0;
   padding-right: 0;
   overflow: visible;
+}
+
+/* Slide 3 — blend uses exact photo blue sampled behind logo (#003062) */
+.hero-m--gemini.hero-m--pack .hero-m__brand::before,
+.hero-m--gemini.hero-m--pack .hero-m__brand--logo-only::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 180%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 75% at 50% 40%,
+    rgba(0, 48, 98, 0.55) 0%,
+    rgba(0, 48, 98, 0.35) 35%,
+    rgba(0, 47, 93, 0.18) 60%,
+    transparent 100%
+  );
+  filter: blur(22px);
 }
 
 .hero-m--gemini.hero-m--pack .hero-m__brand-tag,
@@ -1547,15 +1619,29 @@ textarea {
 .hero-m--gemini.hero-m--lab .hero-m__feats {
   margin-top: auto;
   flex: 0 0 auto;
-  /* Navy box wrapping all 4 footer features (slide 2) */
-  min-height: calc(190 * var(--hm-u));
+  /* Same navy as slides 1/3/4 — was mismatched #062a6b */
+  min-height: calc(220 * var(--hm-u));
   width: 100%;
-  padding-top: calc(4 * var(--hm-u));
-  padding-bottom: max(calc(8 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
-  background: #062a6b;
+  padding-top: calc(10 * var(--hm-u));
+  padding-bottom: max(calc(14 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  background: #0a2756;
   border-top: 1.5px solid rgba(34, 211, 245, 0.7);
   z-index: 4;
   box-sizing: border-box;
+}
+
+/* Slide 2 — bigger icons + labels so the 2×2 footer fills properly */
+.hero-m--gemini.hero-m--lab .hero-m__feats--grid .hero-m__feat {
+  gap: calc(14 * var(--hm-u));
+  padding: calc(16 * var(--hm-u)) calc(22 * var(--hm-u));
+  font-size: calc(24 * var(--hm-u));
+  line-height: 1.15;
+}
+
+.hero-m--gemini.hero-m--lab .hero-m__feats--grid .hero-m__icon {
+  width: calc(56 * var(--hm-u)); /* was shared grid 38 */
+  height: calc(56 * var(--hm-u));
+  stroke-width: 1.85;
 }
 
 /* —— Slide 3 Packaging: left headline + cyan accent; 4-col footer —— */
@@ -1607,9 +1693,51 @@ textarea {
   width: calc(10 * var(--hm-u));
 }
 
+/* Slide 3 footer — taller navy band + bright cyan top edge (like slide 1 join) */
 .hero-m--gemini.hero-m--pack .hero-m__feats {
-  min-height: calc(210 * var(--hm-u));
-  padding-bottom: max(calc(20 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  margin-top: auto;
+  flex: 0 0 auto;
+  height: auto;
+  min-height: calc(295 * var(--hm-u));
+  max-height: none;
+  padding-top: calc(20 * var(--hm-u));
+  padding-bottom: max(calc(24 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  padding-left: calc(6 * var(--hm-u));
+  padding-right: calc(6 * var(--hm-u));
+  box-sizing: border-box;
+  align-content: center;
+  overflow: hidden;
+  background: #0a2756; /* same as slide 4 */
+  border-top: 1.5px solid rgba(34, 211, 245, 0.7);
+  z-index: 4;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__feats--row .hero-m__feat {
+  gap: calc(3 * var(--hm-u));
+  padding: 0 calc(4 * var(--hm-u));
+  font-size: calc(15 * var(--hm-u));
+  line-height: 1.12;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+  outline: none;
+  box-shadow: none;
+  overflow: hidden;
+  min-width: 0;
+  justify-content: center;
+  transform: none;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__feat-text {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: calc(15 * var(--hm-u));
+  line-height: 1.12;
+  overflow: hidden;
+}
+
+.hero-m--gemini.hero-m--pack .hero-m__icon {
+  width: calc(48 * var(--hm-u));
+  height: calc(48 * var(--hm-u));
 }
 
 /* —— Slide 4 Performance: centered headline; skew support; 4-col footer —— */
@@ -1632,14 +1760,16 @@ textarea {
 }
 
 .hero-m--gemini.hero-m--env .hero-m__feats {
-  /* Shorter footer bar — fixed height so content can’t stretch it */
+  /* Slightly taller than slide 1 blue box */
   margin-top: auto;
   flex: 0 0 auto;
-  height: calc(145 * var(--hm-u));
-  min-height: 0;
-  max-height: calc(145 * var(--hm-u));
-  padding: calc(4 * var(--hm-u)) calc(6 * var(--hm-u))
-    max(calc(6 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  height: auto;
+  min-height: calc(218 * var(--hm-u));
+  max-height: none;
+  padding-top: calc(14 * var(--hm-u));
+  padding-bottom: max(calc(18 * var(--hm-u)), env(safe-area-inset-bottom, 0px));
+  padding-left: calc(6 * var(--hm-u));
+  padding-right: calc(6 * var(--hm-u));
   box-sizing: border-box;
   align-content: center;
   overflow: hidden;

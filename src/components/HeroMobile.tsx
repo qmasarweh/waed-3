@@ -184,7 +184,17 @@ export function HeroMobile() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className={`hero-m hero-m--client hero-m--gemini hero-m--${slide.layout}`}>
+      <div
+        className={[
+          "hero-m",
+          "hero-m--client",
+          "hero-m--gemini",
+          `hero-m--${slide.layout}`,
+          slide.bakedChrome ? "hero-m--baked" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <img
           key={slide.id}
           className="hero-m__gemini-photo"
@@ -197,26 +207,28 @@ export function HeroMobile() {
           decoding="async"
           draggable={false}
         />
-        <div className="hero-m__overlay">
-          {slide.layout === "lab" ? (
-            <div className="hero-m__wash-block">
-              <BrandHeader logoOnly />
-              <Headline slide={slide} />
-            </div>
-          ) : (
-            <>
-              <BrandHeader
-                logoOnly={
-                  slide.layout === "factory" ||
-                  slide.layout === "pack" ||
-                  slide.layout === "env"
-                }
-              />
-              <Headline slide={slide} />
-            </>
-          )}
-          <FeatureBar slide={slide} />
-        </div>
+        {!slide.bakedChrome ? (
+          <div className="hero-m__overlay">
+            {slide.layout === "lab" ? (
+              <div className="hero-m__wash-block">
+                <BrandHeader logoOnly />
+                <Headline slide={slide} />
+              </div>
+            ) : (
+              <>
+                <BrandHeader
+                  logoOnly={
+                    slide.layout === "factory" ||
+                    slide.layout === "pack" ||
+                    slide.layout === "env"
+                  }
+                />
+                <Headline slide={slide} />
+              </>
+            )}
+            <FeatureBar slide={slide} />
+          </div>
+        ) : null}
       </div>
 
       <div className="hero-m__dots" role="tablist" aria-label="Hero slides">

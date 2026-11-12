@@ -1,0 +1,25 @@
+﻿RESTORE POINT — FOUR HERO SLIDES
+================================
+
+This is a full restore point (not a screenshot).
+
+If the slides get messed up, run this from PowerShell:
+
+  cd "C:\Users\qusai\files\circle\WEAD\waed 2\site\slide-backups"
+  .\RESTORE-FOUR-SLIDES.ps1
+
+That copies these exact files back into the live site:
+
+  - All slide images (01–04 phone / portrait / gemini / desktop)
+  - heroSlides.ts
+  - Hero.tsx, HeroMobile.tsx, HeroDesktop.tsx
+  - global.css
+  - index.html
+
+Exact CSS values, image hashes, and slide config are in:
+
+  FOUR-SLIDES-DOCUMENT.md
+
+Also available as zip:
+
+  four-slides-20261112-214821.zip

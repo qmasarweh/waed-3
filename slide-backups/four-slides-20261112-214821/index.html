@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Strongly discourage Safari / in-app browsers from keeping a stale shell -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>WAED Industrial | Cleaning Products Manufacturer in Bahrain</title>
+    <meta
+      name="description"
+      content="Bahrain-based maker of household soap, detergents and cleaning products for homes and families. Quality-controlled consumer brands including Enaya and leenX."
+    />
+    <meta
+      name="keywords"
+      content="WAED Industrial, household cleaning Bahrain, home detergents, Enaya, leenX, Al Hidd, family cleaning products"
+    />
+    <meta name="author" content="WAED Industrial Innovation Company W.L.L." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://waediic.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="WAED Industrial" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://waediic.com/" />
+    <meta property="og:title" content="WAED Industrial | Cleaning Products Manufacturer in Bahrain" />
+    <meta
+      property="og:description"
+      content="Bahrain-based maker of household soap, detergents and cleaning products for homes and families across the region."
+    />
+    <meta property="og:image" content="https://waediic.com/img/hero-facility.jpg" />
+    <meta property="og:image:alt" content="WAED Industrial facility in Al Hidd, Bahrain" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WAED Industrial | Cleaning Products Manufacturer in Bahrain" />
+    <meta
+      name="twitter:description"
+      content="Bahrain-based household cleaning brands for everyday homes and families — including Enaya and leenX."
+    />
+    <meta name="twitter:image" content="https://waediic.com/img/hero-facility.jpg" />
+
+    <link rel="icon" href="./img/waed-logo-vertical.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="./img/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="./img/apple-touch-icon.png" />
+    <meta name="theme-color" content="#1d2d44" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "WAED Industrial Innovation Company W.L.L.",
+        "url": "https://waediic.com/",
+        "logo": "https://waediic.com/img/waed-logo-vertical.svg",
+        "email": "info@waediic.com",
+        "telephone": "+97377930999",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Warehouse no. 9, Building 2094, Road 1529, Al Hidd",
+          "addressLocality": "Al Hidd",
+          "addressCountry": "BH"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Visible before React: phones must ALWAYS see this until real hero text is on screen. -->
+    <style>
+      .waed-boot {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483000;
+        display: none;
+        flex-direction: column;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        padding: max(1rem, env(safe-area-inset-top)) 1rem max(2rem, env(safe-area-inset-bottom));
+        color: #ffffff !important;
+        background-color: transparent;
+        background-image: url("./img/hero-redesign/slide-01-portrait.jpg?v=10");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        -webkit-text-size-adjust: 100%;
+      }
+      /* Show on phones even when “Request Desktop Website” lies about width/hover/pointer */
+      html.waed-phone .waed-boot,
+      html.waed-skip-intro .waed-boot {
+        display: flex !important;
+      }
+      .waed-boot h1 {
+        margin: 0.75rem 0 0;
+        font-size: clamp(1.45rem, 6.2vw, 2rem);
+        line-height: 1.15;
+        font-weight: 700;
+        color: #ffffff !important;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.65);
+      }
+      .waed-boot p {
+        margin: 0.55rem 0 0;
+        font-size: 0.98rem;
+        color: #ffffff !important;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+      }
+      .waed-boot__brand {
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #ffffff !important;
+        opacity: 0.95;
+      }
+      html.waed-app-ready .waed-boot {
+        display: none !important;
+      }
+    </style>
+    <div id="waed-boot" class="waed-boot" aria-hidden="true">
+      <div>
+        <div class="waed-boot__brand">WAED Industrial</div>
+        <h1>Innovating the Future of<br />Cleaning Manufacturing.</h1>
+        <p>Manufactured in Bahrain. Ready to Supply Regionally.</p>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script>
+      (function () {
+        // Phones / iPad / “Request Desktop Website” on iPhone:
+        // mark skip BEFORE React mounts so navy splash never appears.
+        var ua = navigator.userAgent || "";
+        var shortSide = Math.min(screen.width || 0, screen.height || 0);
+        // Keep in sync with Hero.tsx isPhoneLike — avoid marking Windows touch
+        // desktops as phones (that hid HeroDesktop via html.waed-phone).
+        var phone =
+          /iP(hone|ad|od)/i.test(ua) ||
+          /CriOS|FxiOS|Android.+Mobile|Mobile.+Safari/i.test(ua) ||
+          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
+          (shortSide > 0 && shortSide <= 500) ||
+          (window.matchMedia &&
+            (window.matchMedia("(max-width: 759px)").matches ||
+              (window.matchMedia("(hover: none)").matches &&
+                window.matchMedia("(pointer: coarse)").matches)));
+        if (phone) {
+          document.documentElement.classList.add("waed-skip-intro");
+          document.documentElement.classList.add("waed-phone");
+          try {
+            sessionStorage.setItem("waed-intro-seen", "1");
+          } catch (e) {}
+        } else {
+          // Desktops: boot is CSS-hidden; mark ready so it never sticks.
+          document.documentElement.classList.add("waed-app-ready");
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, "", redirect);
+        }
+      })();
+    </script>
+    <!--
+      Deploy cache-bust: fetch a tiny build-id with cache:no-store.
+      If it changed since last visit, force one hard navigation so Safari
+      drops the old cached JS (fixes “works on some iPhones, not others”).
+      Placeholders __WAED_*__ are replaced at build time by vite.cacheBustPlugin.
+    -->
+    <script>
+      (function () {
+        var BUILD = "__WAED_BUILD_ID__";
+        var BASE = "__WAED_BASE__";
+        // Skip Vite dev injections and unreplaced placeholders.
+        if (!BUILD || BUILD.indexOf("__WAED_") === 0 || BUILD.indexOf("dev-") === 0) return;
+        var KEY = "waed-build-id:" + BASE;
+        var bustKey = "waed-bust-" + BUILD;
+        var url = BASE.replace(/\/?$/, "/") + "build-id.txt?t=" + Date.now();
+        fetch(url, { cache: "no-store" })
+          .then(function (r) {
+            return r.ok ? r.text() : "";
+          })
+          .then(function (text) {
+            var id = String(text || "").trim();
+            // Reject HTML / junk so Safari never rewrites the URL into a broken query.
+            if (!id || id.length > 80 || !/^[A-Za-z0-9._-]+$/.test(id)) return;
+            var prev = null;
+            try {
+              prev = localStorage.getItem(KEY);
+              localStorage.setItem(KEY, id);
+            } catch (e) {}
+            if (!prev || prev === id) return;
+            try {
+              if (sessionStorage.getItem(bustKey)) return;
+              sessionStorage.setItem(bustKey, "1");
+            } catch (e) {}
+            var next = location.pathname + "?_b=" + encodeURIComponent(id);
+            if (location.hash) next += location.hash;
+            location.replace(next);
+          })
+          .catch(function () {});
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
