@@ -286,7 +286,7 @@ export function HeroDesktop() {
                 {isFirst && slide.logo !== "none" && (
                   <img
                     className={`hero-hs__logo hero-hs__logo--${slide.logo}`}
-                    src={asset("/img/hero-redesign/waed-hero-lockup.png?v=approved2")}
+                    src={asset("/img/hero-redesign/waed-hero-lockup.png?v=approved3")}
                     alt={active === 0 ? "WAED Industrial Innovation Company" : ""}
                     width={1600}
                     height={414}
