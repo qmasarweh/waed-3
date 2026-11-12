@@ -681,7 +681,7 @@ textarea {
   display: none;
 }
 
-/* Slide 1 logo: clean white lockup + soft navy wash behind it */
+/* Slide 1 logo: approved lockup + soft navy wash behind it */
 .hero-hs__slide--1::before {
   content: "";
   position: absolute;
@@ -1219,7 +1219,8 @@ textarea {
   /* Centered, then nudged slightly right */
   left: 50%;
   transform: translateX(calc(-50% + 2.5%));
-  filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0, 20, 60, 0.4));
+  /* Approved brand colors from approved logo.pdf — do not force white */
+  filter: drop-shadow(0 4px 16px rgba(0, 20, 60, 0.4));
 }
 
 .hero-m--gemini.hero-m--factory .hero-m__brand-name,
@@ -1539,7 +1540,8 @@ textarea {
   margin: 0;
   left: 50%;
   transform: translateX(calc(-50% + 2.5%));
-  filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0, 20, 60, 0.4));
+  /* Approved brand colors from approved logo.pdf — do not force white */
+  filter: drop-shadow(0 4px 16px rgba(0, 20, 60, 0.4));
 }
 
 .hero-m--gemini.hero-m--lab .hero-m__copy {
@@ -1902,7 +1904,8 @@ textarea {
   height: auto;
   display: block;
   margin: 0 auto;
-  filter: brightness(0) invert(1);
+  /* Keep approved steel/navy colors (no invert-to-white) */
+  filter: drop-shadow(0 4px 16px rgba(0, 20, 60, 0.35));
 }
 
 .hero-m__brand-name {
